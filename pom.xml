@@ -1,0 +1,75 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.didacusabella</groupId>
+    <artifactId>yaspl</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>yaspl</name>
+    <url>http://maven.apache.org</url>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/de.jflex/jflex -->
+        <dependency>
+            <groupId>de.jflex</groupId>
+            <artifactId>jflex</artifactId>
+            <version>1.6.1</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/nz.ac.waikato.cms.weka.thirdparty/java-cup-11b-runtime -->
+        <dependency>
+            <groupId>nz.ac.waikato.cms.weka.thirdparty</groupId>
+            <artifactId>java-cup-11b-runtime</artifactId>
+            <version>2015.03.26</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/nz.ac.waikato.cms.weka.thirdparty/java-cup-11b -->
+        <dependency>
+            <groupId>nz.ac.waikato.cms.weka.thirdparty</groupId>
+            <artifactId>java-cup-11b</artifactId>
+            <version>2015.03.26</version>
+        </dependency>
+
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <id>generate</id>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <target>
+                                <property name="cup" value="${nz.ac.waikato.cms.weka.thirdparty:java-cup-11b:jar}"/>
+                                <property name="flex" value="${de.jflex:jflex:jar}"/>
+                                <property name="runtime" value="${nz.ac.waikato.cms.weka.thirdparty:java-cup-11b-runtime:jar}"/>
+                                <taskdef  name="jflex" classname="jflex.anttask.JFlexTask"   classpath="${flex}"   />
+                                <taskdef  name="cup"   classname="java_cup.anttask.CUPTask"  classpath="${cup}"  />
+                                <jflex  file="${project.build.sourceDirectory}\com\didacusabella\lexer.jflex" destdir="${project.build.sourceDirectory}" />
+                                <cup srcfile="${project.build.sourceDirectory}\com\didacusabella\parser.cup" destdir="${project.build.sourceDirectory}"
+                                     parser="Parser" interface="true"/>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
