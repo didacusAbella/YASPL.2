@@ -13,6 +13,10 @@ import java.io.InputStreamReader;
 %column
 %cup
 
+%eofval{
+    return symbol("EOF", sym.EOF);
+%eofval}
+
 %{
 
 
@@ -21,7 +25,7 @@ import java.io.InputStreamReader;
         symbolFactory = sf;
     }
 
-    private StringBuffer sb;
+    private StringBuffer sb = new StringBuffer();
     private ComplexSymbolFactory symbolFactory;
 
     public Symbol symbol(String name, int code){
@@ -77,6 +81,7 @@ Identifier = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
   "int" { return symbol("INT", sym.INT); }
   "bool" { return symbol("BOOL", sym.BOOL); }
   "double" { return symbol("DOUBLE", sym.DOUBLE); }
+  "string" { return symbol("STRING", sym.STRING); }
   "," {return symbol("COMMA", sym.COMMA); }
   "def" {return symbol("DEF", sym.DEF); }
   "(" { return symbol("LPAR", sym.LPAR); }

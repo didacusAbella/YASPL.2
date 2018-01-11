@@ -7,27 +7,18 @@ import com.didacusabella.Lexer;
 import java.io.IOException;
 import java.io.File;
 import java.io.FileInputStream;
-
-parser code {:
-  protected Lexer lexer;
-:}
-
-/* define how to connect to the scanner! */
-init with {:
-  ComplexSymbolFactory f = new ComplexSymbolFactory();
-  symbolFactory = f;
-  FileInputStream fis = new FileInputStream(new File("input.txt"));
-  lexer = new Lexer(f,fis);
-:};
-scan with {: return lexer.next_token(); :};
+import java_cup.runtime.ComplexSymbolFactory.ComplexSymbol;
 
 /* Terminals (tokens returned by the scanner). */
-terminal            HEAD, START, SEMI, INT, BOOL, DOUBLE, NAME, COMMA, DEF, LPAR, RPAR, COLON, LGPAR, RGPAR, READ, WRITE, PLUS, MINUS, TIMES, DIV,
-                    INT_CONST, DOUBLE_CONST, STRING_CONST, TRUE, FALSE, ASSIGN, IF, THEN, ELSE, WHILE, DO, GT, GE, LT, LE, EQ, NOT, AND, OR;
+terminal            HEAD, START, SEMI, INT, BOOL, DOUBLE, NAME, COMMA, DEF, LPAR, RPAR, COLON, LGPAR,
+                    RGPAR, READ, WRITE, PLUS, MINUS, TIMES, DIV, INT_CONST, DOUBLE_CONST, STRING_CONST,
+                    TRUE, FALSE, ASSIGN, IF, THEN, ELSE, WHILE, DO, GT, GE, LT, LE, EQ, NOT, AND, OR,
+                    STRING, UMINUS;
 
 /* Non terminals */
-non terminal            Programma, Decls, Statements, Var_decl, Type, Vars, Types, Def_decl, Var_decls, Par_decls, Body, Comp_stat, Stat, Simple_stat,
-                        Out_values, Exprs, Expr, Arith_op, Bool_Expr, Bool_op, Rel_op;
+non terminal            Programma, Decls, Statements, Var_decl, Type, Vars, Types, Def_decl, Var_decls,
+                        Par_decls, Body, Comp_stat, Stat, Simple_stat, Out_values, Exprs, Expr, Arith_op,
+                        Bool_Expr, Bool_op, Rel_op, Def_Expr;
 
 /* Precedences. C style */
 
@@ -58,6 +49,7 @@ Var_decl ::= Type Vars SEMI;
 Type ::=  INT
         | BOOL
         | DOUBLE
+        | STRING
         ;
 // Var set
 Vars ::= NAME COMMA Vars
@@ -89,7 +81,7 @@ Stat ::= Comp_stat
 Simple_stat ::= Vars READ Types SEMI
                | Out_values WRITE SEMI
                | NAME ASSIGN Expr SEMI
-               | NAME LPAR Exprs COLON Vars RPAR SEMI
+               | NAME LPAR Def_Expr COLON Vars RPAR SEMI
                |IF LPAR Bool_Expr RPAR THEN Comp_stat ELSE Comp_stat SEMI
                | IF LPAR Bool_Expr RPAR THEN Comp_stat SEMI
                |WHILE LPAR Bool_Expr RPAR DO Comp_stat SEMI
@@ -100,6 +92,9 @@ Out_values ::= Expr COMMA Out_values
               | Expr
               | STRING_CONST
               ;
+Def_Expr ::= Exprs
+            | //empty
+            ;
 //Expressions
 Exprs ::= Expr COMMA Exprs
          | Expr
@@ -109,7 +104,7 @@ Expr ::= INT_CONST
         | DOUBLE_CONST
         | Expr Arith_op Expr
         | NAME
-        | MINUS Expr
+        | MINUS Expr %prec UMINUS
         | LPAR Expr RPAR
         ;
 //Arithmetical operation
