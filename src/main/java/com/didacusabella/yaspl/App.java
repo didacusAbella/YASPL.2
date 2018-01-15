@@ -1,13 +1,11 @@
-package com.didacusabella;
+package com.didacusabella.yaspl;
 
-import java_cup.anttask.CUPTask;
+import com.didacusabella.yaspl.dist.Lexer;
+import com.didacusabella.yaspl.dist.Parser;
 import java_cup.runtime.ComplexSymbolFactory;
-import jflex.anttask.JFlexTask;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.net.URISyntaxException;
 
 /**
  * Hello world!
