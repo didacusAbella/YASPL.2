@@ -1,4 +1,4 @@
 package com.didacusabella.yaspl.syntax;
 
-public interface Expression extends YasplNode {
+public abstract class Expression extends YasplTree {
 }

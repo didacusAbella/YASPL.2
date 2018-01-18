@@ -14,7 +14,7 @@ terminal ComplexSymbol HEAD, START, SEMI, INT, BOOL, DOUBLE, NAME, COMMA, DEF, L
                        STRING, UMINUS;
 
 /* Non terminals */
-non terminal  YasplNode Programma, Var_decl, Type, Def_decl, Body, Comp_stat, Stat, Simple_stat,
+non terminal  YasplTree Programma, Var_decl, Type, Def_decl, Body, Comp_stat, Stat, Simple_stat,
                         Expr, Arith_op, Bool_Expr, Bool_op, Rel_op, Def_Expr, Decls, Statements, Vars,
                         Types, Var_decls, Par_decls, Exprs, Out_values;
 
@@ -31,12 +31,25 @@ precedence right NOT;
 /*-------------GRAMMAR----------------------*/
 
 //Entry
-Programma ::= HEAD Decls START Statements;
-//Declararions
-Decls  ::=  Var_decl Decls
-          | Def_decl Decls
+Programma ::= HEAD Decls:decls START Statements:stmts
+{:
+    RESULT = new Program();
+    RESULT.add(RESULT, decls);
+    RESULT.add(RESULT, stms);
+    SyntaxVisitor visitor = new SyntaxVisitor();
+    visitor.createDocument();
+    visitor.visit(RESULT);
+    visitor.toXml();
+:};
+//Declarations
+Decls  ::=  Var_decl Decls:vardecls
+          | Def_decl Decls:defdecls
           | //simulate empty production
-          ;
+{:
+    RESULT = new YasplTree();
+    RESULT.add(RESULT, vardecls);
+    RESULT.add(RESULT, defdecls);
+:};
 //Statements
 Statements ::= Stat Statements
               | Stat

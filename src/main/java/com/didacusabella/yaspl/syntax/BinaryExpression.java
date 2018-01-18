@@ -1,23 +1,20 @@
 package com.didacusabella.yaspl.syntax;
 
-public abstract class BinaryExpression implements Expression{
+public abstract class BinaryExpression extends Expression{
 
-    private Expression leftOperand;
-    private Expression rightOperand;
+    private final Expression leftOperand;
+    private final Expression rightOperand;
+
+    public BinaryExpression(Expression leftOperand, Expression rightOperand) {
+        this.leftOperand = leftOperand;
+        this.rightOperand = rightOperand;
+    }
 
     public Expression getLeftOperand() {
         return leftOperand;
     }
 
-    public void setLeftOperand(Expression leftOperand) {
-        this.leftOperand = leftOperand;
-    }
-
     public Expression getRightOperand() {
         return rightOperand;
-    }
-
-    public void setRightOperand(Expression rightOperand) {
-        this.rightOperand = rightOperand;
     }
 }

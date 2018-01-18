@@ -2,14 +2,10 @@ package com.didacusabella.yaspl.syntax;
 
 import com.didacusabella.yaspl.visitor.Visitor;
 
-public class StringType implements Type {
-    @Override
-    public String getKind() {
-        return "STRING_TYPE";
-    }
+public class StringType extends Type {
 
     @Override
-    public void accept(Visitor visitor) {
-
+    public <T, P> T accept(Visitor<T, P> visitor, P param) {
+        return visitor.visit(this, param);
     }
 }

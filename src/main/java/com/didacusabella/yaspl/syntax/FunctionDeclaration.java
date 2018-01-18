@@ -4,20 +4,27 @@ import com.didacusabella.yaspl.visitor.Visitor;
 
 import java.util.List;
 
-public class FunctionDeclaration implements YasplNode {
+public class FunctionDeclaration extends YasplTree {
 
-    private Identifier identifier;
-    private List<VariableDeclaration> variableDeclarationList;
-    private List<ParameterDeclaration> paramenterDeclarationList;
-    private Body body;
 
     @Override
-    public String getKind() {
-        return "PROC_DECL_OP";
+    public <T, P> T accept(Visitor<T,P> visitor, P param) {
+       return visitor.visit(this, param);
     }
 
-    @Override
-    public void accept(Visitor visitor) {
+    public Identifier getIdentifier() {
+        return this.subTree(Identifier.class);
+    }
 
+    public List<VariableDeclaration> getVariableDeclarationList() {
+        return this.subTrees(VariableDeclaration.class);
+    }
+
+    public List<ParameterDeclaration> getParamenterDeclarationList() {
+        return this.subTrees(ParameterDeclaration.class);
+    }
+
+    public Body getBody() {
+        return this.subTree(Body.class);
     }
 }

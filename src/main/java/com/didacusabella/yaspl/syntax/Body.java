@@ -1,19 +1,21 @@
 package com.didacusabella.yaspl.syntax;
 
 import com.didacusabella.yaspl.visitor.Visitor;
-
 import java.util.List;
 
-public class Body implements YasplNode {
-    private List<VariableDeclaration> variableDeclarationList;
-    private List<Statement> statements;
+public class Body extends YasplTree {
+
+
     @Override
-    public String getKind() {
-        return "BODY_OP";
+    public <T, P> T accept(Visitor<T, P> visitor, P param) {
+        return visitor.visit(this, param);
     }
 
-    @Override
-    public void accept(Visitor visitor) {
+    public List<VariableDeclaration> getVariableDeclarationList() {
+        return this.subTrees(VariableDeclaration.class);
+    }
 
+    public List<Statement> getStatements() {
+        return this.subTrees(Statement.class);
     }
 }

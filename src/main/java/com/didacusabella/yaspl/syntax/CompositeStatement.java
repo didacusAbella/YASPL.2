@@ -4,16 +4,16 @@ import com.didacusabella.yaspl.visitor.Visitor;
 
 import java.util.List;
 
-public class CompositeStatement implements Statement {
-    private List<Statement> statementList;
+public class CompositeStatement extends Statement {
+
 
     @Override
-    public String getKind() {
-        return "COMP_STAT_OP";
+    public <T, P> T accept(Visitor<T, P> visitor, P param) {
+        return visitor.visit(this, param);
     }
 
-    @Override
-    public void accept(Visitor visitor) {
-
+    public List<Statement> getStatementList() {
+        return this.subTrees(Statement.class);
     }
+
 }

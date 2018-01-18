@@ -4,17 +4,19 @@ import com.didacusabella.yaspl.visitor.Visitor;
 
 import java.util.List;
 
-public class VariableDeclaration implements YasplNode {
+public class VariableDeclaration extends YasplTree {
 
-    private Type type;
-    private List<Variable> variables;
+
     @Override
-    public String getKind() {
-        return "VAR_DECL_OP";
+    public <T, P> T accept(Visitor<T, P> visitor, P param) {
+        return visitor.visit(this, param);
     }
 
-    @Override
-    public void accept(Visitor visitor) {
+    public Type getType() {
+        return this.subTree(Type.class);
+    }
 
+    public List<Variable> getVariables() {
+        return this.subTrees(Variable.class);
     }
 }

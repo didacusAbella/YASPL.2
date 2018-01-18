@@ -4,17 +4,19 @@ import com.didacusabella.yaspl.visitor.Visitor;
 
 import java.util.List;
 
-public class ReadStatement implements Statement {
-    private List<Identifier> identifierList;
-    private List<Type> typeList;
+public class ReadStatement extends Statement {
+
 
     @Override
-    public String getKind() {
-        return "READ_OP";
+    public <T, P> T accept(Visitor<T, P> visitor, P param) {
+        return visitor.visit(this, param);
     }
 
-    @Override
-    public void accept(Visitor visitor) {
+    public List<Identifier> getIdentifierList() {
+        return this.subTrees(Identifier.class);
+    }
 
+    public List<Type> getTypeList() {
+        return this.subTrees(Type.class);
     }
 }

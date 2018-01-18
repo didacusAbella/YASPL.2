@@ -4,16 +4,16 @@ import com.didacusabella.yaspl.visitor.Visitor;
 
 import java.util.List;
 
-public class WriteStatement implements Statement {
-    private List<Expression> expressionList;
+public class WriteStatement extends Statement {
 
-    @Override
-    public String getKind() {
-        return "WRITE_OP";
+
+
+    public List<Expression> getExpressionList() {
+        return this.subTrees(Expression.class);
     }
 
     @Override
-    public void accept(Visitor visitor) {
-
+    public <T, P> T accept(Visitor<T, P> visitor, P param) {
+        return visitor.visit(this, param);
     }
 }

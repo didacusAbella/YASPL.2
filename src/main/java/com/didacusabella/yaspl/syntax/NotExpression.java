@@ -2,14 +2,14 @@ package com.didacusabella.yaspl.syntax;
 
 import com.didacusabella.yaspl.visitor.Visitor;
 
-public class NotExpression implements BooleanExpression {
+public class NotExpression extends BooleanExpression {
+
     @Override
-    public String getKind() {
-        return "NOT_OP";
+    public <T, P> T accept(Visitor<T, P> visitor, P param) {
+        return visitor.visit(this, param);
     }
 
-    @Override
-    public void accept(Visitor visitor) {
-
+    public Expression getExpression(){
+        return this.subTree(Expression.class);
     }
 }

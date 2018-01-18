@@ -1,4 +1,5 @@
 package com.didacusabella.yaspl.syntax;
 
-public interface BooleanExpression extends Expression {
+public abstract class BooleanExpression extends Expression {
+
 }

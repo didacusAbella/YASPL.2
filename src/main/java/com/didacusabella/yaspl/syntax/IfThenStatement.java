@@ -2,17 +2,19 @@ package com.didacusabella.yaspl.syntax;
 
 import com.didacusabella.yaspl.visitor.Visitor;
 
-public class IfThenStatement implements Statement {
+public class IfThenStatement extends Statement {
 
-    private BooleanExpression ifCondition;
-    private Statement thenStatement;
-    @Override
-    public String getKind() {
-        return null;
+
+    public BooleanExpression getIfCondition() {
+        return this.subTree(BooleanExpression.class);
+    }
+
+    public Statement getThenStatement() {
+        return this.subTree(Statement.class);
     }
 
     @Override
-    public void accept(Visitor visitor) {
-
+    public <T, P> T accept(Visitor<T, P> visitor, P param) {
+        return visitor.visit(this, param);
     }
 }

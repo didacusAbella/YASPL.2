@@ -2,18 +2,19 @@ package com.didacusabella.yaspl.syntax;
 
 import com.didacusabella.yaspl.visitor.Visitor;
 
-public class WhileStatement implements Statement {
+public class WhileStatement extends Statement {
 
-    private BooleanExpression whileCondition;
-    private Statement whileStatement;
 
     @Override
-    public String getKind() {
-        return "WHILE_OP";
+    public <T, P> T accept(Visitor<T, P> visitor, P param) {
+        return null;
     }
 
-    @Override
-    public void accept(Visitor visitor) {
+    public BooleanExpression getWhileCondition() {
+        return this.subTree(BooleanExpression.class);
+    }
 
+    public Statement getWhileStatement() {
+        return this.subTree(Statement.class);
     }
 }

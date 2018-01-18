@@ -3,14 +3,10 @@ package com.didacusabella.yaspl.syntax;
 
 import com.didacusabella.yaspl.visitor.Visitor;
 
-public class AndExpression implements BooleanExpression {
-    @Override
-    public String getKind() {
-        return "AND_OP";
-    }
+public class AndExpression extends BooleanExpression {
 
     @Override
-    public void accept(Visitor visitor) {
-
+    public <T, P> T accept(Visitor<T, P> visitor, P param) {
+        return visitor.visit(this, param);
     }
 }
