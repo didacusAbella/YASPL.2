@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import com.didacusabella.yaspl.syntax.*;
 import com.didacusabella.yaspl.visitor.*;
 
-/* Terminals (tokens returned by the scanner). */
+/* Terminals (tokens returned by the scanner). Annotated with String attribute. Exception for constants */
 terminal String        HEAD, START, SEMI, INT, BOOL, DOUBLE, NAME, COMMA, DEF, LPAR, RPAR, COLON, LGPAR,
                        RGPAR, READ, WRITE, PLUS, MINUS, TIMES, DIV,  ASSIGN, IF, THEN, ELSE, WHILE, DO,
                        GT, GE, LT, LE, EQ, NOT, AND, OR, STRING, UMINUS;
@@ -16,7 +16,7 @@ terminal Double DOUBLE_CONST;
 terminal String STRING_CONST;
 terminal Boolean TRUE, FALSE;
 
-/* Non terminals */
+/* Non terminals. Each non terminal is annotated with a class */
 non terminal Program Programma;
 non terminal VariableDeclaration Var_decl;
 non terminal Type Type;
@@ -30,16 +30,14 @@ non terminal ArrayList<ParameterDeclaration> Par_decls;
 non terminal ArrayList<Decl> Decls;
 non terminal ArrayList<Statement> Statements;
 non terminal ArrayList<Variable> Vars;
-non terminal ArrayList<Type>Types;
+non terminal ArrayList<Type> Types;
 non terminal ArrayList<Expression> Out_values;
 non terminal ArrayList<Expression> Exprs;
 non terminal ArrayList<VariableDeclaration> Var_decls;
 non terminal ArrayList<Expression> Def_Expr;
 non terminal String Arith_op, Bool_op, Rel_op;
 
-
 /* Precedences. C style */
-
 precedence left COMMA;
 precedence right ASSIGN;
 precedence left OR;
@@ -48,9 +46,9 @@ precedence left TIMES, DIV;
 precedence left PLUS, MINUS;
 precedence right NOT;
 
-/*-------------GRAMMAR----------------------*/
+/*------------------------------------------- START GRAMMAR--------------------------------------------------*/
 
-//Entry
+/********************************** Entrypoint of the Program *****************************************/
 Programma ::= HEAD Decls:decls START Statements:stmts
             {:
                 RESULT = new Program(decls, stmts);
@@ -58,55 +56,80 @@ Programma ::= HEAD Decls:decls START Statements:stmts
                 visitor.appendRoot(visitor.visit(RESULT, null));
                 visitor.toXml();
             :};
-//Declarations
+
+
+/***************************************** Declarations ***********************************************/
 Decls  ::=  Var_decl:var_decl Decls:decls {: decls.add(var_decl); RESULT = decls; :}
           | Def_decl:def_decl Decls:decls {: decls.add(def_decl); RESULT = decls; :}
-          | {: RESULT = new ArrayList<>(); :}//empty production
+          | {: RESULT = new ArrayList<>(); :} //empty production
           ;
-//Statements
+
+
+/********************************** Statements ********************************************************/
 Statements ::= Stat:s Statements:stmts {: stmts.add(s); RESULT = stmts ; :}
               | Stat:s {: RESULT = new ArrayList<>(); RESULT.add(s); :}
               ;
-//Variable Declarations
+
+
+/********************************** Variable Declarations *******************************************/
 Var_decl ::= Type:type Vars:vars SEMI{: RESULT = new VariableDeclaration(type, vars); :};
 
-// Types ammitted
-Type ::=  INT:integer {: RESULT = new Type(integer); :}
-        | BOOL:bool {: RESULT = new Type(bool); :}
-        | DOUBLE:dobl {: RESULT = new Type(dobl);:}
-        | STRING:str {: RESULT = new Type(str); :}
+
+/************************************ Types ammitted ************************************************/
+Type ::=  INT {: RESULT = new Type("integer"); :}
+        | BOOL {: RESULT = new Type("boolean"); :}
+        | DOUBLE {: RESULT = new Type("double");:}
+        | STRING {: RESULT = new Type("string"); :}
         ;
-// Var set
+
+
+/***************************************** Variables ***********************************************/
 Vars ::= NAME:name COMMA Vars:vars {: vars.add(new Variable(new Identifier(name))); RESULT = vars; :}
         | NAME:name {: RESULT = new ArrayList<>(); RESULT.add(new Variable(new Identifier(name))); :}
         ;
-// Type set
+
+
+/***************************************** Type set ***********************************************/
 Types ::= Type:type COMMA Types:types {: types.add(type); RESULT = types; :}
          | Type:type {: RESULT = new ArrayList<>(); RESULT.add(type); :}
          ;
-// Function Declaration
+
+
+/********************************** Function Declaration *****************************************/
 Def_decl ::= DEF NAME:fname LPAR Var_decls:decls RPAR COLON Par_decls:pars Body:body
             {:
                 RESULT = new FunctionDeclaration(new Identifier(fname), decls, pars, body);
             :}
             ;
-//Variables declarations
+
+
+/********************************** Variable Declarations *****************************************/
 Var_decls ::= Var_decl:vd Var_decls:vds {: vds.add(vd); RESULT = vds; :}
              | {: RESULT = new ArrayList<>(); :}//empty production
              ;
-// Function paramenter declaration
-Par_decls ::= Var_decl:vd Par_decls:pd{: pd.add(new ParameterDeclaration(vd)); RESULT = pd; :}
+
+
+/************************************ Function Parameter *****************************************/
+Par_decls ::= Var_decl:vd Par_decls:pd {: pd.add(new ParameterDeclaration(vd)); RESULT = pd; :}
              | Var_decl:vd {: RESULT = new ArrayList<>(); RESULT.add(new ParameterDeclaration(vd)); :}
              ;
-//Body program
+
+
+/************************************ Body Program **********************************************/
 Body ::= LGPAR Var_decls:vds Statements:stmts RGPAR SEMI {: RESULT = new Body(vds, stmts); :} ;
-//Complex statements
+
+
+/********************************** Composite Statement *****************************************/
 Comp_stat ::= LGPAR Statements:stmts RGPAR {: RESULT = new CompositeStatement(stmts); :} ;
-//Statement
+
+
+/**************************************** Statement ********************************************/
 Stat ::= Comp_stat:cs {: RESULT = cs; :}
        | Simple_stat:ss {: RESULT = ss; :}
        ;
-//Simple Statement
+
+
+/********************************** Simple Statement *******************************************/
 Simple_stat ::=  Vars:vs READ Types:tps SEMI {: RESULT = new ReadStatement(vs, tps); :}
                | Out_values:ov WRITE SEMI {: RESULT = new WriteStatement(ov); :}
                | NAME:name ASSIGN Expr:expr SEMI {: RESULT = new AssignStatement(new Identifier(name), expr); :}
@@ -121,28 +144,29 @@ Simple_stat ::=  Vars:vs READ Types:tps SEMI {: RESULT = new ReadStatement(vs, t
                | IF LPAR Bool_Expr:be RPAR THEN Comp_stat:c1 SEMI {: RESULT = new IfThenStatement(be, c1); :}
                | WHILE LPAR Bool_Expr:be RPAR DO Comp_stat:c1 SEMI {: RESULT = new WhileStatement(be, c1); :}
                ;
-//Input-output
-Out_values ::=  Expr:exp COMMA Out_values:ov
-                {:
-                    ov.add(exp);
-                    RESULT = ov;
-                :}
-              | STRING_CONST:sc COMMA Out_values:ov
-                {:
-                    ov.add(new StringConst(sc));
-                    RESULT = ov;
-                :}
+
+
+/********************************** Input/Output *********************************************/
+Out_values ::=  Expr:exp COMMA Out_values:ov {: ov.add(exp); RESULT = ov; :}
+              | STRING_CONST:sc COMMA Out_values:ov {: ov.add(new StringConst(sc)); RESULT = ov; :}
               | Expr:exp {: RESULT = new ArrayList<>(); RESULT.add(exp); :}
               | STRING_CONST:sc {: RESULT = new ArrayList<>(); RESULT.add(new StringConst(sc)); :}
               ;
+
+
+/********************************** Function Parameters *****************************************/
 Def_Expr ::= Exprs:exprs {: RESULT = new ArrayList<>(); RESULT.addAll(exprs); :}
             | {: RESULT = new ArrayList<>(); :}//empty
             ;
-//Expressions
+
+
+/************************************** Expressions ********************************************/
 Exprs ::= Expr:exp COMMA Exprs:exprs {: exprs.add(exp); RESULT = exprs; :}
          | Expr:exp {: RESULT = new ArrayList<>(); RESULT.add(exp); :}
          ;
-//Expression
+
+
+/************************************** Expression ********************************************/
 Expr ::= INT_CONST:ic {: RESULT = new IntegerConst(ic); :}
         | DOUBLE_CONST:dc {: RESULT = new DoubleConst(dc); :}
         | Expr:s1 Arith_op:op Expr:s2 {: RESULT = new BinaryExpression(s1, s2, op); :}
@@ -150,13 +174,17 @@ Expr ::= INT_CONST:ic {: RESULT = new IntegerConst(ic); :}
         | MINUS Expr:exp {: RESULT = new UminusExpression(exp); :} %prec UMINUS
         | LPAR Expr:expr RPAR {: RESULT = expr; :}
         ;
-//Arithmetical operation
-Arith_op ::= PLUS:s {: RESULT = s; :}
-            | MINUS:s {:RESULT = s; :}
-            | TIMES:s {:RESULT = s; :}
-            | DIV:s {:RESULT = s; :}
+
+
+/********************************** Arithmetical Operation *****************************************/
+Arith_op ::= PLUS:s {: RESULT = "PLUS"; :}
+            | MINUS:s {:RESULT = "MINUS"; :}
+            | TIMES:s {:RESULT = "TIMES"; :}
+            | DIV:s {:RESULT = "DIV"; :}
             ;
-//Boolean expression
+
+
+/********************************** BooleanExpression *****************************************/
 Bool_Expr ::= TRUE {: RESULT = new TrueExpression(); :}
              | FALSE {: RESULT = new FalseExpression(); :}
              | Bool_Expr:b1 Bool_op:bo Bool_Expr:b2 {: RESULT = new RelationalExpression(b1, b2, bo); :}
@@ -164,14 +192,20 @@ Bool_Expr ::= TRUE {: RESULT = new TrueExpression(); :}
              | Expr:r1 Rel_op:ro Expr:r2 {: RESULT = new RelationalExpression(r1, r2, ro);:}
              | LPAR Bool_Expr:be RPAR {: RESULT = be; :}
              ;
-//Boolean operations
-Bool_op ::= AND:bo {: RESULT = bo; :}
-           | OR:bo {: RESULT = bo; :}
+
+
+/********************************** BooleanOperation *****************************************/
+Bool_op ::= AND:bo {: RESULT = "AND"; :}
+           | OR:bo {: RESULT = "OR"; :}
            ;
-//Relational operations
-Rel_op ::=  GT:ro {: RESULT = ro; :}
-          | GE:ro {: RESULT = ro; :}
-          | LT:ro {: RESULT = ro; :}
-          | LE:ro {: RESULT = ro; :}
-          | EQ:ro {: RESULT = ro; :}
+
+
+/********************************** Relational Operations *****************************************/
+Rel_op ::=  GT:ro {: RESULT = "GT"; :}
+          | GE:ro {: RESULT = "GE"; :}
+          | LT:ro {: RESULT = "LT"; :}
+          | LE:ro {: RESULT = "LE"; :}
+          | EQ:ro {: RESULT = "EQ"; :}
           ;
+
+/*------------------------------------------- END GRAMMAR--------------------------------------------------*/

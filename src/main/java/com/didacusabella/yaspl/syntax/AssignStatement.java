@@ -2,6 +2,16 @@ package com.didacusabella.yaspl.syntax;
 
 import com.didacusabella.yaspl.visitor.Visitor;
 
+/**
+ * A Tree node for the an assignment. For example:
+ * <pre>
+ *     {@code
+ *     x = 1;
+ *     }
+ * </pre>
+ * @since 1.0
+ * @author didacusAbella
+ */
 public class AssignStatement extends Statement {
 
     private final Identifier identifier;

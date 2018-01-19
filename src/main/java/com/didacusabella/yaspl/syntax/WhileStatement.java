@@ -21,7 +21,7 @@ public class WhileStatement extends Statement {
         return this.booleanExpression;
     }
 
-    public Statement getWhileStatement() {
+    public CompositeStatement getWhileStatement() {
         return this.whileStatement;
     }
 }

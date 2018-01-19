@@ -2,14 +2,32 @@ package com.didacusabella.yaspl.syntax;
 
 import com.didacusabella.yaspl.visitor.Visitor;
 
+/**
+ * Class wrapping the constant literal form. For example:
+ * <pre>
+ *     {@code
+ *     2.0
+ *     }
+ * </pre>
+ * @since 1.0
+ * @author didacusAbella
+ */
 public class DoubleConst extends Expression {
 
     private final double doubleValue;
 
+    /**
+     * Create a new wrapper for double const
+     * @param doubleValue the value to wrap
+     */
     public DoubleConst(double doubleValue) {
         this.doubleValue = doubleValue;
     }
 
+    /**
+     * Return the double value associated with this wrapper
+     * @return
+     */
     public double getDoubleValue() {
         return doubleValue;
     }
