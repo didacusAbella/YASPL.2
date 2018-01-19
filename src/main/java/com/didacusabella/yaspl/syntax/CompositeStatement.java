@@ -6,6 +6,11 @@ import java.util.List;
 
 public class CompositeStatement extends Statement {
 
+    private final List<Statement> statements;
+
+    public CompositeStatement(List<Statement> statements) {
+        this.statements = statements;
+    }
 
     @Override
     public <T, P> T accept(Visitor<T, P> visitor, P param) {
@@ -13,7 +18,7 @@ public class CompositeStatement extends Statement {
     }
 
     public List<Statement> getStatementList() {
-        return this.subTrees(Statement.class);
+        return this.statements;
     }
 
 }

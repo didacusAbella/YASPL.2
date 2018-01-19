@@ -6,17 +6,26 @@ import java.util.List;
 
 public class FunctionCall extends Statement {
 
+    private final Identifier identifier;
+    private final List<Expression> expressions;
+    private final List<Variable> variables;
+
+    public FunctionCall(Identifier identifier, List<Expression> expressions, List<Variable> variables) {
+        this.identifier = identifier;
+        this.expressions = expressions;
+        this.variables = variables;
+    }
 
     public Identifier getFunctionName() {
-        return this.subTree(Identifier.class);
+        return this.identifier;
     }
 
     public List<Expression> getExpressions() {
-        return this.subTrees(Expression.class);
+        return this.expressions;
     }
 
-    public List<Identifier> getIdentifierList() {
-        return this.subTrees(Identifier.class);
+    public List<Variable> getVariableList() {
+        return this.variables;
     }
 
     @Override

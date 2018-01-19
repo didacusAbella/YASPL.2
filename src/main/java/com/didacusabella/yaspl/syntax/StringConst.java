@@ -2,16 +2,16 @@ package com.didacusabella.yaspl.syntax;
 
 import com.didacusabella.yaspl.visitor.Visitor;
 
-public class IntegerConst extends Expression {
+public class StringConst extends Expression {
 
-    private final int intValue;
+    private String stringValue;
 
-    public IntegerConst(int intValue) {
-        this.intValue = intValue;
+    public StringConst(String stringValue) {
+        this.stringValue = stringValue;
     }
 
-    public int getIntValue() {
-        return intValue;
+    public String getStringValue() {
+        return stringValue;
     }
 
     @Override

@@ -4,13 +4,20 @@ import com.didacusabella.yaspl.visitor.Visitor;
 
 public class IfThenStatement extends Statement {
 
+    private final BooleanExpression ifCondition;
+    private final CompositeStatement thenStatement;
+
+    public IfThenStatement(BooleanExpression ifCondition, CompositeStatement thenStatement) {
+        this.ifCondition = ifCondition;
+        this.thenStatement = thenStatement;
+    }
 
     public BooleanExpression getIfCondition() {
-        return this.subTree(BooleanExpression.class);
+        return this.ifCondition;
     }
 
     public Statement getThenStatement() {
-        return this.subTree(Statement.class);
+        return this.thenStatement;
     }
 
     @Override

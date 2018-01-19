@@ -4,12 +4,20 @@ import com.didacusabella.yaspl.visitor.Visitor;
 
 public class AssignStatement extends Statement {
 
+    private final Identifier identifier;
+    private final Expression expression;
+
+    public AssignStatement(Identifier identifier, Expression expression) {
+        this.identifier = identifier;
+        this.expression = expression;
+    }
+
     public Identifier getIdentifier() {
-        return this.subTree(Identifier.class);
+        return this.identifier;
     }
 
     public Expression getExpression() {
-        return this.subTree(Expression.class);
+        return this.expression;
     }
 
     @Override

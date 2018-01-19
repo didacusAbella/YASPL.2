@@ -20,7 +20,6 @@ public class App
         FileInputStream fis = new FileInputStream(new File(App.class.getResource("/prova.yasp").getPath()));
         Parser parser = new Parser(new Lexer(cf, fis), cf);
         parser.parse();
-
     }
 
 }

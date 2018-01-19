@@ -4,17 +4,24 @@ import com.didacusabella.yaspl.visitor.Visitor;
 
 public class WhileStatement extends Statement {
 
+    private final BooleanExpression booleanExpression;
+    private final CompositeStatement whileStatement;
+
+    public WhileStatement(BooleanExpression booleanExpression, CompositeStatement whileStatement) {
+        this.booleanExpression = booleanExpression;
+        this.whileStatement = whileStatement;
+    }
 
     @Override
     public <T, P> T accept(Visitor<T, P> visitor, P param) {
-        return null;
+        return visitor.visit(this, param);
     }
 
     public BooleanExpression getWhileCondition() {
-        return this.subTree(BooleanExpression.class);
+        return this.booleanExpression;
     }
 
     public Statement getWhileStatement() {
-        return this.subTree(Statement.class);
+        return this.whileStatement;
     }
 }

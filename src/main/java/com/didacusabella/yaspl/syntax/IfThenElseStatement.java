@@ -4,17 +4,27 @@ import com.didacusabella.yaspl.visitor.Visitor;
 
 public class IfThenElseStatement extends Statement {
 
+    private final BooleanExpression ifCondition;
+    private final CompositeStatement thenStatement;
+    private final CompositeStatement elseStatement;
+
+    public IfThenElseStatement(BooleanExpression ifCondition,
+                               CompositeStatement thenStatement, CompositeStatement elseStatement) {
+        this.ifCondition = ifCondition;
+        this.thenStatement = thenStatement;
+        this.elseStatement = elseStatement;
+    }
 
     public BooleanExpression getIfCondition() {
-        return this.subTree(BooleanExpression.class);
+        return this.ifCondition;
     }
 
     public Statement getThenStatement() {
-        return this.subTree(Statement.class);
+        return this.thenStatement;
     }
 
     public Statement getElseStatement() {
-        return this.subTree(Statement.class);
+        return this.elseStatement;
     }
 
     @Override

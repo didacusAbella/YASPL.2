@@ -6,10 +6,14 @@ import java.util.List;
 
 public class WriteStatement extends Statement {
 
+    private final List<Expression> expressions;
 
+    public WriteStatement(List<Expression> expressions) {
+        this.expressions = expressions;
+    }
 
-    public List<Expression> getExpressionList() {
-        return this.subTrees(Expression.class);
+    public List<Expression> getExpressions() {
+        return expressions;
     }
 
     @Override

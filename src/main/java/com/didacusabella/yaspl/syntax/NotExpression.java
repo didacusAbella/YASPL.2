@@ -2,7 +2,17 @@ package com.didacusabella.yaspl.syntax;
 
 import com.didacusabella.yaspl.visitor.Visitor;
 
+/**
+ * Need not
+ */
 public class NotExpression extends BooleanExpression {
+
+    private final Expression expression;
+
+    public NotExpression(Expression expression) {
+        this.expression = expression;
+    }
+
 
     @Override
     public <T, P> T accept(Visitor<T, P> visitor, P param) {
@@ -10,6 +20,6 @@ public class NotExpression extends BooleanExpression {
     }
 
     public Expression getExpression(){
-        return this.subTree(Expression.class);
+        return this.expression;
     }
 }
