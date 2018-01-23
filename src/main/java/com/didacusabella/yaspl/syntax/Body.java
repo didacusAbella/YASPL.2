@@ -1,6 +1,8 @@
 package com.didacusabella.yaspl.syntax;
 
 import com.didacusabella.yaspl.visitor.Visitor;
+import java_cup.runtime.ComplexSymbolFactory;
+
 import java.util.List;
 
 /**
@@ -13,12 +15,9 @@ public class Body extends YasplNode {
     private final List<VariableDeclaration> variableDeclarations;
     private final List<Statement> statements;
 
-    /**
-     * Create a new body
-     * @param variableDeclarations list o variable declarations
-     * @param statements list of statements
-     */
-    public Body(List<VariableDeclaration> variableDeclarations, List<Statement> statements) {
+    public Body(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
+                List<VariableDeclaration> variableDeclarations, List<Statement> statements) {
+        super(leftLocation, rightLocation);
         this.variableDeclarations = variableDeclarations;
         this.statements = statements;
     }

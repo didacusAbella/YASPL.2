@@ -1,6 +1,7 @@
 package com.didacusabella.yaspl.syntax;
 
 import com.didacusabella.yaspl.visitor.Visitor;
+import java_cup.runtime.ComplexSymbolFactory;
 
 /**
  * Class wrapping the constant literal form. For example:
@@ -16,11 +17,9 @@ public class DoubleConst extends Expression {
 
     private final double doubleValue;
 
-    /**
-     * Create a new wrapper for double const
-     * @param doubleValue the value to wrap
-     */
-    public DoubleConst(double doubleValue) {
+    public DoubleConst(ComplexSymbolFactory.Location leftLocation,
+                       ComplexSymbolFactory.Location rightLocation, double doubleValue) {
+        super(leftLocation, rightLocation);
         this.doubleValue = doubleValue;
     }
 

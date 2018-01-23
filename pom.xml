@@ -46,15 +46,10 @@
             <artifactId>jflex</artifactId>
             <version>1.6.1</version>
         </dependency>
-        <!-- JC Tree used for creating AST -->
-        <dependency>
-            <groupId>com.googlecode.jctree</groupId>
-            <artifactId>jctree</artifactId>
-            <version>2.0.1</version>
-        </dependency>
     </dependencies>
     <build>
         <plugins>
+            <!--JFlex maven plugin. Automates Lexer generation -->
             <plugin>
                 <groupId>de.jflex</groupId>
                 <artifactId>jflex-maven-plugin</artifactId>
@@ -74,6 +69,7 @@
                 </executions>
             </plugin>
             <plugin>
+                <!--Java CUP maven plugin. Automates Parser generation-->
                 <groupId>com.github.vbmacher</groupId>
                 <artifactId>cup-maven-plugin</artifactId>
                 <version>11b-20160615</version>
@@ -90,6 +86,23 @@
                     <className>Parser</className>
                     <symbolsInterface>true</symbolsInterface>
                     <symbolsName>sym</symbolsName>
+                    <locations>true</locations>
+                </configuration>
+            </plugin>
+            <plugin>
+                <!--Java Exec -->
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>com.didacusabella.yaspl.App</mainClass>
                 </configuration>
             </plugin>
         </plugins>

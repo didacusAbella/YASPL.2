@@ -1,8 +1,10 @@
 package com.didacusabella.yaspl.dist;
 import java_cup.runtime.ComplexSymbolFactory;
 import java_cup.runtime.ComplexSymbolFactory.Location;
+import java_cup.runtime.ComplexSymbolFactory.ComplexSymbol;
 import java_cup.runtime.Symbol;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 %%
 
 %class Lexer
@@ -30,8 +32,7 @@ import java.io.InputStreamReader;
     public Symbol symbol(String name, int code){
 		return symbolFactory.newSymbol(name, code,
 						new Location(yyline+1,yycolumn+1 - yylength()),
-						new Location(yyline+1,yycolumn+1)
-				);
+						new Location(yyline+1,yycolumn+1));
     }
 
     public Symbol symbol(String name, int code, Object value){

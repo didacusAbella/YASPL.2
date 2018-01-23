@@ -1,6 +1,7 @@
 package com.didacusabella.yaspl.syntax;
 
 import com.didacusabella.yaspl.visitor.Visitor;
+import java_cup.runtime.ComplexSymbolFactory;
 
 import java.util.List;
 
@@ -13,11 +14,9 @@ public class CompositeStatement extends Statement {
 
     private final List<Statement> statements;
 
-    /**
-     * Create a new composite statement
-     * @param statements the list of statements
-     */
-    public CompositeStatement(List<Statement> statements) {
+    public CompositeStatement(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
+                              List<Statement> statements) {
+        super(leftLocation, rightLocation);
         this.statements = statements;
     }
 

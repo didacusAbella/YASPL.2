@@ -1,6 +1,7 @@
 package com.didacusabella.yaspl.syntax;
 
 import com.didacusabella.yaspl.visitor.Visitor;
+import java_cup.runtime.ComplexSymbolFactory;
 
 /**
  * This is a while statement node for a YASPL program. For example:
@@ -17,12 +18,9 @@ public class WhileStatement extends Statement {
     private final BooleanExpression booleanExpression;
     private final CompositeStatement whileStatement;
 
-    /**
-     * Create a new while statement
-     * @param booleanExpression the boolean condition
-     * @param whileStatement the while statement's list
-     */
-    public WhileStatement(BooleanExpression booleanExpression, CompositeStatement whileStatement) {
+    public WhileStatement(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
+                          BooleanExpression booleanExpression, CompositeStatement whileStatement) {
+        super(leftLocation, rightLocation);
         this.booleanExpression = booleanExpression;
         this.whileStatement = whileStatement;
     }

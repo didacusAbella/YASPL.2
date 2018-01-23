@@ -1,6 +1,8 @@
 package com.didacusabella.yaspl.syntax;
 
 import com.didacusabella.yaspl.visitor.Visitor;
+import java_cup.runtime.ComplexSymbolFactory;
+
 /**
  * This expression is a wrapper around true value
  * <pre>
@@ -11,11 +13,8 @@ import com.didacusabella.yaspl.visitor.Visitor;
  */
 public class TrueExpression extends BooleanExpression {
 
-    /**
-     * Create a new true expression wrapper
-     */
-    public TrueExpression() {
-        super();
+    public TrueExpression(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation) {
+        super(leftLocation, rightLocation);
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.didacusabella.yaspl.syntax;
 
 import com.didacusabella.yaspl.visitor.Visitor;
+import java_cup.runtime.ComplexSymbolFactory;
 
 /**
  * Node used for wrapping a string constant value. For example
@@ -14,11 +15,9 @@ public class StringConst extends Expression {
 
     private String stringValue;
 
-    /**
-     * Create a new string wrapper
-     * @param stringValue the string constant
-     */
-    public StringConst(String stringValue) {
+    public StringConst(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
+                       String stringValue) {
+        super(leftLocation, rightLocation);
         this.stringValue = stringValue;
     }
 

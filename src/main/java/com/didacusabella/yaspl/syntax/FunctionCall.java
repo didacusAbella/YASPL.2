@@ -1,6 +1,7 @@
 package com.didacusabella.yaspl.syntax;
 
 import com.didacusabella.yaspl.visitor.Visitor;
+import java_cup.runtime.ComplexSymbolFactory;
 
 import java.util.List;
 
@@ -18,13 +19,9 @@ public class FunctionCall extends Statement {
     private final List<Expression> expressions;
     private final List<Variable> variables;
 
-    /**
-     * Create a new function call
-     * @param identifier the name of the function
-     * @param expressions the list of expression
-     * @param variables the parameter to store result
-     */
-    public FunctionCall(Identifier identifier, List<Expression> expressions, List<Variable> variables) {
+    public FunctionCall(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
+                        Identifier identifier, List<Expression> expressions, List<Variable> variables) {
+        super(leftLocation, rightLocation);
         this.identifier = identifier;
         this.expressions = expressions;
         this.variables = variables;

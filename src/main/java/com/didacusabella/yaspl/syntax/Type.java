@@ -1,6 +1,7 @@
 package com.didacusabella.yaspl.syntax;
 
 import com.didacusabella.yaspl.visitor.Visitor;
+import java_cup.runtime.ComplexSymbolFactory;
 
 /**
  * This node wrapping the primitive typeof a YASPL program.
@@ -11,11 +12,9 @@ public class Type extends YasplNode {
 
     private final String typeName;
 
-    /**
-     * Create a new primitive type
-     * @param typeName the type associated
-     */
-    public Type(String typeName) {
+    public Type(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
+                String typeName) {
+        super(leftLocation, rightLocation);
         this.typeName = typeName;
     }
 

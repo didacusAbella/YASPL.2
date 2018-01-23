@@ -1,6 +1,7 @@
 package com.didacusabella.yaspl.syntax;
 
 import com.didacusabella.yaspl.visitor.Visitor;
+import java_cup.runtime.ComplexSymbolFactory;
 
 /**
  * Create an if then else node statement. For example:
@@ -20,14 +21,10 @@ public class IfThenElseStatement extends Statement {
     private final CompositeStatement thenStatement;
     private final CompositeStatement elseStatement;
 
-    /**
-     * Create a new if then else statement
-     * @param ifCondition the if condition
-     * @param thenStatement the statement's list of then body
-     * @param elseStatement the statements's list of else body
-     */
-    public IfThenElseStatement(BooleanExpression ifCondition,
-                               CompositeStatement thenStatement, CompositeStatement elseStatement) {
+    public IfThenElseStatement(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
+                               BooleanExpression ifCondition, CompositeStatement thenStatement,
+                               CompositeStatement elseStatement) {
+        super(leftLocation, rightLocation);
         this.ifCondition = ifCondition;
         this.thenStatement = thenStatement;
         this.elseStatement = elseStatement;

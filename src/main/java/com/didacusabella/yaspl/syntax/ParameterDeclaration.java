@@ -1,6 +1,7 @@
 package com.didacusabella.yaspl.syntax;
 
 import com.didacusabella.yaspl.visitor.Visitor;
+import java_cup.runtime.ComplexSymbolFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,11 +19,9 @@ public class ParameterDeclaration extends YasplNode {
 
     private final List<VariableDeclaration> variableDeclarations;
 
-    /**
-     * Create a new parameter declaration node
-     * @param variableDeclarations the list of variables used as parameters
-     */
-    public ParameterDeclaration(List<VariableDeclaration> variableDeclarations) {
+    public ParameterDeclaration(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
+                                List<VariableDeclaration> variableDeclarations) {
+        super(leftLocation, rightLocation);
         this.variableDeclarations = variableDeclarations;
     }
 
@@ -30,7 +29,9 @@ public class ParameterDeclaration extends YasplNode {
      * Create a new parameter declaration node
      * @param vd the single variable
      */
-    public ParameterDeclaration(VariableDeclaration vd) {
+    public ParameterDeclaration(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
+                                VariableDeclaration vd) {
+        super(leftLocation, rightLocation);
         this.variableDeclarations = new ArrayList<>();
         this.variableDeclarations.add(vd);
     }

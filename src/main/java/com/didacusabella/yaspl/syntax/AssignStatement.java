@@ -1,6 +1,7 @@
 package com.didacusabella.yaspl.syntax;
 
 import com.didacusabella.yaspl.visitor.Visitor;
+import java_cup.runtime.ComplexSymbolFactory;
 
 /**
  * A Tree node for the an assignment. For example:
@@ -17,7 +18,9 @@ public class AssignStatement extends Statement {
     private final Identifier identifier;
     private final Expression expression;
 
-    public AssignStatement(Identifier identifier, Expression expression) {
+    public AssignStatement(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
+                           Identifier identifier, Expression expression) {
+        super(leftLocation, rightLocation);
         this.identifier = identifier;
         this.expression = expression;
     }

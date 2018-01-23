@@ -1,6 +1,7 @@
 package com.didacusabella.yaspl.syntax;
 
 import com.didacusabella.yaspl.visitor.Visitor;
+import java_cup.runtime.ComplexSymbolFactory;
 
 import java.util.List;
 
@@ -12,12 +13,9 @@ public class Program extends YasplNode {
     private final List<Decl> declarations;
     private final List<Statement> statements;
 
-    /**
-     * Create a new root node
-     * @param declarations the list of declarations
-     * @param statements the list of the statements
-     */
-    public Program(List<Decl> declarations, List<Statement> statements) {
+    public Program(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
+                   List<Decl> declarations, List<Statement> statements) {
+        super(leftLocation, rightLocation);
         this.declarations = declarations;
         this.statements = statements;
     }

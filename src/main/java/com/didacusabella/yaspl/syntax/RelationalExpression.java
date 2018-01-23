@@ -1,6 +1,7 @@
 package com.didacusabella.yaspl.syntax;
 
 import com.didacusabella.yaspl.visitor.Visitor;
+import java_cup.runtime.ComplexSymbolFactory;
 
 /**
  * A relational expression is a boolean expression used for relational operators. For example:
@@ -16,16 +17,12 @@ public class RelationalExpression extends BooleanExpression {
     private final Expression leftOperand, rightOperand;
     private final String relOp;
 
-    /**
-     * Create anew relational operator node
-     * @param leftOperand the left operand
-     * @param rightOperand the right operand
-     * @param boolOp the boolean operation
-     */
-    public RelationalExpression(Expression leftOperand, Expression rightOperand, String boolOp) {
+    public RelationalExpression(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
+                                Expression leftOperand, Expression rightOperand, String relOp) {
+        super(leftLocation, rightLocation);
         this.leftOperand = leftOperand;
         this.rightOperand = rightOperand;
-        this.relOp = boolOp;
+        this.relOp = relOp;
     }
 
     /**

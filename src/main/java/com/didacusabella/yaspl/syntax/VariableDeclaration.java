@@ -1,6 +1,7 @@
 package com.didacusabella.yaspl.syntax;
 
 import com.didacusabella.yaspl.visitor.Visitor;
+import java_cup.runtime.ComplexSymbolFactory;
 
 import java.util.List;
 
@@ -17,12 +18,9 @@ public class VariableDeclaration extends Decl {
     private final Type type;
     private final List<Variable> variables;
 
-    /**
-     * Create a new variable declaration node
-     * @param type the type of the variable
-     * @param variables the list of variables assoiciated with the type
-     */
-    public VariableDeclaration(Type type, List<Variable> variables) {
+    public VariableDeclaration(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
+                               Type type, List<Variable> variables) {
+        super(leftLocation, rightLocation);
         this.type = type;
         this.variables = variables;
     }

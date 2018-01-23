@@ -6,6 +6,7 @@ import java_cup.runtime.*;
 import java.util.ArrayList;
 import com.didacusabella.yaspl.syntax.*;
 import com.didacusabella.yaspl.visitor.*;
+import java_cup.runtime.ComplexSymbolFactory.ComplexSymbol;
 
 /* Terminals (tokens returned by the scanner). Annotated with String attribute. Exception for constants */
 terminal String        HEAD, START, SEMI, INT, BOOL, DOUBLE, NAME, COMMA, DEF, LPAR, RPAR, COLON, LGPAR,
@@ -49,9 +50,9 @@ precedence right NOT;
 /*------------------------------------------- START GRAMMAR--------------------------------------------------*/
 
 /********************************** Entrypoint of the Program *****************************************/
-Programma ::= HEAD Decls:decls START Statements:stmts
+Programma ::= HEAD:h Decls:decls START Statements:stmts
             {:
-                RESULT = new Program(decls, stmts);
+                RESULT = new Program(hxleft, hxright, decls, stmts);
                 SyntaxVisitor visitor = new SyntaxVisitor();
                 visitor.appendRoot(visitor.visit(RESULT, null));
                 visitor.toXml();
@@ -72,20 +73,27 @@ Statements ::= Stat:s Statements:stmts {: stmts.add(s); RESULT = stmts ; :}
 
 
 /********************************** Variable Declarations *******************************************/
-Var_decl ::= Type:type Vars:vars SEMI{: RESULT = new VariableDeclaration(type, vars); :};
+Var_decl ::= Type:type Vars:vars SEMI{: RESULT = new VariableDeclaration(typexleft, typexright, type, vars); :};
 
 
 /************************************ Types ammitted ************************************************/
-Type ::=  INT {: RESULT = new Type("integer"); :}
-        | BOOL {: RESULT = new Type("boolean"); :}
-        | DOUBLE {: RESULT = new Type("double");:}
-        | STRING {: RESULT = new Type("string"); :}
+Type ::=  INT:i {: RESULT = new Type(ixleft, ixright, "integer"); :}
+        | BOOL:b {: RESULT = new Type(bxleft, bxright, "boolean"); :}
+        | DOUBLE:d {: RESULT = new Type(dxleft, dxright, "double");:}
+        | STRING:s {: RESULT = new Type(sxleft, sxright, "string"); :}
         ;
 
 
 /***************************************** Variables ***********************************************/
-Vars ::= NAME:name COMMA Vars:vars {: vars.add(new Variable(new Identifier(name))); RESULT = vars; :}
-        | NAME:name {: RESULT = new ArrayList<>(); RESULT.add(new Variable(new Identifier(name))); :}
+Vars ::= NAME:name COMMA:c Vars:vars
+        {: vars.add(new Variable(cxleft, cxright, new Identifier(namexleft, namexright, name)));
+           RESULT = vars;
+        :}
+
+        | NAME:name
+                {: RESULT = new ArrayList<>();
+                   RESULT.add(new Variable(namexleft, namexright, new Identifier(namexleft, namexright, name)));
+                :}
         ;
 
 
@@ -96,9 +104,10 @@ Types ::= Type:type COMMA Types:types {: types.add(type); RESULT = types; :}
 
 
 /********************************** Function Declaration *****************************************/
-Def_decl ::= DEF NAME:fname LPAR Var_decls:decls RPAR COLON Par_decls:pars Body:body
+Def_decl ::= DEF:d NAME:fname LPAR Var_decls:decls RPAR COLON Par_decls:pars Body:body
             {:
-                RESULT = new FunctionDeclaration(new Identifier(fname), decls, pars, body);
+                RESULT = new FunctionDeclaration(dxleft, dxright,
+                    new Identifier(fnamexleft, fnamexright, fname), decls, pars, body);
             :}
             ;
 
@@ -110,17 +119,19 @@ Var_decls ::= Var_decl:vd Var_decls:vds {: vds.add(vd); RESULT = vds; :}
 
 
 /************************************ Function Parameter *****************************************/
-Par_decls ::= Var_decl:vd Par_decls:pd {: pd.add(new ParameterDeclaration(vd)); RESULT = pd; :}
-             | Var_decl:vd {: RESULT = new ArrayList<>(); RESULT.add(new ParameterDeclaration(vd)); :}
+Par_decls ::= Var_decl:vd Par_decls:pd {: pd.add(new ParameterDeclaration(vdxleft, vdxright, vd)); RESULT = pd; :}
+             | Var_decl:vd {: RESULT = new ArrayList<>();
+                              RESULT.add(new ParameterDeclaration(vdxleft, vdxright, vd));
+                           :}
              ;
 
 
 /************************************ Body Program **********************************************/
-Body ::= LGPAR Var_decls:vds Statements:stmts RGPAR SEMI {: RESULT = new Body(vds, stmts); :} ;
+Body ::= LGPAR:l Var_decls:vds Statements:stmts RGPAR SEMI {: RESULT = new Body(lxleft, lxright, vds, stmts); :} ;
 
 
 /********************************** Composite Statement *****************************************/
-Comp_stat ::= LGPAR Statements:stmts RGPAR {: RESULT = new CompositeStatement(stmts); :} ;
+Comp_stat ::= LGPAR:l Statements:stmts RGPAR {: RESULT = new CompositeStatement(lxleft, lxright, stmts); :} ;
 
 
 /**************************************** Statement ********************************************/
@@ -130,27 +141,34 @@ Stat ::= Comp_stat:cs {: RESULT = cs; :}
 
 
 /********************************** Simple Statement *******************************************/
-Simple_stat ::=  Vars:vs READ Types:tps SEMI {: RESULT = new ReadStatement(vs, tps); :}
-               | Out_values:ov WRITE SEMI {: RESULT = new WriteStatement(ov); :}
-               | NAME:name ASSIGN Expr:expr SEMI {: RESULT = new AssignStatement(new Identifier(name), expr); :}
-               | NAME:name LPAR Def_Expr:de COLON Vars:vs RPAR SEMI
+Simple_stat ::=  Vars:vs READ Types:tps SEMI {: RESULT = new ReadStatement(vsxleft, vsxright, vs, tps); :}
+               | Out_values:ov WRITE SEMI {: RESULT = new WriteStatement(ovxleft, ovxright, ov); :}
+               | NAME:name ASSIGN Expr:expr SEMI {: RESULT = new AssignStatement(namexleft, namexright,
+                                                        new Identifier(namexleft, namexright, name), expr);
+                                                 :}
+               | NAME:name LPAR Def_Expr:def COLON Vars:vs RPAR SEMI
                         {:
-                        RESULT = new FunctionCall(new Identifier(name), de, vs);
+                            RESULT = new FunctionCall(namexleft, namexright,
+                            new Identifier(namexleft, namexright, name), def, vs);
                         :}
-               | IF LPAR Bool_Expr:be RPAR THEN Comp_stat:c1 ELSE Comp_stat:c2 SEMI
+               | IF:i LPAR Bool_Expr:be RPAR THEN Comp_stat:c1 ELSE Comp_stat:c2 SEMI
                 {:
-                    RESULT = new IfThenElseStatement(be, c1, c2);
+                    RESULT = new IfThenElseStatement(ixleft, ixright, be, c1, c2);
                 :}
-               | IF LPAR Bool_Expr:be RPAR THEN Comp_stat:c1 SEMI {: RESULT = new IfThenStatement(be, c1); :}
-               | WHILE LPAR Bool_Expr:be RPAR DO Comp_stat:c1 SEMI {: RESULT = new WhileStatement(be, c1); :}
+               | IF:i LPAR Bool_Expr:be RPAR THEN Comp_stat:c1 SEMI
+                        {:
+                           RESULT = new IfThenStatement(ixleft, ixright, be, c1);
+                        :}
+               | WHILE:wh LPAR Bool_Expr:be RPAR DO Comp_stat:c1 SEMI
+                        {: RESULT = new WhileStatement(whxleft, whxright, be, c1); :}
                ;
 
 
 /********************************** Input/Output *********************************************/
 Out_values ::=  Expr:exp COMMA Out_values:ov {: ov.add(exp); RESULT = ov; :}
-              | STRING_CONST:sc COMMA Out_values:ov {: ov.add(new StringConst(sc)); RESULT = ov; :}
+              | STRING_CONST:sc COMMA Out_values:ov {: ov.add(new StringConst(scxleft, scxright, sc)); RESULT = ov; :}
               | Expr:exp {: RESULT = new ArrayList<>(); RESULT.add(exp); :}
-              | STRING_CONST:sc {: RESULT = new ArrayList<>(); RESULT.add(new StringConst(sc)); :}
+              | STRING_CONST:sc {: RESULT = new ArrayList<>(); RESULT.add(new StringConst(scxleft, scxright, sc)); :}
               ;
 
 
@@ -167,11 +185,11 @@ Exprs ::= Expr:exp COMMA Exprs:exprs {: exprs.add(exp); RESULT = exprs; :}
 
 
 /************************************** Expression ********************************************/
-Expr ::= INT_CONST:ic {: RESULT = new IntegerConst(ic); :}
-        | DOUBLE_CONST:dc {: RESULT = new DoubleConst(dc); :}
-        | Expr:s1 Arith_op:op Expr:s2 {: RESULT = new BinaryExpression(s1, s2, op); :}
-        | NAME:name {: RESULT = new Identifier(name);:}
-        | MINUS Expr:exp {: RESULT = new UminusExpression(exp); :} %prec UMINUS
+Expr ::= INT_CONST:ic {: RESULT = new IntegerConst(icxleft, icxright, ic); :}
+        | DOUBLE_CONST:dc {: RESULT = new DoubleConst(dcxleft, dcxright, dc); :}
+        | Expr:s1 Arith_op:op Expr:s2 {: RESULT = new BinaryExpression(s1xleft, s1xright, s1, s2, op); :}
+        | NAME:name {: RESULT = new Identifier(namexleft, namexright, name);:}
+        | MINUS Expr:exp {: RESULT = new UminusExpression(expxleft, expxright, exp); :} %prec UMINUS
         | LPAR Expr:expr RPAR {: RESULT = expr; :}
         ;
 
@@ -185,11 +203,11 @@ Arith_op ::= PLUS:s {: RESULT = "PLUS"; :}
 
 
 /********************************** BooleanExpression *****************************************/
-Bool_Expr ::= TRUE {: RESULT = new TrueExpression(); :}
-             | FALSE {: RESULT = new FalseExpression(); :}
-             | Bool_Expr:b1 Bool_op:bo Bool_Expr:b2 {: RESULT = new RelationalExpression(b1, b2, bo); :}
-             | NOT Bool_Expr:exp {: RESULT = new NotExpression(exp); :}
-             | Expr:r1 Rel_op:ro Expr:r2 {: RESULT = new RelationalExpression(r1, r2, ro);:}
+Bool_Expr ::= TRUE:t {: RESULT = new TrueExpression(txleft, txright); :}
+             | FALSE:f {: RESULT = new FalseExpression(fxleft, fxright); :}
+             | Bool_Expr:b1 Bool_op:bo Bool_Expr:b2 {: RESULT = new RelationalExpression(b1xleft, b1xright, b1, b2, bo); :}
+             | NOT Bool_Expr:exp {: RESULT = new NotExpression(expxleft, expxright, exp); :}
+             | Expr:r1 Rel_op:ro Expr:r2 {: RESULT = new RelationalExpression(r1xleft, r1xright, r1, r2, ro);:}
              | LPAR Bool_Expr:be RPAR {: RESULT = be; :}
              ;
 

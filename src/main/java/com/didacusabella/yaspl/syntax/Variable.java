@@ -1,6 +1,7 @@
 package com.didacusabella.yaspl.syntax;
 
 import com.didacusabella.yaspl.visitor.Visitor;
+import java_cup.runtime.ComplexSymbolFactory;
 
 /**
  * This node encapsulate a variable of a YASPL program. For example:
@@ -14,11 +15,9 @@ public class Variable extends YasplNode {
 
     private final Identifier identifier;
 
-    /**
-     * Create a new variable
-     * @param identifier the name of the variable
-     */
-    public Variable(Identifier identifier) {
+    public Variable(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
+                    Identifier identifier) {
+        super(leftLocation, rightLocation);
         this.identifier = identifier;
     }
 

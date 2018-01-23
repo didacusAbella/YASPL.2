@@ -1,6 +1,7 @@
 package com.didacusabella.yaspl.syntax;
 
 import com.didacusabella.yaspl.visitor.Visitor;
+import java_cup.runtime.ComplexSymbolFactory;
 
 /**
  * This node represent the uminus expression. For example:
@@ -14,11 +15,9 @@ public class UminusExpression extends Expression {
 
     private final Expression expression;
 
-    /**
-     * Create a new uminus expression
-     * @param expression the expression to evaluate
-     */
-    public UminusExpression(Expression expression) {
+    public UminusExpression(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
+                            Expression expression) {
+        super(leftLocation, rightLocation);
         this.expression = expression;
     }
 

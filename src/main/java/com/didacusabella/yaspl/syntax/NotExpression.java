@@ -1,6 +1,7 @@
 package com.didacusabella.yaspl.syntax;
 
 import com.didacusabella.yaspl.visitor.Visitor;
+import java_cup.runtime.ComplexSymbolFactory;
 
 /**
  * This node represent the not expression. For example
@@ -15,14 +16,11 @@ public class NotExpression extends BooleanExpression {
 
     private final Expression expression;
 
-    /**
-     * Create a new not expression node
-     * @param expression the expression to be evaluated
-     */
-    public NotExpression(Expression expression) {
+    public NotExpression(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
+                         Expression expression) {
+        super(leftLocation, rightLocation);
         this.expression = expression;
     }
-
 
     @Override
     public <T, P> T accept(Visitor<T, P> visitor, P param) {

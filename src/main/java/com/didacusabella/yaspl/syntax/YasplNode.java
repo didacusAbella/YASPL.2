@@ -2,12 +2,7 @@ package com.didacusabella.yaspl.syntax;
 
 
 import com.didacusabella.yaspl.visitor.Visitor;
-import com.googlecode.jctree.ArrayListTree;
-import com.googlecode.jctree.NodeNotFoundException;
 import java_cup.runtime.ComplexSymbolFactory;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * This class is a representation of YASPL language node used for create the AST. is a visitable node
@@ -17,6 +12,22 @@ import java.util.stream.Collectors;
  * @since 1.0
  */
 public abstract class YasplNode {
+
+     private final ComplexSymbolFactory.Location leftLocation;
+     private final ComplexSymbolFactory.Location rightLocation;
+
+     public YasplNode(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation) {
+          this.leftLocation = leftLocation;
+          this.rightLocation = rightLocation;
+     }
+
+     public ComplexSymbolFactory.Location getLeftLocation() {
+          return leftLocation;
+     }
+
+     public ComplexSymbolFactory.Location getRightLocation() {
+          return rightLocation;
+     }
 
      /**
       * Accept method used to implement visitor pattern

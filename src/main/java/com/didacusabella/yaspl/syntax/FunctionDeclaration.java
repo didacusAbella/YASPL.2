@@ -1,6 +1,7 @@
 package com.didacusabella.yaspl.syntax;
 
 import com.didacusabella.yaspl.visitor.Visitor;
+import java_cup.runtime.ComplexSymbolFactory;
 
 import java.util.List;
 
@@ -21,15 +22,10 @@ public class FunctionDeclaration extends Decl {
     private final List<ParameterDeclaration> parameterDeclarations;
     private final Body body;
 
-    /**
-     * Create a new function declaration
-     * @param identifier the name of the function
-     * @param variableDeclarations the list of formal parameters
-     * @param parameterDeclarations the list of return types
-     * @param body
-     */
-    public FunctionDeclaration(Identifier identifier, List<VariableDeclaration> variableDeclarations,
+    public FunctionDeclaration(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
+                               Identifier identifier, List<VariableDeclaration> variableDeclarations,
                                List<ParameterDeclaration> parameterDeclarations, Body body) {
+        super(leftLocation, rightLocation);
         this.identifier = identifier;
         this.variableDeclarations = variableDeclarations;
         this.parameterDeclarations = parameterDeclarations;

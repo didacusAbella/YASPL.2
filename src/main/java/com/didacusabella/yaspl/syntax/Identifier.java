@@ -1,6 +1,7 @@
 package com.didacusabella.yaspl.syntax;
 
 import com.didacusabella.yaspl.visitor.Visitor;
+import java_cup.runtime.ComplexSymbolFactory;
 
 /**
  * This class wrap the identifiers. For example
@@ -14,11 +15,9 @@ public class Identifier extends Expression {
 
     private final String name;
 
-    /**
-     * Create a new identifier
-     * @param name the name of the identifier
-     */
-    public Identifier(String name) {
+    public Identifier(ComplexSymbolFactory.Location leftLocation,
+                      ComplexSymbolFactory.Location rightLocation, String name) {
+        super(leftLocation, rightLocation);
         this.name = name;
     }
 

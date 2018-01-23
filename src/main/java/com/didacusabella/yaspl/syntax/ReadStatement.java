@@ -1,6 +1,7 @@
 package com.didacusabella.yaspl.syntax;
 
 import com.didacusabella.yaspl.visitor.Visitor;
+import java_cup.runtime.ComplexSymbolFactory;
 
 import java.util.List;
 
@@ -17,12 +18,9 @@ public class ReadStatement extends Statement {
     private final List<Variable> variables;
     private final List<Type> types;
 
-    /**
-     * Create a new read statement
-     * @param variables the list of variable to fill
-     * @param types the types to fil variables
-     */
-    public ReadStatement(List<Variable> variables, List<Type> types) {
+    public ReadStatement(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
+                         List<Variable> variables, List<Type> types) {
+        super(leftLocation, rightLocation);
         this.variables = variables;
         this.types = types;
     }

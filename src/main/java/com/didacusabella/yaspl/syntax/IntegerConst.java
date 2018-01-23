@@ -1,6 +1,7 @@
 package com.didacusabella.yaspl.syntax;
 
 import com.didacusabella.yaspl.visitor.Visitor;
+import java_cup.runtime.ComplexSymbolFactory;
 
 /**
  * Node for wrapping integer const value. For example
@@ -14,11 +15,9 @@ public class IntegerConst extends Expression {
 
     private final int intValue;
 
-    /**
-     * Create a new integer node
-     * @param intValue the int value associated
-     */
-    public IntegerConst(int intValue) {
+    public IntegerConst(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
+                        int intValue) {
+        super(leftLocation, rightLocation);
         this.intValue = intValue;
     }
 

@@ -1,6 +1,7 @@
 package com.didacusabella.yaspl.syntax;
 
 import com.didacusabella.yaspl.visitor.Visitor;
+import java_cup.runtime.ComplexSymbolFactory;
 
 /**
  * This is the Tree node for a BinaryExpression. Is used for handle math operations. For example:
@@ -18,13 +19,9 @@ public class BinaryExpression extends Expression{
     private final Expression rightOperand;
     private final String op;
 
-    /**
-     * Create a new Binary Expression
-     * @param leftOperand the left operand of the expression
-     * @param rightOperand the right operand of the expression
-     * @param op the operation associated with the expression
-     */
-    public BinaryExpression(Expression leftOperand, Expression rightOperand, String op) {
+    public BinaryExpression(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
+                            Expression leftOperand, Expression rightOperand, String op) {
+        super(leftLocation, rightLocation);
         this.leftOperand = leftOperand;
         this.rightOperand = rightOperand;
         this.op = op;

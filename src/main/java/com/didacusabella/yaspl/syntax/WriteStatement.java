@@ -1,6 +1,7 @@
 package com.didacusabella.yaspl.syntax;
 
 import com.didacusabella.yaspl.visitor.Visitor;
+import java_cup.runtime.ComplexSymbolFactory;
 
 import java.util.List;
 
@@ -17,11 +18,9 @@ public class WriteStatement extends Statement {
 
     private final List<Expression> expressions;
 
-    /**
-     * Create a new write statement node
-     * @param expressions the expression to write
-     */
-    public WriteStatement(List<Expression> expressions) {
+    public WriteStatement(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
+                          List<Expression> expressions) {
+        super(leftLocation, rightLocation);
         this.expressions = expressions;
     }
 
