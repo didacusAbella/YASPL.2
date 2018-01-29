@@ -4,6 +4,7 @@ import com.didacusabella.yaspl.visitor.Visitor;
 import java_cup.runtime.ComplexSymbolFactory;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * This node represents a Read statement. For example:
@@ -44,5 +45,11 @@ public class ReadStatement extends Statement {
      */
     public List<Type> getTypeList() {
         return this.types;
+    }
+
+    @Override
+    public boolean checkType() {
+        return variables.stream().map(v -> v.getNodeType()).collect(Collectors.toList())
+                .equals(types.stream().map(t -> t.getNodeType()).collect(Collectors.toList()));
     }
 }

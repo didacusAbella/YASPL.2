@@ -49,4 +49,12 @@ public class ParameterDeclaration extends YasplNode {
         return this.variableDeclarations;
     }
 
+    @Override
+    public boolean checkType() {
+        return checkAll(variableDeclarations);
+    }
+
+    public int trueSize(){
+        return this.variableDeclarations.size();
+    }
 }

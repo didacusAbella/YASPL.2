@@ -1,5 +1,6 @@
 package com.didacusabella.yaspl.syntax;
 
+import com.didacusabella.yaspl.semantic.ReturnType;
 import com.didacusabella.yaspl.visitor.Visitor;
 import java_cup.runtime.ComplexSymbolFactory;
 
@@ -33,5 +34,10 @@ public class NotExpression extends BooleanExpression {
      */
     public Expression getExpression(){
         return this.expression;
+    }
+
+    @Override
+    public boolean checkType() {
+        return expression.getNodeType() == ReturnType.BOOLEAN;
     }
 }

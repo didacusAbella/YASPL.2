@@ -1,206 +1,251 @@
 head
-	int choice,intResult;
-	double doubleResult;
-	string operativeChoice;
+ int choice,intResult;
+ double doubleResult;
+ int operativeChoice;
 
-	def addInt ( ) : int intSum;
-	{
-		int intAdded,intSum;
-		intAdded=-99999;
- 		intSum=0;
-		while(not(intAdded==0)) do
-		{
- 			"Inserisca un altro numero, inserisca zero se vuole finire" ->;
- 			intAdded <- int;
- 			intSum=intSum+intAdded;
-		};
-	};
-	def addDouble ( ) : double doubleSum;
- 	{
- 		double doubleAdded,doubleSum;
- 		doubleAdded = -99999;
- 		doubleSum= 0;
- 		while(not(doubleAdded==0)) do
- 		{
- 			"Inserisca un altro numero, inserisca zero se vuole finire" ->;
- 			doubleAdded <- double;
- 			doubleSum=doubleSum+doubleAdded;
- 		};
-	};
-	def subtractionInt ( ) : int intRemainder;
-	{
-		int intAmount,intRemainder;
-		intAmount=-99999;
- 		intRemainder=0;
-		while(not(intAmount==0)) do
-		{
- 			"Inserisca un altro numero, inserisca zero se vuole finire" ->;
- 			intAmount<- int;
- 			intRemainder=intRemainder-intAmount;
-		};
-	};
-	def subtractionDouble ( ) : double doubleRemainder;
- 	{
-		double doubleAmount, doubleRemainder;
-		doubleAmount=-99999;
- 		doubleRemainder=0;
-		while(not(doubleAmount==0)) do
-		{
- 			"Inserisca un altro numero, inserisca zero se vuole finire" ->;
- 			doubleAmount<- double;
- 			doubleRemainder=doubleRemainder-doubleAmount;
-		};
-	};
-	def moltiplicationInt(): int intProduct;
-	{
-		int intMoltiplicator, intProduct;
-		intMoltiplicator=-99999;
-		intProduct=1;
-		while(not(intMoltiplicator==0)) do
-		{
-			"Inserisca un altro numero, inserisca zero se vuole finire" ->;
- 			intMoltiplicator <- int;
- 			intProduct=intProduct*intMoltiplicator;
-		};
-	};
-	def moltiplicationDouble(): double doubleProduct;
-	{
-		double doubleMoltiplicator, doubleProduct;
-		doubleMoltiplicator=-99999;
-		doubleProduct=1;
-		while(not(doubleMoltiplicator==0)) do
-		{
-			"Inserisca un altro numero, inserisca zero se vuole finire" ->;
- 			doubleMoltiplicator <- double;
- 			doubleProduct=doubleProduct*doubleMoltiplicator;
-		};
-	};
-	def divisionInt(): int intQuotient;
-	{
-		int intDivider, intQuotient;
-		intDivider=-99999;
-		intQuotient=1;
-		while(not(intDivider==0)) do
-		{
-			"Inserisca un altro numero, inserisca zero se vuole finire" ->;
- 			intDivider <- int;
- 			intQuotient=intQuotient/intDivider;
-		};
-	};
-	def divisionDouble(): double doubleQuotient;
-	{
-		double doubleDivider, doubleQuotient;
-		doubleDivider=-99999;
-		doubleQuotient=1;
-		while(not(doubleDivider==0)) do
-		{
-			"Inserisca un altro numero, inserisca zero se vuole finire" ->;
- 			doubleDivider<- double;
- 			doubleQuotient=doubleQuotient/doubleDivider;
-		};
-	};
+ def addInt () : int intSum;
+ {
+  int intAdded,intSum;
+  intAdded=-99999;
+   intSum=0;
+   "Somma di interi "->;
+   "Inserisca un numero. "->;
+   intAdded <- int;
+  while(not(intAdded==0)) do
+  {
+      intSum=intSum+intAdded;
+    "Inserisca un altro numero, inserisca zero se vuole finire " ->;
+    intAdded <- int;
+  };
+ };
+ def addDouble ( ) : double doubleSum;
+  {
+
+   double doubleAdded,doubleSum;
+   doubleAdded = -99999;
+   doubleSum= 0;
+   "Somma di double "->;
+   "Inserisca un numero. "->;
+         doubleAdded <- double;
+   while(not(doubleAdded==0)) do
+   {
+       doubleSum=doubleSum+doubleAdded;
+    "Inserisca un altro numero, inserisca zero se vuole finire " ->;
+    doubleAdded <- double;
+   };
+ };
+ def subtractionInt ( ) : int intRemainder; 
+ {
+  int intAmount,intRemainder;
+  intAmount=-99999;
+   intRemainder=0;
+   "Sottrazione di interi "->;
+   "Inserisca un numero. "->;
+   intRemainder<-int;
+        intAmount <- int;
+  while(not(intAmount==0)) do
+  {
+      intRemainder = intRemainder-intAmount;
+    "Inserisca un altro numero, inserisca zero se vuole finire " ->;
+    intAmount<- int;
+  };
+ };
+ def subtractionDouble ( ) : double doubleRemainder;
+  {
+  double doubleAmount, doubleRemainder;
+  doubleAmount=-99999;
+   doubleRemainder=0;
+   "Sottrazione di Double "->;
+   "Inserisca un numero. "->;
+   doubleRemainder <- double;
+        doubleAmount <- double;
+  while(not(doubleAmount==0)) do
+  {
+      doubleRemainder=doubleRemainder-doubleAmount;
+    "Inserisca un altro numero, inserisca zero se vuole finire " ->;
+    doubleAmount<- double;
+  };
+ };
+ def moltiplicationInt(): int intProduct;
+ {
+  int intMoltiplicator, intProduct;
+  intMoltiplicator=-99999;
+  intProduct=1;
+  "Moltiplicazione di interi "->;
+   "Inserisca un numero. "->;
+         intMoltiplicator <- int;
+  while(not(intMoltiplicator==0)) do
+  {
+      intProduct=intProduct*intMoltiplicator;
+   "Inserisca un altro numero, inserisca zero se vuole finire " ->;
+    intMoltiplicator <- int;
+  };
+ };
+ def moltiplicationDouble(): double doubleProduct;
+ {
+  double doubleMoltiplicator, doubleProduct;
+  doubleMoltiplicator=-99999;
+  doubleProduct=1;
+  "Moltiplicazione di double "->;
+   "Inserisca un numero. "->;
+         doubleMoltiplicator <- double;
+  while(not(doubleMoltiplicator==0)) do
+  {
+      doubleProduct=doubleProduct*doubleMoltiplicator;
+   "Inserisca un altro numero, inserisca zero se vuole finire " ->;
+    doubleMoltiplicator <- double;
+  };
+ };
+ def divisionInt(): int intQuotient;
+ {
+  int intDivider, intQuotient;
+  intDivider=-99999;
+  intQuotient=1;
+  "Divisione di interi "->;
+   "Inserisca dividendo e divisore."->;
+   intQuotient<-int;
+        intDivider <- int;
+  while(not(intDivider==0)) do
+  {
+      intQuotient=intQuotient/intDivider;
+   "Inserisca un altro numero, inserisca zero se vuole finire " ->;
+    intDivider <- int;
+  };
+ };
+ def divisionDouble(): double doubleQuotient;
+ {
+  double doubleDivider, doubleQuotient;
+  doubleDivider=-99999;
+  doubleQuotient=1;
+  "Divisione di Double "->;
+   "Inserisca dividendo e divisore. "->;
+    doubleQuotient <- double;
+         doubleDivider <- double;
+  while(not(doubleDivider==0)) do
+  {
+      doubleQuotient=doubleQuotient/doubleDivider;
+   "Inserisca un altro numero, inserisca zero se vuole finire " ->;
+    doubleDivider<- double;
+  };
+ }; 
 start
-
-"Scrivi il simbolo per effetture l'operazione decisa \n I simboli possibili sono :  0 Addizione 1 Sottrazione 2 Moltiplicazione 3 Divisione \n Inserica -1 per terminare" ->;
-choice<-int;
-while(true) do
+choice=0;
+while(not(choice==-1)) do
 {
-	if(choice==0) then
-	{
-		"Vuoi lavorare con interi o double? 0 per interi 1 per double"->;
-			operativeChoice<-int;
-			if(operativeChoice==0)then
-			{
-				addInt(:intResult);
-			}
-			else
-			{
-				if(operativeChoice==1)then
-				{
-					addDouble(:doubleResult);
-				}
-				else
-				{
-					"Comando non riconosciuto"->;
-				};
-			};
-	}
-	else
-	{
-		if(choice==1) then
-		{
-			"Vuoi lavorare con interi o double? INTERI per interi DOUBLE per double"->;
-			operativeChoice<-int;
-			if(operativeChoice==0)then
-			{
-				moltiplicationInt(:intResult);
-			}
-			else
-			{
-				if(operativeChoice==1)then
-				{
-					moltiplicationInt(:doubleResult);
-				}
-				else
-				{
-					"Comando non riconosciuto"->;
-				};
-			};
-		}
-		else
-		{
-			if(choice==2) then
-			{
-				"Vuoi lavorare con interi o double? INTERI per interi DOUBLE per double"->;
-				operativeChoice<-int;
-				if(operativeChoice==0)then
-				{
-					moltiplicationInt(:intResult);
-				}
-				else
-				{
-					if(operativeChoice==1)then
-					{
-						moltiplicationInt(:doubleResult);
-					}
-					else
-					{
-						"Comando non riconosciuto"->;
-					};
-				};
-			}
-			else
-			{
-				if(choice==3) then
-				{
-					"Vuoi lavorare con interi o double? INTERI per interi DOUBLE per double"->;
-					operativeChoice<-int;
-					if(operativeChoice==0)then
-					{
-						moltiplicationInt(:intResult);
-					}
-					else
-					{
-						if(operativeChoice==1)then
-						{
-							moltiplicationInt(:doubleResult);
-						}
-						else
-						{
-							"Comando non riconosciuto"->;
-						};
-					};
-				}
-				else
-				{
-					if(choice==-1) then
-					{
-						"finito"->;
-					};
-				};
-			};
-		};
-	};
-};
-
-
+"Scrivi il simbolo per effetture l'operazione decisa  I simboli possibili sono :  0 Addizione 1 Sottrazione 2 Moltiplicazione 3 Divisione Inserica -1 per terminare " ->;
+choice<-int;
+ if(choice==0) then
+ {
+  "Vuoi lavorare con interi o double? 0 per interi 1 per double "->;
+   operativeChoice<-int;
+   if(operativeChoice==0)then
+   {  
+    addInt(:intResult);
+    "Risultato "->;
+    intResult->;
+   }
+   else
+   {
+    if(operativeChoice==1)then
+    {
+     addDouble(:doubleResult);
+     "Risultato "->;
+                    doubleResult->;
+    }
+    else
+    {
+     "Comando non riconosciuto "->;
+    };
+   };
+ }
+ else
+ {
+  if(choice==1) then
+  {
+   "Vuoi lavorare con interi o double? INTERI per interi DOUBLE per double "->;
+               operativeChoice<-int;
+               if(operativeChoice==0)then
+               {
+                subtractionInt(:intResult);
+                "Risultato "->;
+                            intResult->;
+               }
+               else
+               {
+                if(operativeChoice==1)then
+                {
+                 subtractionDouble(:doubleResult);
+                 "Risultato "->;
+                                doubleResult->;
+                }
+                else
+                {
+                 "Comando non riconosciuto "->;
+                };
+               };
+              }
+              else
+              {
+               if(choice==2) then
+               {
+                "Vuoi lavorare con interi o double? INTERI per interi DOUBLE per double "->;
+                operativeChoice<-int;
+                if(operativeChoice==0)then
+                {
+                 moltiplicationInt(:intResult);
+                 "Risultato "->;
+                                intResult->;
+                }
+                else
+                {
+                 if(operativeChoice==1)then
+                 {
+                  moltiplicationDouble(:doubleResult);
+                  "Risultato "->;
+                                    doubleResult->;
+                 }
+                 else
+                 {
+                  "Comando non riconosciuto "->;
+                 };
+                };
+               }
+               else
+               {
+                if(choice==3) then
+                {
+                 "Vuoi lavorare con interi o double? INTERI per interi DOUBLE per double "->;
+                 operativeChoice<-int;
+                 if(operativeChoice==0)then
+                 {
+                  divisionInt(:intResult);
+                     "Risultato "->;
+                                    intResult->;
+                 }
+                 else
+                 {
+                  if(operativeChoice==1)then
+                  {
+                   divisionDouble(:doubleResult);
+                         "Risultato " ->;
+                          doubleResult ->;
+                  }
+                  else
+                  {
+                   "Comando non riconosciuto "->;
+                  };
+                 };
+                }
+                else
+                {
+                 if(choice==-1) then
+                 {
+                  "finito"->;
+                 }else{
+                     "Comando non riconosciuto "->;
+                 };
+                };
+               };
+              };
+             };
+             };

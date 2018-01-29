@@ -42,4 +42,9 @@ public class Body extends YasplNode {
     public List<Statement> getStatements() {
         return this.statements;
     }
+
+    @Override
+    public boolean checkType() {
+        return checkAll(variableDeclarations) && checkAll(statements);
+    }
 }

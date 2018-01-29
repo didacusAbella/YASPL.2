@@ -33,4 +33,8 @@ public class CompositeStatement extends Statement {
         return this.statements;
     }
 
+    @Override
+    public boolean checkType() {
+        return checkAll(statements);
+    }
 }

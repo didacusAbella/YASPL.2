@@ -37,4 +37,12 @@ public class AssignStatement extends Statement {
     public <T, P> T accept(Visitor<T, P> visitor, P param) {
         return visitor.visit(this, param);
     }
+
+    @Override
+    public boolean checkType() {
+        if(identifier.checkType() && expression.checkType())
+            return true;
+        else
+            return false;
+    }
 }

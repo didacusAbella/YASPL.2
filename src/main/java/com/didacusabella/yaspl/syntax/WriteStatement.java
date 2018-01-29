@@ -36,4 +36,9 @@ public class WriteStatement extends Statement {
     public <T, P> T accept(Visitor<T, P> visitor, P param) {
         return visitor.visit(this, param);
     }
+
+    @Override
+    public boolean checkType() {
+       return checkAll(expressions);
+    }
 }

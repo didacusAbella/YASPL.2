@@ -45,4 +45,9 @@ public class WhileStatement extends Statement {
     public CompositeStatement getWhileStatement() {
         return this.whileStatement;
     }
+
+    @Override
+    public boolean checkType() {
+        return booleanExpression.checkType() && whileStatement.checkType();
+    }
 }

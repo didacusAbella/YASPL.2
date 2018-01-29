@@ -47,16 +47,11 @@ precedence left TIMES, DIV;
 precedence left PLUS, MINUS;
 precedence right NOT;
 
+
 /*------------------------------------------- START GRAMMAR--------------------------------------------------*/
 
 /********************************** Entrypoint of the Program *****************************************/
-Programma ::= HEAD:h Decls:decls START Statements:stmts
-            {:
-                RESULT = new Program(hxleft, hxright, decls, stmts);
-                SyntaxVisitor visitor = new SyntaxVisitor();
-                visitor.appendRoot(visitor.visit(RESULT, null));
-                visitor.toXml();
-            :};
+Programma ::= HEAD:h Decls:decls START Statements:stmts {:  RESULT = new Program(hxleft, hxright, decls, stmts); :};
 
 
 /***************************************** Declarations ***********************************************/
@@ -77,8 +72,8 @@ Var_decl ::= Type:type Vars:vars SEMI{: RESULT = new VariableDeclaration(typexle
 
 
 /************************************ Types ammitted ************************************************/
-Type ::=  INT:i {: RESULT = new Type(ixleft, ixright, "integer"); :}
-        | BOOL:b {: RESULT = new Type(bxleft, bxright, "boolean"); :}
+Type ::=  INT:i {: RESULT = new Type(ixleft, ixright, "int"); :}
+        | BOOL:b {: RESULT = new Type(bxleft, bxright, "bool"); :}
         | DOUBLE:d {: RESULT = new Type(dxleft, dxright, "double");:}
         | STRING:s {: RESULT = new Type(sxleft, sxright, "string"); :}
         ;

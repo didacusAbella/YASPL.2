@@ -1,6 +1,7 @@
 package com.didacusabella.yaspl.syntax;
 
 
+import com.didacusabella.yaspl.semantic.ReturnType;
 import com.didacusabella.yaspl.visitor.Visitor;
 import java_cup.runtime.ComplexSymbolFactory;
 
@@ -11,14 +12,16 @@ import java_cup.runtime.ComplexSymbolFactory;
  * @author didacusAbella
  * @since 1.0
  */
-public abstract class YasplNode {
+public abstract class YasplNode implements TypeChecking {
 
      private final ComplexSymbolFactory.Location leftLocation;
      private final ComplexSymbolFactory.Location rightLocation;
+     private ReturnType nodeType;
 
      public YasplNode(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation) {
           this.leftLocation = leftLocation;
           this.rightLocation = rightLocation;
+          this.nodeType = ReturnType.UNDEFINED;
      }
 
      public ComplexSymbolFactory.Location getLeftLocation() {
@@ -39,4 +42,11 @@ public abstract class YasplNode {
       */
      public abstract <T, P> T accept(Visitor<T,P> visitor, P param);
 
+    public ReturnType getNodeType() {
+        return nodeType;
+    }
+
+    public void setNodeType(ReturnType nodeType) {
+        this.nodeType = nodeType;
+    }
 }

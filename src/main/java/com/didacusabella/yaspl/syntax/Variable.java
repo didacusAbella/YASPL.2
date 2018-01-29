@@ -35,4 +35,8 @@ public class Variable extends YasplNode {
     }
 
 
+    @Override
+    public boolean checkType() {
+        return identifier.checkType();
+    }
 }

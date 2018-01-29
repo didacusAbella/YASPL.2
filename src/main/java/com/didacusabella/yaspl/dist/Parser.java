@@ -339,12 +339,7 @@ class CUP$Parser$actions {
 		Location stmtsxleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xleft;
 		Location stmtsxright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xright;
 		ArrayList<Statement> stmts = (ArrayList<Statement>)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		
-                RESULT = new Program(hxleft, hxright, decls, stmts);
-                SyntaxVisitor visitor = new SyntaxVisitor();
-                visitor.appendRoot(visitor.visit(RESULT, null));
-                visitor.toXml();
-            
+		  RESULT = new Program(hxleft, hxright, decls, stmts); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("Programma",0, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -451,7 +446,7 @@ class CUP$Parser$actions {
 		Location ixleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xleft;
 		Location ixright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xright;
 		String i = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new Type(ixleft, ixright, "integer"); 
+		 RESULT = new Type(ixleft, ixright, "int"); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("Type",2, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -463,7 +458,7 @@ class CUP$Parser$actions {
 		Location bxleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xleft;
 		Location bxright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xright;
 		String b = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new Type(bxleft, bxright, "boolean"); 
+		 RESULT = new Type(bxleft, bxright, "bool"); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("Type",2, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;

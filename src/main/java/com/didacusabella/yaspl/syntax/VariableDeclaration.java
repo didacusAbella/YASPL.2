@@ -45,4 +45,9 @@ public class VariableDeclaration extends Decl {
     public List<Variable> getVariables() {
         return this.variables;
     }
+
+    @Override
+    public boolean checkType() {
+        return type.checkType() && checkAll(variables);
+    }
 }

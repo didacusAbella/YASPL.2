@@ -1,5 +1,6 @@
 package com.didacusabella.yaspl.syntax;
 
+import com.didacusabella.yaspl.visitor.Visitor;
 import java_cup.runtime.ComplexSymbolFactory;
 
 /**
@@ -12,4 +13,10 @@ public abstract class BooleanExpression extends Expression {
     public BooleanExpression(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation) {
         super(leftLocation, rightLocation);
     }
+
+    @Override
+    public <T, P> T accept(Visitor<T, P> visitor, P param) {
+        return null;
+    }
+
 }

@@ -4,6 +4,7 @@ import com.didacusabella.yaspl.visitor.Visitor;
 import java_cup.runtime.ComplexSymbolFactory;
 
 import java.util.List;
+import java.util.StringJoiner;
 
 /**
  * This is the node associated with a function call. For example:
@@ -56,5 +57,20 @@ public class FunctionCall extends Statement {
         return visitor.visit(this, param);
     }
 
+    @Override
+    public boolean checkType() {
+        return identifier.checkType() && checkAll(expressions) && checkAll(variables);
+    }
 
+    public String getDomain(){
+        StringJoiner sj = new StringJoiner("x");
+        expressions.forEach(e -> sj.add(e.getNodeType().getValue()));
+        return sj.toString();
+    }
+
+    public String getCodomain(){
+        StringJoiner sj = new StringJoiner("x");
+        variables.forEach(v -> sj.add(v.getNodeType().getValue()));
+        return sj.toString();
+    }
 }

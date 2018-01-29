@@ -4,6 +4,7 @@ import java_cup.runtime.ComplexSymbolFactory.Location;
 import java_cup.runtime.ComplexSymbolFactory.ComplexSymbol;
 import java_cup.runtime.Symbol;
 import java.io.InputStreamReader;
+import com.didacusabella.yaspl.lexical.StringTable;
 import java.util.HashMap;
 %%
 
@@ -19,11 +20,13 @@ import java.util.HashMap;
 %eofval}
 
 %{
+    private StringTable table;
 
 
-    public Lexer(ComplexSymbolFactory sf, java.io.InputStream is){
+    public Lexer(ComplexSymbolFactory sf, java.io.InputStream is, StringTable table){
 		this(new InputStreamReader(is));
         symbolFactory = sf;
+        this.table = table;
     }
 
     private StringBuffer sb = new StringBuffer();
@@ -36,6 +39,7 @@ import java.util.HashMap;
     }
 
     public Symbol symbol(String name, int code, Object value){
+        this.table.addLexicalSymbol(value.toString(), code);
         return symbolFactory.newSymbol(name, code,
     					new Location(yyline+1, yycolumn+1),
     					new Location(yyline+1, yycolumn+yylength()), value);

@@ -1,5 +1,6 @@
 package com.didacusabella.yaspl.syntax;
 
+import com.didacusabella.yaspl.semantic.ReturnType;
 import com.didacusabella.yaspl.visitor.Visitor;
 import java_cup.runtime.ComplexSymbolFactory;
 
@@ -54,5 +55,13 @@ public class BinaryExpression extends Expression{
     @Override
     public <T, P> T accept(Visitor<T, P> visitor, P param) {
         return visitor.visit(this, param);
+    }
+
+    @Override
+    public boolean checkType() {
+        ReturnType leftType = leftOperand.getNodeType();
+        ReturnType rightType = rightOperand.getNodeType();
+        return (leftType == ReturnType.INTEGER || leftType == ReturnType.DOUBLE)
+                && (rightType == ReturnType.INTEGER || rightType == ReturnType.DOUBLE);
     }
 }

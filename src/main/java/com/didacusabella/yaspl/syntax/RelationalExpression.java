@@ -1,5 +1,6 @@
 package com.didacusabella.yaspl.syntax;
 
+import com.didacusabella.yaspl.semantic.ReturnType;
 import com.didacusabella.yaspl.visitor.Visitor;
 import java_cup.runtime.ComplexSymbolFactory;
 
@@ -52,5 +53,18 @@ public class RelationalExpression extends BooleanExpression {
     @Override
     public <T, P> T accept(Visitor<T, P> visitor, P param) {
         return visitor.visit(this, param);
+    }
+
+    @Override
+    public boolean checkType() {
+        ReturnType left = leftOperand.getNodeType();
+        ReturnType right = rightOperand.getNodeType();
+        if(left == ReturnType.BOOLEAN && right == ReturnType.BOOLEAN) {
+            return true;
+        }
+        else {
+            return (left == ReturnType.INTEGER || left == ReturnType.DOUBLE)
+                    && (right == ReturnType.INTEGER || right == ReturnType.DOUBLE);
+        }
     }
 }

@@ -1,5 +1,8 @@
 package com.didacusabella.yaspl.syntax;
 
+import com.didacusabella.yaspl.semantic.Scope;
+import com.didacusabella.yaspl.semantic.Scopeable;
+import com.didacusabella.yaspl.semantic.SymbolTable;
 import com.didacusabella.yaspl.visitor.Visitor;
 import java_cup.runtime.ComplexSymbolFactory;
 
@@ -8,10 +11,11 @@ import java.util.List;
 /**
  * This node represent the root of a YASPL program
  */
-public class Program extends YasplNode {
+public class Program extends YasplNode implements Scopeable {
 
     private final List<Decl> declarations;
     private final List<Statement> statements;
+    private Scope scopeReference;
 
     public Program(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
                    List<Decl> declarations, List<Statement> statements) {
@@ -41,6 +45,18 @@ public class Program extends YasplNode {
         return visitor.visit(this, param);
     }
 
+    @Override
+    public boolean checkType() {
+        return checkAll(declarations) && checkAll(statements);
+    }
 
+    @Override
+    public void attachScope(Scope table) {
+        this.scopeReference = table;
+    }
 
+    @Override
+    public Scope getAttachedScope() {
+        return this.scopeReference;
+    }
 }
