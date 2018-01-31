@@ -1,0 +1,6 @@
+head
+def name(int a,b,c;) : int e,f,g; {
+e = a+b+c;
+};
+start
+"Ciao" ->;

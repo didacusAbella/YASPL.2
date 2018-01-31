@@ -1,0 +1,8 @@
+head
+int stResult;
+def emptyFunction() : int result;{
+result = 1;
+};
+start
+"Ciao Mondo" ->;
+emptyFunction(:stResult);

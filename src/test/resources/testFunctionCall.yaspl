@@ -1,0 +1,9 @@
+head
+int a,b;
+string g, h;
+def function(int c, d;) : string e, f; {
+  e = "Ciao";
+  f = "A Tutti";
+};
+start
+function(a,b:g,h);
