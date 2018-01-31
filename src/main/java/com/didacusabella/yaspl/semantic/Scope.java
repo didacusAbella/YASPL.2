@@ -9,7 +9,7 @@ public class Scope extends HashMap<Integer, SemanticSymbol>{
     public String toString() {
         StringBuilder sb = new StringBuilder();
         this.entrySet().forEach(e -> {
-            sb.append(String.format("indirizzo:%d | Valore: %s\n", e.getKey(), e.getValue()));
+            sb.append(String.format("Indirizzo:%d | %s\n", e.getKey(), e.getValue()));
         });
         return sb.toString();
     }

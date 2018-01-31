@@ -26,8 +26,9 @@ public class StackSymbolTable extends Stack<Scope> implements SymbolTable {
     }
 
     @Override
-    public boolean probe(SemanticSymbol symbol) {
-        return false;
+    public boolean probe(int address)
+    {
+        return this.getCurrentScope().containsKey(address);
     }
 
     @Override
@@ -57,7 +58,7 @@ public class StackSymbolTable extends Stack<Scope> implements SymbolTable {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for(int i=0; i < this.size(); i++){
-            sb.append(this.elementAt(i).toString());
+            sb.append("Scope n"+i+"\n "+this.elementAt(i).toString().concat("\n"));
         }
         return sb.toString();
     }

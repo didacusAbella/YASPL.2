@@ -54,7 +54,4 @@ public class ParameterDeclaration extends YasplNode {
         return checkAll(variableDeclarations);
     }
 
-    public int trueSize(){
-        return this.variableDeclarations.size();
-    }
 }

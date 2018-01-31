@@ -4,7 +4,7 @@ public interface SymbolTable {
 
     void enterScope(Scope scope);
     void exitScope();
-    boolean probe(SemanticSymbol symbol);
+    boolean probe(int address);
     void addId(int address, SemanticSymbol symbol);
     Scope lookup(int address);
     int findAddress(String lexeme);

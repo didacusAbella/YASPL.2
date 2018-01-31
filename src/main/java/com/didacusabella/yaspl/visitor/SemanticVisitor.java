@@ -35,7 +35,7 @@ public class SemanticVisitor implements Visitor<ReturnType, Logger> {
     public ReturnType visit(VariableDeclaration variableDeclarationNode, Logger param) {
         variableDeclarationNode.getType().accept(this, param);
         variableDeclarationNode.getVariables().forEach(v -> v.accept(this, param));
-        if(!variableDeclarationNode.checkType()) {
+        if(variableDeclarationNode.checkType()) {
             ReturnType varType = variableDeclarationNode.getType().getNodeType();
             variableDeclarationNode.setNodeType(varType);
             variableDeclarationNode.getVariables().forEach(v -> {
@@ -80,11 +80,18 @@ public class SemanticVisitor implements Visitor<ReturnType, Logger> {
 
     @Override
     public ReturnType visit(Variable variableNode, Logger param) {
-        variableNode.getIdentifier().accept(this, param);
-        if(variableNode.checkType())
-            variableNode.setNodeType(variableNode.getIdentifier().getNodeType());
-        else
+        int address = this.symbolTable.findAddress(variableNode.getIdentifier().getName());
+        if(!this.symbolTable.probe(address)){
             variableNode.setNodeType(ReturnType.UNDEFINED);
+            return variableNode.getNodeType();
+        }else {
+            variableNode.getIdentifier().accept(this, param);
+            if(variableNode.checkType()) {
+                variableNode.setNodeType(variableNode.getIdentifier().getNodeType());
+            } else {
+                variableNode.setNodeType(ReturnType.UNDEFINED);
+            }
+        }
         return variableNode.getNodeType();
     }
 
@@ -103,10 +110,12 @@ public class SemanticVisitor implements Visitor<ReturnType, Logger> {
     public ReturnType visit(Identifier identifierNode, Logger param) {
         int address = this.symbolTable.findAddress(identifierNode.getName());
         Scope candidate = this.symbolTable.lookup(address);
-        if(candidate != null)
+        if(candidate != null) {
             identifierNode.setNodeType(candidate.get(address).getReturnType());
-        else
+        }
+        else {
             identifierNode.setNodeType(ReturnType.UNDEFINED);
+        }
         return identifierNode.getNodeType();
     }
 

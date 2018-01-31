@@ -44,12 +44,12 @@ public class App
         symbolTable = new StackSymbolTable(table);
         semanticVisitor = new SemanticVisitor(symbolTable);
         semanticVisitor.visit(program, Logger.getLogger(semanticVisitor.getClass().getSimpleName()));
-        cVisitor = new CodeVisitor();
+       /* cVisitor = new CodeVisitor();
         File f = new File(System.getProperty("user.home").concat("/output.c"));
         f.createNewFile();
         FileWriter pw = new FileWriter(f);
         pw.write(cVisitor.visit(program, symbolTable));
-        pw.close();
+        pw.close();*/
     }
 
 }

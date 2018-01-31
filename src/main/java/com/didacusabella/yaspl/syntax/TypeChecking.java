@@ -11,4 +11,8 @@ public interface TypeChecking {
     default boolean checkAll(List<? extends YasplNode> list){
         return list.stream().allMatch(node -> node.getNodeType() != ReturnType.UNDEFINED);
     }
+
+    default boolean allUndefined(List<? extends YasplNode> list){
+        return list.stream().allMatch(node -> node.getNodeType() == ReturnType.UNDEFINED);
+    }
 }

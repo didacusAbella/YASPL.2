@@ -31,8 +31,10 @@ public class ArrayStringTable implements StringTable {
 
     @Override
     public String toString() {
-        return "ArrayStringTable{" +
-                "lexicalSymbols=" + lexicalSymbols +
-                '}';
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < lexicalSymbols.size(); i++){
+            sb.append(String.format("Indirizzo:%d | Valore:%s\n", i, lexicalSymbols.get(i).getLexeme()));
+        }
+        return sb.toString();
     }
 }

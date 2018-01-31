@@ -112,11 +112,15 @@ public class CodeVisitor implements Visitor<String, SymbolTable> {
     @Override
     public String visit(FunctionCall functionCallNode, SymbolTable param) {
         String functionName = functionCallNode.getFunctionName().accept(this, param);
-        StringJoiner input = new StringJoiner(", ");
+        String input = "";
+        if(!functionCallNode.getExpressions().isEmpty()){
+            StringJoiner sj = new StringJoiner(", ");
+            functionCallNode.getExpressions().forEach(e -> sj.add(e.accept(this, param)));
+            input = sj.toString().concat(",");
+        }
         StringJoiner output = new StringJoiner(", ");
-        functionCallNode.getExpressions().forEach(e -> input.add(e.accept(this, param)));
         functionCallNode.getVariableList().forEach(v -> output.add("&".concat(v.accept(this, param))));
-        return String.format("%s(%s, %s);\n", functionName, input, output);
+        return String.format("%s(%s%s);\n", functionName, input, output);
     }
 
     @Override
@@ -176,7 +180,7 @@ public class CodeVisitor implements Visitor<String, SymbolTable> {
 
     @Override
     public String visit(NotExpression notExpressionNode, SymbolTable param) {
-        return String.format("!%s", notExpressionNode.getExpression().accept(this, param));
+        return String.format("!(%s)", notExpressionNode.getExpression().accept(this, param));
     }
 
     @Override
@@ -218,7 +222,7 @@ public class CodeVisitor implements Visitor<String, SymbolTable> {
             case "bool": case "int":
                 return "%d";
             case "double":
-                return "%f";
+                return "%lf";
             case "string":
                 return "%s";
                 default:

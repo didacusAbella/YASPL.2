@@ -48,6 +48,6 @@ public class VariableDeclaration extends Decl {
 
     @Override
     public boolean checkType() {
-        return type.checkType() && checkAll(variables);
+        return type.checkType() && allUndefined(variables);
     }
 }
