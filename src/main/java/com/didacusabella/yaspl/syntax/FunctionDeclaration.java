@@ -83,23 +83,26 @@ public class FunctionDeclaration extends Decl implements Scopeable {
     }
 
     public String domainString(){
-        StringJoiner sj = new StringJoiner("x");
+        if(variableDeclarations.isEmpty()){
+            return ReturnType.VOID.getValue();
+        }
+        StringJoiner sj = new StringJoiner("X");
         variableDeclarations.forEach(v -> {
             int size = v.getVariables().size();
             ReturnType type = v.getNodeType();
-            String tmp = String.join("x", Collections.nCopies(size, type.getValue()));
+            String tmp = String.join("X", Collections.nCopies(size, type.getValue()));
             sj.add(tmp);
         });
         return sj.toString();
     }
 
     public String codomainString(){
-        StringJoiner sj = new StringJoiner("x");
+        StringJoiner sj = new StringJoiner("X");
         parameterDeclarations.forEach(p -> {
             p.getVariableDeclarationList().forEach(v -> {
                 int size = v.getVariables().size();
                 ReturnType type = v.getNodeType();
-                String tmp = String.join("x", Collections.nCopies(size, type.getValue()));
+                String tmp = String.join("X", Collections.nCopies(size, type.getValue()));
                 sj.add(tmp);
             });
         });

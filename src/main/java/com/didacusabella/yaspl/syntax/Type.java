@@ -36,7 +36,7 @@ public class Type extends YasplNode {
     public boolean checkType() {
         return this.getTypeName().equals("int")
                 || this.getTypeName().equals("double")
-                || this.getTypeName().equals("double")
+                || this.getTypeName().equals("string")
                 || this.getTypeName().equals("bool");
     }
 }

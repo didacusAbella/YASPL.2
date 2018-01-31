@@ -1,5 +1,6 @@
 package com.didacusabella.yaspl.syntax;
 
+import com.didacusabella.yaspl.semantic.ReturnType;
 import com.didacusabella.yaspl.visitor.Visitor;
 import java_cup.runtime.ComplexSymbolFactory;
 
@@ -63,13 +64,16 @@ public class FunctionCall extends Statement {
     }
 
     public String getDomain(){
-        StringJoiner sj = new StringJoiner("x");
+        if(expressions.isEmpty()){
+            return ReturnType.VOID.getValue();
+        }
+        StringJoiner sj = new StringJoiner("X");
         expressions.forEach(e -> sj.add(e.getNodeType().getValue()));
         return sj.toString();
     }
 
     public String getCodomain(){
-        StringJoiner sj = new StringJoiner("x");
+        StringJoiner sj = new StringJoiner("X");
         variables.forEach(v -> sj.add(v.getNodeType().getValue()));
         return sj.toString();
     }

@@ -163,7 +163,6 @@ Simple_stat ::=  Vars:vs READ Types:tps SEMI {: RESULT = new ReadStatement(vsxle
 Out_values ::=  Expr:exp COMMA Out_values:ov {: ov.add(exp); RESULT = ov; :}
               | STRING_CONST:sc COMMA Out_values:ov {: ov.add(new StringConst(scxleft, scxright, sc)); RESULT = ov; :}
               | Expr:exp {: RESULT = new ArrayList<>(); RESULT.add(exp); :}
-              | STRING_CONST:sc {: RESULT = new ArrayList<>(); RESULT.add(new StringConst(scxleft, scxright, sc)); :}
               ;
 
 
@@ -182,6 +181,7 @@ Exprs ::= Expr:exp COMMA Exprs:exprs {: exprs.add(exp); RESULT = exprs; :}
 /************************************** Expression ********************************************/
 Expr ::= INT_CONST:ic {: RESULT = new IntegerConst(icxleft, icxright, ic); :}
         | DOUBLE_CONST:dc {: RESULT = new DoubleConst(dcxleft, dcxright, dc); :}
+        | STRING_CONST:sc {: RESULT = new StringConst(scxleft, scxright, sc); :}
         | Expr:s1 Arith_op:op Expr:s2 {: RESULT = new BinaryExpression(s1xleft, s1xright, s1, s2, op); :}
         | NAME:name {: RESULT = new Identifier(namexleft, namexright, name);:}
         | MINUS Expr:exp {: RESULT = new UminusExpression(expxleft, expxright, exp); :} %prec UMINUS

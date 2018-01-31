@@ -8,13 +8,13 @@ head
   int intAdded,intSum;
   intAdded=-99999;
    intSum=0;
-   "Somma di interi "->;
-   "Inserisca un numero. "->;
+   "Sum of integers"->;
+   "Insert a number"->;
    intAdded <- int;
   while(not(intAdded==0)) do
   {
       intSum=intSum+intAdded;
-    "Inserisca un altro numero, inserisca zero se vuole finire " ->;
+    "Insert another number, zero to finish " ->;
     intAdded <- int;
   };
  };
@@ -24,13 +24,13 @@ head
    double doubleAdded,doubleSum;
    doubleAdded = -99999;
    doubleSum= 0;
-   "Somma di double "->;
-   "Inserisca un numero. "->;
+   "Sum of doubles "->;
+   "Insert a number"->;
          doubleAdded <- double;
    while(not(doubleAdded==0)) do
    {
        doubleSum=doubleSum+doubleAdded;
-    "Inserisca un altro numero, inserisca zero se vuole finire " ->;
+    "Insert another number, zero to finish " ->;
     doubleAdded <- double;
    };
  };
@@ -39,14 +39,14 @@ head
   int intAmount,intRemainder;
   intAmount=-99999;
    intRemainder=0;
-   "Sottrazione di interi "->;
-   "Inserisca un numero. "->;
+   "Difference of integer "->;
+   "Insert a number "->;
    intRemainder<-int;
         intAmount <- int;
   while(not(intAmount==0)) do
   {
       intRemainder = intRemainder-intAmount;
-    "Inserisca un altro numero, inserisca zero se vuole finire " ->;
+    "Insert another number, zero to finish" ->;
     intAmount<- int;
   };
  };
@@ -55,14 +55,14 @@ head
   double doubleAmount, doubleRemainder;
   doubleAmount=-99999;
    doubleRemainder=0;
-   "Sottrazione di Double "->;
-   "Inserisca un numero. "->;
+   "Difference of doubles "->;
+   "Insert a number"->;
    doubleRemainder <- double;
         doubleAmount <- double;
   while(not(doubleAmount==0)) do
   {
       doubleRemainder=doubleRemainder-doubleAmount;
-    "Inserisca un altro numero, inserisca zero se vuole finire " ->;
+    "Insert another number, zero to finish" ->;
     doubleAmount<- double;
   };
  };
