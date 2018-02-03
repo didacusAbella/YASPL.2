@@ -4,6 +4,7 @@ import com.didacusabella.yaspl.visitor.Visitor;
 import java_cup.runtime.ComplexSymbolFactory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,6 +23,7 @@ public class ParameterDeclaration extends YasplNode {
     public ParameterDeclaration(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
                                 List<VariableDeclaration> variableDeclarations) {
         super(leftLocation, rightLocation);
+        Collections.reverse(variableDeclarations);
         this.variableDeclarations = variableDeclarations;
     }
 
@@ -47,11 +49,6 @@ public class ParameterDeclaration extends YasplNode {
      */
     public List<VariableDeclaration> getVariableDeclarationList() {
         return this.variableDeclarations;
-    }
-
-    @Override
-    public boolean checkType() {
-        return checkAll(variableDeclarations);
     }
 
 }

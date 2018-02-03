@@ -3,6 +3,7 @@ package com.didacusabella.yaspl.syntax;
 import com.didacusabella.yaspl.visitor.Visitor;
 import java_cup.runtime.ComplexSymbolFactory;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,6 +23,7 @@ public class VariableDeclaration extends Decl {
                                Type type, List<Variable> variables) {
         super(leftLocation, rightLocation);
         this.type = type;
+        Collections.reverse(variables);
         this.variables = variables;
     }
 
@@ -46,8 +48,4 @@ public class VariableDeclaration extends Decl {
         return this.variables;
     }
 
-    @Override
-    public boolean checkType() {
-        return type.checkType() && allUndefined(variables);
-    }
 }

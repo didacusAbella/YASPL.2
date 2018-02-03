@@ -3,6 +3,7 @@ package com.didacusabella.yaspl.syntax;
 import com.didacusabella.yaspl.visitor.Visitor;
 import java_cup.runtime.ComplexSymbolFactory;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -17,6 +18,7 @@ public class CompositeStatement extends Statement {
     public CompositeStatement(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
                               List<Statement> statements) {
         super(leftLocation, rightLocation);
+        Collections.reverse(statements);
         this.statements = statements;
     }
 
@@ -31,10 +33,5 @@ public class CompositeStatement extends Statement {
      */
     public List<Statement> getStatementList() {
         return this.statements;
-    }
-
-    @Override
-    public boolean checkType() {
-        return checkAll(statements);
     }
 }

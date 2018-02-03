@@ -3,6 +3,7 @@ package com.didacusabella.yaspl.syntax;
 import com.didacusabella.yaspl.visitor.Visitor;
 import java_cup.runtime.ComplexSymbolFactory;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -21,6 +22,7 @@ public class WriteStatement extends Statement {
     public WriteStatement(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
                           List<Expression> expressions) {
         super(leftLocation, rightLocation);
+        Collections.reverse(expressions);
         this.expressions = expressions;
     }
 
@@ -37,8 +39,4 @@ public class WriteStatement extends Statement {
         return visitor.visit(this, param);
     }
 
-    @Override
-    public boolean checkType() {
-       return checkAll(expressions);
-    }
 }

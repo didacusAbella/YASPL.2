@@ -56,12 +56,4 @@ public class BinaryExpression extends Expression{
     public <T, P> T accept(Visitor<T, P> visitor, P param) {
         return visitor.visit(this, param);
     }
-
-    @Override
-    public boolean checkType() {
-        ReturnType leftType = leftOperand.getNodeType();
-        ReturnType rightType = rightOperand.getNodeType();
-        return (leftType == ReturnType.INTEGER || leftType == ReturnType.DOUBLE)
-                && (rightType == ReturnType.INTEGER || rightType == ReturnType.DOUBLE);
-    }
 }

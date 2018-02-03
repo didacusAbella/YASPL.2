@@ -58,9 +58,4 @@ public class IfThenElseStatement extends Statement {
     public <T, P> T accept(Visitor<T, P> visitor, P param) {
         return visitor.visit(this, param);
     }
-
-    @Override
-    public boolean checkType() {
-        return ifCondition.checkType() && thenStatement.checkType() && elseStatement.checkType();
-    }
 }

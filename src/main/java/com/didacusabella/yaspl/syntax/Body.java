@@ -3,6 +3,7 @@ package com.didacusabella.yaspl.syntax;
 import com.didacusabella.yaspl.visitor.Visitor;
 import java_cup.runtime.ComplexSymbolFactory;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -18,7 +19,9 @@ public class Body extends YasplNode {
     public Body(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
                 List<VariableDeclaration> variableDeclarations, List<Statement> statements) {
         super(leftLocation, rightLocation);
+        Collections.reverse(variableDeclarations);
         this.variableDeclarations = variableDeclarations;
+        Collections.reverse(statements);
         this.statements = statements;
     }
 
@@ -43,8 +46,4 @@ public class Body extends YasplNode {
         return this.statements;
     }
 
-    @Override
-    public boolean checkType() {
-        return checkAll(variableDeclarations) && checkAll(statements);
-    }
 }

@@ -3,6 +3,7 @@ package com.didacusabella.yaspl.syntax;
 import com.didacusabella.yaspl.visitor.Visitor;
 import java_cup.runtime.ComplexSymbolFactory;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,7 +23,9 @@ public class ReadStatement extends Statement {
     public ReadStatement(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
                          List<Variable> variables, List<Type> types) {
         super(leftLocation, rightLocation);
+        Collections.reverse(variables);
         this.variables = variables;
+        Collections.reverse(types);
         this.types = types;
     }
 
@@ -47,9 +50,15 @@ public class ReadStatement extends Statement {
         return this.types;
     }
 
-    @Override
-    public boolean checkType() {
-        return variables.stream().map(v -> v.getNodeType()).collect(Collectors.toList())
-                .equals(types.stream().map(t -> t.getNodeType()).collect(Collectors.toList()));
+    public String variableDomain(){
+        return this.variables.stream().map(v -> v.getIdentifier().getNodeType().getValue()).collect(Collectors.joining("X"));
+    }
+
+    public String typeDomain(){
+        return this.types.stream().map(v -> v.getTypeName()).collect(Collectors.joining("X"));
+    }
+
+    public boolean checkInputValidity(){
+        return this.variableDomain().equals(typeDomain());
     }
 }

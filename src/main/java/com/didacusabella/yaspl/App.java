@@ -43,13 +43,13 @@ public class App
         Program program = (Program) parser.parse().value;
         symbolTable = new StackSymbolTable(table);
         semanticVisitor = new SemanticVisitor(symbolTable);
-        semanticVisitor.visit(program, Logger.getLogger(semanticVisitor.getClass().getSimpleName()));
-       /* cVisitor = new CodeVisitor();
+        semanticVisitor.visit(program, Logger.getLogger("YASPL2 SEMANTIC VISIT"));
+        cVisitor = new CodeVisitor(symbolTable);
         File f = new File(System.getProperty("user.home").concat("/output.c"));
         f.createNewFile();
         FileWriter pw = new FileWriter(f);
-        pw.write(cVisitor.visit(program, symbolTable));
-        pw.close();*/
+        pw.write(cVisitor.visit(program, null));
+        pw.close();
     }
 
 }

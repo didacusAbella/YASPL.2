@@ -35,8 +35,4 @@ public class Identifier extends Expression {
         return visitor.visit(this, param);
     }
 
-    @Override
-    public boolean checkType() {
-        return this.getNodeType() != ReturnType.UNDEFINED;
-    }
 }

@@ -35,9 +35,4 @@ public class NotExpression extends BooleanExpression {
     public Expression getExpression(){
         return this.expression;
     }
-
-    @Override
-    public boolean checkType() {
-        return expression.getNodeType() == ReturnType.BOOLEAN;
-    }
 }

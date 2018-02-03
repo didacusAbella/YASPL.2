@@ -4,6 +4,7 @@ import com.didacusabella.yaspl.semantic.ReturnType;
 import com.didacusabella.yaspl.visitor.Visitor;
 import java_cup.runtime.ComplexSymbolFactory;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.StringJoiner;
 
@@ -25,7 +26,9 @@ public class FunctionCall extends Statement {
                         Identifier identifier, List<Expression> expressions, List<Variable> variables) {
         super(leftLocation, rightLocation);
         this.identifier = identifier;
+        Collections.reverse(expressions);
         this.expressions = expressions;
+        Collections.reverse(variables);
         this.variables = variables;
     }
 
@@ -56,11 +59,6 @@ public class FunctionCall extends Statement {
     @Override
     public <T, P> T accept(Visitor<T, P> visitor, P param) {
         return visitor.visit(this, param);
-    }
-
-    @Override
-    public boolean checkType() {
-        return identifier.checkType() && checkAll(expressions) && checkAll(variables);
     }
 
     public String getDomain(){

@@ -3,6 +3,9 @@ package com.didacusabella.yaspl.visitor;
 
 import com.didacusabella.yaspl.semantic.*;
 import com.didacusabella.yaspl.syntax.*;
+
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Logger;
 
 
@@ -17,10 +20,10 @@ public class SemanticVisitor implements Visitor<ReturnType, Logger> {
 
     @Override
     public ReturnType visit(Program programNode, Logger param) {
-        this.symbolTable.enterScope(new Scope());
+        this.symbolTable.enterScope();
         programNode.getDeclarations().forEach(d -> d.accept(this, param));
         programNode.getStatements().forEach(s -> s.accept(this, param));
-        if(programNode.checkType())
+        if(this.checkAll(programNode.getDeclarations()) && this.checkAll(programNode.getStatements()))
             programNode.setNodeType(ReturnType.VOID);
         else {
             programNode.setNodeType(ReturnType.UNDEFINED);
@@ -34,8 +37,14 @@ public class SemanticVisitor implements Visitor<ReturnType, Logger> {
     @Override
     public ReturnType visit(VariableDeclaration variableDeclarationNode, Logger param) {
         variableDeclarationNode.getType().accept(this, param);
-        variableDeclarationNode.getVariables().forEach(v -> v.accept(this, param));
-        if(variableDeclarationNode.checkType()) {
+        variableDeclarationNode.getVariables().forEach(v -> {
+            int variableAddress = this.symbolTable.findAddress(v.getIdentifier().getName());
+            if(this.symbolTable.probe(variableAddress))
+                v.setNodeType(this.symbolTable.getCurrentScope().get(variableAddress).getReturnType());
+            else
+                v.setNodeType(ReturnType.UNDEFINED);
+        });
+        if(this.allUndefined(variableDeclarationNode.getVariables()) && this.isUndefined(variableDeclarationNode.getType())) {
             ReturnType varType = variableDeclarationNode.getType().getNodeType();
             variableDeclarationNode.setNodeType(varType);
             variableDeclarationNode.getVariables().forEach(v -> {
@@ -53,18 +62,29 @@ public class SemanticVisitor implements Visitor<ReturnType, Logger> {
     public ReturnType visit(FunctionDeclaration functionDeclarationNode, Logger param) {
         functionDeclarationNode.getIdentifier().accept(this, param);
         //Se Identifier è uguale ad UNDEFINED
-        if(!functionDeclarationNode.getIdentifier().checkType()){
+        if(!this.isUndefined(functionDeclarationNode.getIdentifier())){
             int functionAddress = this.symbolTable.findAddress(functionDeclarationNode.getIdentifier().getName());
             FunctionSymbol fs = new FunctionSymbol(ReturnType.VOID, "undefined", "undefined");
             this.symbolTable.addId(functionAddress,fs);
-            this.symbolTable.enterScope(new Scope());
+            this.symbolTable.enterScope();
             functionDeclarationNode.getVariableDeclarations().forEach(v -> v.accept(this, param));
             functionDeclarationNode.getParameterDeclarations().forEach(p -> p.accept(this, param));
             functionDeclarationNode.getBody().accept(this, param);
-            if(functionDeclarationNode.checkType()) {
+            if(this.checkAll(functionDeclarationNode.getVariableDeclarations()) && this.checkAll(functionDeclarationNode.getParameterDeclarations())
+                    && this.isUndefined(functionDeclarationNode.getBody())) {
                 functionDeclarationNode.setNodeType(ReturnType.VOID);
-                fs.setInputDomain(functionDeclarationNode.domainString());
-                fs.setOutputDomain(functionDeclarationNode.codomainString());
+                fs.setInputDomain(functionDeclarationNode.functionDomain());
+                fs.setOutputDomain(functionDeclarationNode.functionCodomain());
+                /*Patch parameter*/
+                for(ParameterDeclaration p : functionDeclarationNode.getParameterDeclarations()){
+                    for(VariableDeclaration vd : p.getVariableDeclarationList()){
+                        for(Variable v : vd.getVariables()){
+                            int address = this.symbolTable.findAddress(v.getIdentifier().getName());
+                            VariableSymbol vs = (VariableSymbol)this.symbolTable.getCurrentScope().get(address);
+                            vs.setVarType(VariableType.OUTPUT);
+                        }
+                    }
+                }
             } else {
                 functionDeclarationNode.setNodeType(ReturnType.UNDEFINED);
                 param.severe(ErrorGenerator.generateError("Function declaration error", functionDeclarationNode));
@@ -80,25 +100,22 @@ public class SemanticVisitor implements Visitor<ReturnType, Logger> {
 
     @Override
     public ReturnType visit(Variable variableNode, Logger param) {
-        int address = this.symbolTable.findAddress(variableNode.getIdentifier().getName());
-        if(!this.symbolTable.probe(address)){
-            variableNode.setNodeType(ReturnType.UNDEFINED);
-            return variableNode.getNodeType();
+        variableNode.getIdentifier().accept(this, param);
+        if(this.isUndefined(variableNode.getIdentifier())){
+            variableNode.setNodeType(variableNode.getIdentifier().getNodeType());
         }else {
-            variableNode.getIdentifier().accept(this, param);
-            if(variableNode.checkType()) {
-                variableNode.setNodeType(variableNode.getIdentifier().getNodeType());
-            } else {
-                variableNode.setNodeType(ReturnType.UNDEFINED);
-            }
+            variableNode.setNodeType(ReturnType.UNDEFINED);
+            param.severe(ErrorGenerator.generateError("Variable not defined", variableNode));
         }
         return variableNode.getNodeType();
     }
 
     @Override
     public ReturnType visit(Type typeNode, Logger param) {
-        if(typeNode.checkType())
+        if(typeNode.getTypeName().equals("int") || typeNode.getTypeName().equals("double") || typeNode.getTypeName().equals("string")
+                || typeNode.getTypeName().equals("bool")) {
             typeNode.setNodeType(ReturnType.getEnumFor(typeNode.getTypeName()));
+        }
         else {
             typeNode.setNodeType(ReturnType.UNDEFINED);
             param.severe(ErrorGenerator.generateError("Type not permitted", typeNode));
@@ -110,19 +127,15 @@ public class SemanticVisitor implements Visitor<ReturnType, Logger> {
     public ReturnType visit(Identifier identifierNode, Logger param) {
         int address = this.symbolTable.findAddress(identifierNode.getName());
         Scope candidate = this.symbolTable.lookup(address);
-        if(candidate != null) {
-            identifierNode.setNodeType(candidate.get(address).getReturnType());
-        }
-        else {
-            identifierNode.setNodeType(ReturnType.UNDEFINED);
-        }
+        ReturnType tableType = (candidate != null) ? candidate.get(address).getReturnType() : ReturnType.UNDEFINED;
+        identifierNode.setNodeType(tableType);
         return identifierNode.getNodeType();
     }
 
     @Override
     public ReturnType visit(ParameterDeclaration parameterDeclarationNode, Logger param) {
         parameterDeclarationNode.getVariableDeclarationList().forEach(o -> o.accept(this, param));
-        if(parameterDeclarationNode.checkType()){
+        if(this.checkAll(parameterDeclarationNode.getVariableDeclarationList())){
             parameterDeclarationNode.setNodeType(ReturnType.VOID);
         }else{
             param.severe(ErrorGenerator.generateError("Parameter declaration error", parameterDeclarationNode));
@@ -135,7 +148,7 @@ public class SemanticVisitor implements Visitor<ReturnType, Logger> {
     public ReturnType visit(Body bodyNode, Logger param) {
         bodyNode.getVariableDeclarationList().forEach(v -> v.accept(this, param));
         bodyNode.getStatements().forEach(s -> s.accept(this, param));
-        if(bodyNode.checkType())
+        if(this.checkAll(bodyNode.getVariableDeclarationList()) && this.checkAll(bodyNode.getStatements()))
             bodyNode.setNodeType(ReturnType.VOID);
         else {
             param.severe(ErrorGenerator.generateError("Error at body level", bodyNode));
@@ -148,23 +161,17 @@ public class SemanticVisitor implements Visitor<ReturnType, Logger> {
     public ReturnType visit(ReadStatement readStatementNode, Logger param) {
         readStatementNode.getIdentifierList().forEach(i -> i.accept(this, param));
         readStatementNode.getTypeList().forEach(t -> t.accept(this, param));
-        int sizeIdentifiers = readStatementNode.getIdentifierList().size();
-        int sizeTypes = readStatementNode.getTypeList().size();
-        if(!readStatementNode.checkAll(readStatementNode.getIdentifierList())){
-            param.severe(ErrorGenerator.generateError("Variable not defined", readStatementNode));
+        if(this.checkAll(readStatementNode.getIdentifierList()) && this.checkAll(readStatementNode.getTypeList())){
+            if(readStatementNode.checkInputValidity()){
+                readStatementNode.setNodeType(ReturnType.VOID);
+            }else{
+                param.severe(ErrorGenerator.generateError(String.format("Input expected: %s but found %s",
+                        readStatementNode.typeDomain(), readStatementNode.variableDomain()), readStatementNode));
+                readStatementNode.setNodeType(ReturnType.UNDEFINED);
+            }
+        }else {
+            param.severe(ErrorGenerator.generateError("Read statement Error", readStatementNode));
             readStatementNode.setNodeType(ReturnType.UNDEFINED);
-        }else if(!readStatementNode.checkAll(readStatementNode.getTypeList())){
-            param.severe(ErrorGenerator.generateError("Types not permitted", readStatementNode));
-            readStatementNode.setNodeType(ReturnType.UNDEFINED);
-        }else if(sizeIdentifiers != sizeTypes){
-            param.severe(ErrorGenerator.generateError("variable or types are different in number",
-                    readStatementNode));
-            readStatementNode.setNodeType(ReturnType.UNDEFINED);
-        } else if(!readStatementNode.checkType()) {
-            param.severe(ErrorGenerator.generateError("Read incompatibles", readStatementNode));
-            readStatementNode.setNodeType(ReturnType.UNDEFINED);
-        } else {
-            readStatementNode.setNodeType(ReturnType.VOID);
         }
         return readStatementNode.getNodeType();
     }
@@ -172,7 +179,7 @@ public class SemanticVisitor implements Visitor<ReturnType, Logger> {
     @Override
     public ReturnType visit(WriteStatement writeStatementNode, Logger param) {
         writeStatementNode.getExpressions().forEach(e -> e.accept(this, param));
-        if(writeStatementNode.checkType())
+        if(this.checkAll(writeStatementNode.getExpressions()))
             writeStatementNode.setNodeType(ReturnType.VOID);
         else {
             writeStatementNode.setNodeType(ReturnType.UNDEFINED);
@@ -186,7 +193,7 @@ public class SemanticVisitor implements Visitor<ReturnType, Logger> {
         functionCallNode.getFunctionName().accept(this, param);
         functionCallNode.getExpressions().forEach(e -> e.accept(this, param));
         functionCallNode.getVariableList().forEach(v -> v.accept(this, param));
-        if(functionCallNode.getFunctionName().checkType()) {
+        if(this.isUndefined(functionCallNode.getFunctionName())) {
             int funcAddress = this.symbolTable.findAddress(functionCallNode.getFunctionName().getName());
             FunctionSymbol fs = (FunctionSymbol)this.symbolTable.getCurrentScope().get(funcAddress);
             if(!fs.getInputDomain().equals(functionCallNode.getDomain())){
@@ -210,7 +217,7 @@ public class SemanticVisitor implements Visitor<ReturnType, Logger> {
     @Override
     public ReturnType visit(CompositeStatement compositeStatementNode, Logger param) {
         compositeStatementNode.getStatementList().forEach(s -> s.accept(this, param));
-        if(compositeStatementNode.checkType())
+        if(this.checkAll(compositeStatementNode.getStatementList()))
             compositeStatementNode.setNodeType(ReturnType.VOID);
         else {
             compositeStatementNode.setNodeType(ReturnType.UNDEFINED);
@@ -223,8 +230,13 @@ public class SemanticVisitor implements Visitor<ReturnType, Logger> {
     public ReturnType visit(WhileStatement whileStatementNode, Logger param) {
         whileStatementNode.getWhileCondition().accept(this, param);
         whileStatementNode.getWhileStatement().accept(this, param);
-        if(whileStatementNode.checkType()){
-            whileStatementNode.setNodeType(ReturnType.VOID);
+        if(this.isUndefined(whileStatementNode.getWhileCondition()) && this.isUndefined(whileStatementNode.getWhileStatement())){
+            if(whileStatementNode.getWhileCondition().getNodeType() != ReturnType.BOOLEAN){
+                whileStatementNode.setNodeType(ReturnType.UNDEFINED);
+                param.severe(ErrorGenerator.generateError("While condition not boolean", whileStatementNode));
+            }else{
+                whileStatementNode.setNodeType(ReturnType.VOID);
+            }
         }else {
             param.severe(ErrorGenerator.generateError("While statement error", whileStatementNode));
             whileStatementNode.setNodeType(ReturnType.UNDEFINED);
@@ -236,8 +248,13 @@ public class SemanticVisitor implements Visitor<ReturnType, Logger> {
     public ReturnType visit(IfThenStatement ifThenStatementNode, Logger param) {
         ifThenStatementNode.getIfCondition().accept(this, param);
         ifThenStatementNode.getThenStatement().accept(this, param);
-        if(ifThenStatementNode.checkType()){
-            ifThenStatementNode.setNodeType(ReturnType.VOID);
+        if(this.isUndefined(ifThenStatementNode.getIfCondition()) && this.isUndefined(ifThenStatementNode.getThenStatement())){
+            if(ifThenStatementNode.getIfCondition().getNodeType() == ReturnType.BOOLEAN){
+                ifThenStatementNode.setNodeType(ReturnType.VOID);
+            }else {
+                param.severe(ErrorGenerator.generateError("Type mismatch. Expected boolean", ifThenStatementNode));
+                ifThenStatementNode.setNodeType(ReturnType.UNDEFINED);
+            }
         }else {
             param.severe(ErrorGenerator.generateError("If statement error", ifThenStatementNode));
             ifThenStatementNode.setNodeType(ReturnType.UNDEFINED);
@@ -250,10 +267,16 @@ public class SemanticVisitor implements Visitor<ReturnType, Logger> {
         ifThenElseStatementNode.getIfCondition().accept(this, param);
         ifThenElseStatementNode.getThenStatement().accept(this, param);
         ifThenElseStatementNode.getElseStatement().accept(this, param);
-        if(ifThenElseStatementNode.checkType()){
-            ifThenElseStatementNode.setNodeType(ReturnType.VOID);
+        if(this.isUndefined(ifThenElseStatementNode.getIfCondition()) && this.isUndefined(ifThenElseStatementNode.getThenStatement())
+                && this.isUndefined(ifThenElseStatementNode.getElseStatement())){
+            if(ifThenElseStatementNode.getIfCondition().getNodeType() != ReturnType.BOOLEAN){
+                param.severe(ErrorGenerator.generateError("Type mismatch. Expected boolean", ifThenElseStatementNode));
+                ifThenElseStatementNode.setNodeType(ReturnType.UNDEFINED);
+            }else {
+                ifThenElseStatementNode.setNodeType(ReturnType.VOID);
+            }
         }else {
-            param.severe(ErrorGenerator.generateError("If Else error", ifThenElseStatementNode));
+            param.severe(ErrorGenerator.generateError("If Else statement error", ifThenElseStatementNode));
             ifThenElseStatementNode.setNodeType(ReturnType.UNDEFINED);
         }
         return ifThenElseStatementNode.getNodeType();
@@ -263,15 +286,23 @@ public class SemanticVisitor implements Visitor<ReturnType, Logger> {
     public ReturnType visit(BinaryExpression binaryExpressionNode, Logger param) {
         binaryExpressionNode.getLeftOperand().accept(this, param);
         binaryExpressionNode.getRightOperand().accept(this ,param);
-        if(binaryExpressionNode.checkType()){
-            if(binaryExpressionNode.getLeftOperand().getNodeType() == ReturnType.DOUBLE
-                    || binaryExpressionNode.getRightOperand().getNodeType() == ReturnType.DOUBLE){
-                binaryExpressionNode.setNodeType(ReturnType.DOUBLE);
-            }else
-                binaryExpressionNode.setNodeType(ReturnType.INTEGER);
-        }else{
+        if(this.isUndefined(binaryExpressionNode.getLeftOperand()) && this.isUndefined(binaryExpressionNode.getRightOperand())){
+            ReturnType leftType = binaryExpressionNode.getLeftOperand().getNodeType();
+            ReturnType rightType = binaryExpressionNode.getRightOperand().getNodeType();
+            if((leftType == ReturnType.DOUBLE || leftType == ReturnType.INTEGER)
+                    && (rightType == ReturnType.DOUBLE || rightType == ReturnType.INTEGER)){
+                if(leftType == ReturnType.DOUBLE || rightType == ReturnType.DOUBLE){
+                    binaryExpressionNode.setNodeType(ReturnType.DOUBLE);
+                }else {
+                    binaryExpressionNode.setNodeType(ReturnType.INTEGER);
+                }
+            }else {
+                param.severe(ErrorGenerator.generateError("Type mismatch, Expected Integer or Double", binaryExpressionNode));
+                binaryExpressionNode.setNodeType(ReturnType.UNDEFINED);
+            }
+        }else {
+            param.severe(ErrorGenerator.generateError("Binary Expression error", binaryExpressionNode));
             binaryExpressionNode.setNodeType(ReturnType.UNDEFINED);
-            param.severe(ErrorGenerator.generateError("Type mismatch", binaryExpressionNode));
         }
         return binaryExpressionNode.getNodeType();
     }
@@ -279,10 +310,17 @@ public class SemanticVisitor implements Visitor<ReturnType, Logger> {
     @Override
     public ReturnType visit(UminusExpression uminusExpressionNode, Logger param) {
         uminusExpressionNode.getExpression().accept(this, param);
-        if(uminusExpressionNode.checkType()){
-            uminusExpressionNode.setNodeType(uminusExpressionNode.getExpression().getNodeType());
+        if(this.isUndefined(uminusExpressionNode.getExpression())){
+            if(uminusExpressionNode.getExpression().getNodeType() == ReturnType.DOUBLE){
+                uminusExpressionNode.setNodeType(ReturnType.DOUBLE);
+            }else if(uminusExpressionNode.getExpression().getNodeType() == ReturnType.DOUBLE){
+                uminusExpressionNode.setNodeType(ReturnType.INTEGER);
+            }else {
+                param.severe(ErrorGenerator.generateError("Type mismatch. expected Double or Integer", uminusExpressionNode));
+                uminusExpressionNode.setNodeType(ReturnType.UNDEFINED);
+            }
         }else {
-            param.severe(ErrorGenerator.generateError("Type mismatch", uminusExpressionNode));
+            param.severe(ErrorGenerator.generateError("Uminus Expression error", uminusExpressionNode));
             uminusExpressionNode.setNodeType(ReturnType.UNDEFINED);
         }
         return uminusExpressionNode.getNodeType();
@@ -309,10 +347,15 @@ public class SemanticVisitor implements Visitor<ReturnType, Logger> {
     @Override
     public ReturnType visit(NotExpression notExpressionNode, Logger param) {
         notExpressionNode.getExpression().accept(this, param);
-        if(notExpressionNode.checkType()){
-            notExpressionNode.setNodeType(ReturnType.BOOLEAN);
+        if(this.isUndefined(notExpressionNode.getExpression())){
+            if(notExpressionNode.getExpression().getNodeType() == ReturnType.BOOLEAN){
+                notExpressionNode.setNodeType(ReturnType.BOOLEAN);
+            }else {
+                param.severe(ErrorGenerator.generateError("Type mismatch. Expected Boolean", notExpressionNode));
+                notExpressionNode.setNodeType(ReturnType.UNDEFINED);
+            }
         }else {
-            param.severe(ErrorGenerator.generateError("Type mismatch", notExpressionNode));
+            param.severe(ErrorGenerator.generateError("Not Expression error", notExpressionNode));
             notExpressionNode.setNodeType(ReturnType.UNDEFINED);
         }
         return notExpressionNode.getNodeType();
@@ -334,11 +377,27 @@ public class SemanticVisitor implements Visitor<ReturnType, Logger> {
     public ReturnType visit(RelationalExpression relationalExpressionNode, Logger param) {
         relationalExpressionNode.getLeftOperand().accept(this, param);
         relationalExpressionNode.getRightOperand().accept(this, param);
-        if(relationalExpressionNode.checkType()){
-            relationalExpressionNode.setNodeType(ReturnType.BOOLEAN);
+        if(this.isUndefined(relationalExpressionNode.getLeftOperand()) && this.isUndefined(relationalExpressionNode.getRightOperand())){
+            ReturnType leftType = relationalExpressionNode.getLeftOperand().getNodeType();
+            ReturnType rightType = relationalExpressionNode.getRightOperand().getNodeType();
+            if(relationalExpressionNode.getRelOp().equals("AND") || relationalExpressionNode.getRelOp().equals("OR")){
+                if(leftType == ReturnType.BOOLEAN && rightType == ReturnType.BOOLEAN){
+                    relationalExpressionNode.setNodeType(ReturnType.BOOLEAN);
+                }else {
+                    param.severe(ErrorGenerator.generateError("Type mismatch. Expected boolean", relationalExpressionNode));
+                    relationalExpressionNode.setNodeType(ReturnType.UNDEFINED);
+                }
+            }else {
+                if((leftType == ReturnType.DOUBLE || leftType == ReturnType.INTEGER)
+                        && (rightType == ReturnType.INTEGER || rightType == ReturnType.DOUBLE)){
+                    relationalExpressionNode.setNodeType(ReturnType.BOOLEAN);
+                }else {
+                    param.severe(ErrorGenerator.generateError("Type mismatch. Expected Integer or Double", relationalExpressionNode));
+                    relationalExpressionNode.setNodeType(ReturnType.UNDEFINED);
+                }
+            }
         }else {
-            relationalExpressionNode.setNodeType(ReturnType.UNDEFINED);
-            param.severe(ErrorGenerator.generateError("Type mismatch", relationalExpressionNode));
+            param.severe(ErrorGenerator.generateError("Relational Expression error", relationalExpressionNode));
         }
         return relationalExpressionNode.getNodeType();
     }
@@ -347,13 +406,33 @@ public class SemanticVisitor implements Visitor<ReturnType, Logger> {
     public ReturnType visit(AssignStatement assignStatementNode, Logger param) {
         assignStatementNode.getIdentifier().accept(this, param);
         assignStatementNode.getExpression().accept(this, param);
-        if(assignStatementNode.checkType()){
-            assignStatementNode.setNodeType(ReturnType.VOID);
+        if(this.isUndefined(assignStatementNode.getExpression()) && this.isUndefined(assignStatementNode.getIdentifier())){
+            ReturnType identifier = assignStatementNode.getIdentifier().getNodeType();
+            ReturnType expression = assignStatementNode.getExpression().getNodeType();
+            if((identifier == ReturnType.DOUBLE || identifier == ReturnType.INTEGER)
+                    && (expression == ReturnType.INTEGER || expression == ReturnType.DOUBLE)){
+                assignStatementNode.setNodeType(ReturnType.VOID);
+            }else {
+                param.severe(ErrorGenerator.generateError("Type mismatch. Expected Integer or Double", assignStatementNode));
+                assignStatementNode.setNodeType(ReturnType.UNDEFINED);
+            }
         }else {
-            param.severe(ErrorGenerator.generateError("Type mismatch", assignStatementNode));
+            param.severe(ErrorGenerator.generateError("Assignment expression error", assignStatementNode));
             assignStatementNode.setNodeType(ReturnType.UNDEFINED);
         }
         return assignStatementNode.getNodeType();
+    }
+
+    private boolean checkAll(List<? extends YasplNode> list){
+        return list.stream().allMatch(node -> node.getNodeType() != ReturnType.UNDEFINED);
+    }
+
+    private boolean allUndefined(List<? extends YasplNode> list){
+        return list.stream().allMatch(node -> node.getNodeType() == ReturnType.UNDEFINED);
+    }
+
+    private boolean isUndefined(YasplNode node){
+        return node.getNodeType() != ReturnType.UNDEFINED;
     }
 
 }

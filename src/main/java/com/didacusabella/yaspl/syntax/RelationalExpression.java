@@ -54,17 +54,4 @@ public class RelationalExpression extends BooleanExpression {
     public <T, P> T accept(Visitor<T, P> visitor, P param) {
         return visitor.visit(this, param);
     }
-
-    @Override
-    public boolean checkType() {
-        ReturnType left = leftOperand.getNodeType();
-        ReturnType right = rightOperand.getNodeType();
-        if(left == ReturnType.BOOLEAN && right == ReturnType.BOOLEAN) {
-            return true;
-        }
-        else {
-            return (left == ReturnType.INTEGER || left == ReturnType.DOUBLE)
-                    && (right == ReturnType.INTEGER || right == ReturnType.DOUBLE);
-        }
-    }
 }

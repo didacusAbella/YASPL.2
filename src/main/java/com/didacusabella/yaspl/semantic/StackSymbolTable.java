@@ -11,13 +11,14 @@ public class StackSymbolTable extends Stack<Scope> implements SymbolTable {
         this.tableReference = tableReference;
     }
 
-    public StringTable getTableReference() {
+    @Override
+    public StringTable getTable() {
         return tableReference;
     }
 
     @Override
-    public void enterScope(Scope scope) {
-        this.push(scope);
+    public void enterScope() {
+        this.push(new Scope());
     }
 
     @Override

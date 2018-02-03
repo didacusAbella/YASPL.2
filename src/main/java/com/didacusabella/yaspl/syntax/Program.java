@@ -6,6 +6,7 @@ import com.didacusabella.yaspl.semantic.SymbolTable;
 import com.didacusabella.yaspl.visitor.Visitor;
 import java_cup.runtime.ComplexSymbolFactory;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -20,7 +21,9 @@ public class Program extends YasplNode implements Scopeable {
     public Program(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
                    List<Decl> declarations, List<Statement> statements) {
         super(leftLocation, rightLocation);
+        Collections.reverse(declarations);
         this.declarations = declarations;
+        Collections.reverse(statements);
         this.statements = statements;
     }
 
@@ -45,10 +48,6 @@ public class Program extends YasplNode implements Scopeable {
         return visitor.visit(this, param);
     }
 
-    @Override
-    public boolean checkType() {
-        return checkAll(declarations) && checkAll(statements);
-    }
 
     @Override
     public void attachScope(Scope table) {

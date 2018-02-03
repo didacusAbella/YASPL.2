@@ -30,8 +30,4 @@ public class FalseExpression extends BooleanExpression {
         return visitor.visit(this, param);
     }
 
-    @Override
-    public boolean checkType() {
-        return true;
-    }
 }

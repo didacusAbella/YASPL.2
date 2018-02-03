@@ -12,4 +12,5 @@ public class ErrorGenerator {
     public static String generateError(String msg, YasplNode node){
         return String.format("%s at:%s/%s", msg, node.getLeftLocation(), node.getRightLocation());
     }
+
 }

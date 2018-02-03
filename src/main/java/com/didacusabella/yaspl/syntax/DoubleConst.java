@@ -36,8 +36,4 @@ public class DoubleConst extends Expression {
         return visitor.visit(this, param);
     }
 
-    @Override
-    public boolean checkType() {
-        return true;
-    }
 }

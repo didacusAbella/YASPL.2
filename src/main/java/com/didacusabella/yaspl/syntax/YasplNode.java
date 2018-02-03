@@ -12,7 +12,7 @@ import java_cup.runtime.ComplexSymbolFactory;
  * @author didacusAbella
  * @since 1.0
  */
-public abstract class YasplNode implements TypeChecking {
+public abstract class YasplNode {
 
      private final ComplexSymbolFactory.Location leftLocation;
      private final ComplexSymbolFactory.Location rightLocation;

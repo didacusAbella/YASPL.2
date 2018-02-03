@@ -34,7 +34,9 @@ public class FunctionDeclaration extends Decl implements Scopeable {
                                List<ParameterDeclaration> parameterDeclarations, Body body) {
         super(leftLocation, rightLocation);
         this.identifier = identifier;
+        Collections.reverse(variableDeclarations);
         this.variableDeclarations = variableDeclarations;
+        Collections.reverse(parameterDeclarations);
         this.parameterDeclarations = parameterDeclarations;
         this.body = body;
     }
@@ -76,13 +78,7 @@ public class FunctionDeclaration extends Decl implements Scopeable {
        return visitor.visit(this, param);
     }
 
-
-    @Override
-    public boolean checkType() {
-        return checkAll(variableDeclarations) && checkAll(parameterDeclarations) && body.checkType();
-    }
-
-    public String domainString(){
+    public String functionDomain(){
         if(variableDeclarations.isEmpty()){
             return ReturnType.VOID.getValue();
         }
@@ -96,7 +92,7 @@ public class FunctionDeclaration extends Decl implements Scopeable {
         return sj.toString();
     }
 
-    public String codomainString(){
+    public String functionCodomain(){
         StringJoiner sj = new StringJoiner("X");
         parameterDeclarations.forEach(p -> {
             p.getVariableDeclarationList().forEach(v -> {

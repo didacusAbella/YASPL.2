@@ -37,4 +37,14 @@ public class ArrayStringTable implements StringTable {
         }
         return sb.toString();
     }
+
+    @Override
+    public LexicalSymbol getSymbol(int address) {
+        return this.lexicalSymbols.get(address);
+    }
+
+    @Override
+    public String getLexeme(int address) {
+        return this.lexicalSymbols.get(address).getLexeme();
+    }
 }

@@ -1,10 +1,70 @@
 head
-int value;
- def addInt (int value; bool other;) : double another;
- {
-  double value;
-   "Sum of integers"->;
-   "Insert a number"->;
- };
+/**********Variabili Globali**********/
+int choice, typeChoice;
+int intResult, firstInt, secondInt;
+double doubleResult, firstDouble, secondDouble;
+/***************Funzioni**************/
+def calculateInt(int firstOperand, secondOperand;) :int result; {
+  if(choice == 2) then {
+    result = firstOperand + secondOperand;
+  }else {
+    if(choice == 3) then {
+      result = firstOperand - secondOperand;
+    }else {
+      if(choice == 4) then {
+        result = firstOperand * secondOperand;
+      }else {
+        result = firstOperand / secondOperand;
+      };
+    };
+  };
+};
+
+def calculateDouble(double firstOperand, secondOperand;) :double result; {
+  if(choice == 2) then {
+    result = firstOperand + secondOperand;
+  }else {
+    if(choice == 3) then {
+      result = firstOperand - secondOperand;
+    }else {
+      if(choice == 4) then {
+        result = firstOperand * secondOperand;
+      }else {
+        result = firstOperand / secondOperand;
+      };
+    };
+  };
+};
+/*Main*/
 start
-"Hello World" ->;
+choice = 1;
+typeChoice = 0;
+while(choice >= 1) do {
+  "YasplCalculator 1.0. Scegli 1 se vuoi calcolare interi. Altrimenti usa double" ->;
+  typeChoice <- int;
+  if(typeChoice == 1) then {
+    "Scegli operazione. 2 Somma, 3 Differenza, 4 Prodotto, 5 Quoziente" ->;
+    choice <- int;
+    if(choice >=2 && choice <= 5) then {
+      "Inserisci i due numeri separati da spazio" ->;
+      firstInt, secondInt <- int, int;
+      calculateInt(firstInt, secondInt:intResult);
+      "Il risultato è ", intResult ->;
+    }else {
+      "Comando non riconosciuto" ->;
+    };
+  }else {
+    "Scegli operazione. 2 Somma, 3 Differenza, 4 Prodotto, 5 Quoziente" ->;
+    choice <- int;
+    if(choice >=2 && choice <= 5) then {
+          "Inserisci i due numeri separati da spazio" ->;
+          firstDouble, secondDouble <- double, double;
+          calculateDouble(firstDouble,secondDouble:doubleResult);
+          "Il risultato è ", doubleResult ->;
+    }else {
+          "Comando non riconosciuto" ->;
+    };
+  };
+  "Con un numero inferiore a uno esce. Altrimenti continui." ->;
+  choice <- int;
+};

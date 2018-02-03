@@ -1,0 +1,7 @@
+head
+int operativeChoice;
+def sum(int first, second;) :int res; {
+  res = first + second;
+};
+start
+"Hello Test" ->;

@@ -46,8 +46,4 @@ public class IfThenStatement extends Statement {
         return visitor.visit(this, param);
     }
 
-    @Override
-    public boolean checkType() {
-        return ifCondition.checkType() && thenStatement.checkType();
-    }
 }
