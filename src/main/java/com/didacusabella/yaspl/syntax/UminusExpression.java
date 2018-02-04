@@ -16,6 +16,12 @@ public class UminusExpression extends Expression {
 
     private final Expression expression;
 
+    /**
+     * Create a new uminus node
+     * @param leftLocation the left location
+     * @param rightLocation the right location
+     * @param expression the expression node
+     */
     public UminusExpression(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
                             Expression expression) {
         super(leftLocation, rightLocation);

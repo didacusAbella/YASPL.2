@@ -1,0 +1,10 @@
+head
+int first, second;
+start
+"Inserisci i numeri da dividere" ->;
+first, second <- int, int;
+if(first >=0 && second >= 0) then {
+  "Il risultato è", first/second ->;
+}else {
+  "Non puoi avere numeri negativi" ->;
+};

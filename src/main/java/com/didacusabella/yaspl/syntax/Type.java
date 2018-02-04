@@ -13,6 +13,12 @@ public class Type extends YasplNode {
 
     private final String typeName;
 
+    /**
+     * Create a new Type node
+     * @param leftLocation the left location
+     * @param rightLocation the right location
+     * @param typeName the type name
+     */
     public Type(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
                 String typeName) {
         super(leftLocation, rightLocation);

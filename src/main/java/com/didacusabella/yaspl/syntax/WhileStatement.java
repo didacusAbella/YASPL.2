@@ -18,6 +18,13 @@ public class WhileStatement extends Statement {
     private final BooleanExpression booleanExpression;
     private final CompositeStatement whileStatement;
 
+    /**
+     * Create a new while statement node
+     * @param leftLocation the left location
+     * @param rightLocation the right location
+     * @param booleanExpression the boolean expression node
+     * @param whileStatement the while statement
+     */
     public WhileStatement(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
                           BooleanExpression booleanExpression, CompositeStatement whileStatement) {
         super(leftLocation, rightLocation);

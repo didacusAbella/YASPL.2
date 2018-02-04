@@ -19,6 +19,12 @@ public class WriteStatement extends Statement {
 
     private final List<Expression> expressions;
 
+    /**
+     * Create a new write expression node
+     * @param leftLocation the left location
+     * @param rightLocation the right location
+     * @param expressions the expression node list
+     */
     public WriteStatement(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
                           List<Expression> expressions) {
         super(leftLocation, rightLocation);

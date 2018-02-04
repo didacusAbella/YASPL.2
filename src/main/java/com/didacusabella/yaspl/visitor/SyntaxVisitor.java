@@ -15,20 +15,32 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 
+/**
+ * Syntax visitor. It perform depth first visiting, creating an xml file as output
+ */
 public class SyntaxVisitor implements Visitor<Element, Void>{
 
     private Document xmlDocument;
 
+    /**
+     * Create a new syntax visitor
+     */
     public SyntaxVisitor() {
         super();
         this.createDocument();
     }
 
+    /**
+     * This method append the root child to document
+     * @param el the root child
+     */
     public void appendRoot(Element el){
         this.xmlDocument.appendChild(el);
     }
 
-
+    /**
+     * Create a new empty document to fill
+     */
     private void createDocument(){
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
         try {
@@ -39,7 +51,11 @@ public class SyntaxVisitor implements Visitor<Element, Void>{
         }
     }
 
-    public void toXml(){
+    /**
+     * Generate the appropriate XML file for the output
+     * @param fileName the filename to generate
+     */
+    public void toXml(String fileName){
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer;
         try {
@@ -47,7 +63,7 @@ public class SyntaxVisitor implements Visitor<Element, Void>{
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
             DOMSource source = new DOMSource(this.xmlDocument);
-            StreamResult result = new StreamResult(new File(System.getProperty("user.home").concat("/output.xml")));
+            StreamResult result = new StreamResult(new File(System.getProperty("user.home").concat("/".concat(fileName))));
             transformer.transform(source, result);
             System.out.println("File saved!");
         } catch (TransformerException e) {

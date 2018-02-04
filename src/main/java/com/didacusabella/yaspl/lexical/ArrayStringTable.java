@@ -2,14 +2,24 @@ package com.didacusabella.yaspl.lexical;
 
 import java.util.ArrayList;
 
+/**
+ * Implementation of String Table ADT
+ */
 public class ArrayStringTable implements StringTable {
 
     private ArrayList<LexicalSymbol> lexicalSymbols;
 
+    /**
+     * Create a new String table
+     * @param lexicalSymbols the list of lexical symbols
+     */
     public ArrayStringTable(ArrayList<LexicalSymbol> lexicalSymbols) {
         this.lexicalSymbols = lexicalSymbols;
     }
 
+    /**
+     * Create an empty string table
+     */
     public ArrayStringTable() {
         this.lexicalSymbols = new ArrayList<>();
     }

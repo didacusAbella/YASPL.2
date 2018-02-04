@@ -15,6 +15,12 @@ public class IntegerConst extends Expression {
 
     private final int intValue;
 
+    /**
+     * Create a new integer node
+     * @param leftLocation the left location
+     * @param rightLocation the right location
+     * @param intValue the value of the node
+     */
     public IntegerConst(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
                         int intValue) {
         super(leftLocation, rightLocation);

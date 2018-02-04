@@ -19,6 +19,13 @@ public class VariableDeclaration extends Decl {
     private final Type type;
     private final List<Variable> variables;
 
+    /**
+     * Create a new variable declaration node
+     * @param leftLocation the left location
+     * @param rightLocation then right location
+     * @param type the type node
+     * @param variables the variable node list
+     */
     public VariableDeclaration(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
                                Type type, List<Variable> variables) {
         super(leftLocation, rightLocation);

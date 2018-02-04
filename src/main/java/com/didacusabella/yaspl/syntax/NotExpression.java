@@ -17,6 +17,12 @@ public class NotExpression extends BooleanExpression {
 
     private final Expression expression;
 
+    /**
+     * Create a new not expression node
+     * @param leftLocation the left location
+     * @param rightLocation the right location
+     * @param expression the expression
+     */
     public NotExpression(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
                          Expression expression) {
         super(leftLocation, rightLocation);

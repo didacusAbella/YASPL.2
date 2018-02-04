@@ -19,20 +19,20 @@ public class FunctionDeclarationTest {
     @Test
     public void domainString() throws Exception {
         FunctionDeclaration fd = (FunctionDeclaration) program.getDeclarations().get(0);
-        assertEquals("intXintXint", fd.domainString());
+        assertEquals("intXintXint", fd.functionDomain());
     }
 
     @Test
     public void codomainString() throws Exception {
         FunctionDeclaration fd = (FunctionDeclaration) program.getDeclarations().get(0);
-        assertEquals("intXintXint", fd.codomainString());
+        assertEquals("intXintXint", fd.functionCodomain());
     }
 
     @Test
     public void emptyDomain() throws Exception{
         this.program = EnvironmentGenerator.setupEnvironment("/testEmptyFunction.yaspl");
-        FunctionDeclaration fd = (FunctionDeclaration) program.getDeclarations().get(0);
-        assertEquals("void", fd.domainString());
-        assertEquals("int", fd.codomainString());
+        FunctionDeclaration fd = (FunctionDeclaration) program.getDeclarations().get(1);
+        assertEquals("void", fd.functionDomain());
+        assertEquals("int", fd.functionCodomain());
     }
 }

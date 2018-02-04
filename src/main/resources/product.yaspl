@@ -1,0 +1,18 @@
+head
+int factor, secondFactor, result;
+def product(int factor, secondFactor;) :int result; {
+  int i;
+  i=0;
+  while(i < secondFactor) do{
+    result = result + factor;
+    i = i + 1;
+  };
+};
+start
+factor = 0;
+secondFactor = 0;
+result = 0;
+"Inserisci i due numeri da moltiplicare separati da spazio" ->;
+factor, secondFactor <- int, int;
+product(factor,secondFactor:result);
+"Il risultato è", result ->;

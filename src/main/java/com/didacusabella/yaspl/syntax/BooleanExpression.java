@@ -9,7 +9,11 @@ import java_cup.runtime.ComplexSymbolFactory;
  * @author didacusAbella
  */
 public abstract class BooleanExpression extends Expression {
-
+    /**
+     * Create a new boolean expression node
+     * @param leftLocation the left location
+     * @param rightLocation the right location
+     */
     public BooleanExpression(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation) {
         super(leftLocation, rightLocation);
     }

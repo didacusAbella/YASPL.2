@@ -2,6 +2,9 @@ package com.didacusabella.yaspl.visitor;
 
 import com.didacusabella.yaspl.syntax.YasplNode;
 
+/**
+ * The error generator class is used for maange error during semantic analysis
+ */
 public class ErrorGenerator {
     /**
      * Create error during yaspl node visiting

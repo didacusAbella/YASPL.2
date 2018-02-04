@@ -15,6 +15,12 @@ public class StringConst extends Expression {
 
     private String stringValue;
 
+    /**
+     * Create a new stirng const node
+     * @param leftLocation the left location
+     * @param rightLocation the right location
+     * @param stringValue the string value
+     */
     public StringConst(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
                        String stringValue) {
         super(leftLocation, rightLocation);

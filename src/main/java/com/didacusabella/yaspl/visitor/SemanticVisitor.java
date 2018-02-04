@@ -8,11 +8,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
-
+/**
+ * Semantic visitor for YASPL language
+ */
 public class SemanticVisitor implements Visitor<ReturnType, Logger> {
 
     private SymbolTable symbolTable;
 
+    /**
+     * Create a new semantic visitor
+     * @param table the symbol table to pass
+     */
     public SemanticVisitor(SymbolTable table) {
         super();
         this.symbolTable = table;

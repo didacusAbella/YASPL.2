@@ -1,0 +1,21 @@
+head
+int base, exponent;
+int result;
+def pow(int base, exponent;) :int result; {
+  int i;
+  i = 0;
+  while(i < exponent) do{
+    result = result * base;
+    i = i + 1;
+  };
+};
+start
+result = 1;
+"Inserisci due numeri separarati da spazio" ->;
+base, exponent <- int, int;
+if(exponent == 0) then {
+  "Risultato è", result ->;
+}else {
+  pow(base, exponent:result);
+  "Il risultato è", result ->;
+};

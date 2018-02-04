@@ -1,0 +1,21 @@
+head
+int fn, n;
+def fibonacci(int n;) :int fn; {
+  int f1, f0, i;
+  f1 = 1;
+  f0 = 0;
+  fn = n;
+  i = 2;
+  while(i <= n) do {
+    fn = f0 + f1;
+    f0 = f1;
+    f1 = fn;
+    i = i + 1;
+  };
+};
+start
+n = 0;
+"Inserisci il valore di cui vuoi calcolare il numero di fibonacci" ->;
+n <- int;
+fibonacci(n:fn);
+"Il risultato è", fn ->;

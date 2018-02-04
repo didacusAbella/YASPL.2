@@ -18,6 +18,13 @@ public class Program extends YasplNode implements Scopeable {
     private final List<Statement> statements;
     private Scope scopeReference;
 
+    /**
+     * Create a new Program node (The root program)
+     * @param leftLocation the left location
+     * @param rightLocation the right location
+     * @param declarations the list of declarations
+     * @param statements the list of statements
+     */
     public Program(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
                    List<Decl> declarations, List<Statement> statements) {
         super(leftLocation, rightLocation);

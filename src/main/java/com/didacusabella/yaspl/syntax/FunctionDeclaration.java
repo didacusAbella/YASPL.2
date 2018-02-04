@@ -29,6 +29,15 @@ public class FunctionDeclaration extends Decl implements Scopeable {
     private final Body body;
     private Scope scopeReference;
 
+    /**
+     * Create a new function declaration node
+     * @param leftLocation the left location
+     * @param rightLocation the right location
+     * @param identifier the function name
+     * @param variableDeclarations the list of input
+     * @param parameterDeclarations the list of outputs
+     * @param body the body node of the function
+     */
     public FunctionDeclaration(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
                                Identifier identifier, List<VariableDeclaration> variableDeclarations,
                                List<ParameterDeclaration> parameterDeclarations, Body body) {
@@ -78,6 +87,10 @@ public class FunctionDeclaration extends Decl implements Scopeable {
        return visitor.visit(this, param);
     }
 
+    /**
+     * Get the string representation of the domain of this function
+     * @return the function domain
+     */
     public String functionDomain(){
         if(variableDeclarations.isEmpty()){
             return ReturnType.VOID.getValue();
@@ -92,6 +105,10 @@ public class FunctionDeclaration extends Decl implements Scopeable {
         return sj.toString();
     }
 
+    /**
+     * Get a stirng representation of the codomain of this function
+     * @return the function codomain
+     */
     public String functionCodomain(){
         StringJoiner sj = new StringJoiner("X");
         parameterDeclarations.forEach(p -> {

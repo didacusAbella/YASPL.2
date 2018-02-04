@@ -115,14 +115,12 @@ Var_decls ::= Var_decl:vd Var_decls:vds {: vds.add(vd); RESULT = vds; :}
 
 /************************************ Function Parameter *****************************************/
 Par_decls ::= Var_decl:vd Par_decls:pd {: pd.add(new ParameterDeclaration(vdxleft, vdxright, vd)); RESULT = pd; :}
-             | Var_decl:vd {: RESULT = new ArrayList<>();
-                              RESULT.add(new ParameterDeclaration(vdxleft, vdxright, vd));
-                           :}
+             | Var_decl:vd {: RESULT = new ArrayList<>(); RESULT.add(new ParameterDeclaration(vdxleft, vdxright, vd)); :}
              ;
 
 
 /************************************ Body Program **********************************************/
-Body ::= LGPAR:l Var_decls:vds Statements:stmts RGPAR SEMI {: RESULT = new Body(lxleft, lxright, vds, stmts); :} ;
+Body ::= LGPAR:l Var_decls:vds Statements:stmts RGPAR SEMI {: RESULT = new Body(lxleft, lxright, vds, stmts); :};
 
 
 /********************************** Composite Statement *****************************************/

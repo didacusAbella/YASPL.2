@@ -8,7 +8,11 @@ import java_cup.runtime.ComplexSymbolFactory;
  * @author didacusAbella
  */
 public abstract class Decl extends YasplNode {
-
+    /**
+     * Create a new declaration
+     * @param leftLocation the left location
+     * @param rightLocation the right location
+     */
     public Decl(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation) {
         super(leftLocation, rightLocation);
     }

@@ -25,10 +25,18 @@ public class AssignStatement extends Statement {
         this.expression = expression;
     }
 
+    /**
+     * Get the identifier list
+     * @return the identifier list
+     */
     public Identifier getIdentifier() {
         return this.identifier;
     }
 
+    /**
+     * Get the expression list
+     * @return the expression list
+     */
     public Expression getExpression() {
         return this.expression;
     }

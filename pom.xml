@@ -102,9 +102,33 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>com.didacusabella.yaspl.App</mainClass>
+                    <mainClass>com.didacusabella.yaspl.cli.App</mainClass>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <finalName>yaspl2cc</finalName>
+                    <appendAssemblyId>false</appendAssemblyId>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.didacusabella.yaspl.cli.App</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
                 </configuration>
             </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.yaspl</include>
+                    <include>**/*.yasp</include>
+                </includes>
+            </resource>
+        </resources>
     </build>
 </project>

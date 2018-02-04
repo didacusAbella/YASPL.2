@@ -3,10 +3,17 @@ import com.didacusabella.yaspl.lexical.StringTable;
 
 import java.util.Stack;
 
+/**
+ * Implementation of Symbol table ADT
+ */
 public class StackSymbolTable extends Stack<Scope> implements SymbolTable {
 
     private final StringTable tableReference;
 
+    /**
+     * Create a new Stack symbol Table
+     * @param tableReference the string table referencies
+     */
     public StackSymbolTable(StringTable tableReference) {
         this.tableReference = tableReference;
     }

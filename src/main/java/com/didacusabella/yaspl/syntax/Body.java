@@ -16,6 +16,13 @@ public class Body extends YasplNode {
     private final List<VariableDeclaration> variableDeclarations;
     private final List<Statement> statements;
 
+    /**
+     * Create a new body node
+     * @param leftLocation the left location
+     * @param rightLocation the right location
+     * @param variableDeclarations the list of variable declarations
+     * @param statements the statements list
+     */
     public Body(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
                 List<VariableDeclaration> variableDeclarations, List<Statement> statements) {
         super(leftLocation, rightLocation);

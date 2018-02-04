@@ -17,6 +17,12 @@ public class DoubleConst extends Expression {
 
     private final double doubleValue;
 
+    /**
+     * Create a new double node
+     * @param leftLocation the left location
+     * @param rightLocation the right location
+     * @param doubleValue the double value
+     */
     public DoubleConst(ComplexSymbolFactory.Location leftLocation,
                        ComplexSymbolFactory.Location rightLocation, double doubleValue) {
         super(leftLocation, rightLocation);

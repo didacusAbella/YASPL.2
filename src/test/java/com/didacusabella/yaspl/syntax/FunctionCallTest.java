@@ -30,7 +30,7 @@ public class FunctionCallTest {
     @Test
     public void emptyCall() throws Exception {
         this.program = EnvironmentGenerator.setupEnvironment("/testEmptyFunction.yaspl");
-        FunctionCall fc = (FunctionCall) this.program.getStatements().get(0);
+        FunctionCall fc = (FunctionCall) this.program.getStatements().get(1);
         assertEquals("int", fc.getCodomain());
         assertEquals("void", fc.getDomain());
     }

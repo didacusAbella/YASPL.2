@@ -15,6 +15,12 @@ public class CompositeStatement extends Statement {
 
     private final List<Statement> statements;
 
+    /**
+     * Create a new composite statement cnode
+     * @param leftLocation the left location
+     * @param rightLocation the right location
+     * @param statements the list of statements
+     */
     public CompositeStatement(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
                               List<Statement> statements) {
         super(leftLocation, rightLocation);

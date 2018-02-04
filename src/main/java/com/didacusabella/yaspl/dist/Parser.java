@@ -628,9 +628,7 @@ class CUP$Parser$actions {
 		Location vdxleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xleft;
 		Location vdxright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xright;
 		VariableDeclaration vd = (VariableDeclaration)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new ArrayList<>();
-                              RESULT.add(new ParameterDeclaration(vdxleft, vdxright, vd));
-                           
+		 RESULT = new ArrayList<>(); RESULT.add(new ParameterDeclaration(vdxleft, vdxright, vd)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("Par_decls",10, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;

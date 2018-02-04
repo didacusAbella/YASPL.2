@@ -8,7 +8,11 @@ import java_cup.runtime.ComplexSymbolFactory;
  * @author didacusAbella
  */
 public abstract class Expression extends YasplNode {
-
+    /**
+     * Create a new Expression node
+     * @param leftLocation the left location
+     * @param rightLocation the right location
+     */
     public Expression(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation) {
         super(leftLocation, rightLocation);
     }

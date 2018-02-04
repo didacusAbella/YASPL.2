@@ -18,6 +18,13 @@ public class IfThenStatement extends Statement {
     private final BooleanExpression ifCondition;
     private final CompositeStatement thenStatement;
 
+    /**
+     * Create a new if-then statement node
+     * @param leftLocation the left location
+     * @param rightLocation the right location
+     * @param ifCondition the if condition node
+     * @param thenStatement the then statement node
+     */
     public IfThenStatement(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
                            BooleanExpression ifCondition, CompositeStatement thenStatement) {
         super(leftLocation, rightLocation);

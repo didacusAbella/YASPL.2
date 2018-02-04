@@ -20,6 +20,14 @@ public class BinaryExpression extends Expression{
     private final Expression rightOperand;
     private final String op;
 
+    /**
+     * Create a new binary expression node
+     * @param leftLocation the left location
+     * @param rightLocation the right location
+     * @param leftOperand the left node
+     * @param rightOperand the right node
+     * @param op the operand
+     */
     public BinaryExpression(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
                             Expression leftOperand, Expression rightOperand, String op) {
         super(leftLocation, rightLocation);

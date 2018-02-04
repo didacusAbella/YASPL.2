@@ -21,6 +21,14 @@ public class IfThenElseStatement extends Statement {
     private final CompositeStatement thenStatement;
     private final CompositeStatement elseStatement;
 
+    /**
+     * Create a new if then else statement node
+     * @param leftLocation the left location
+     * @param rightLocation the right location
+     * @param ifCondition the if condition node
+     * @param thenStatement the then statement node
+     * @param elseStatement the else statement node
+     */
     public IfThenElseStatement(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
                                BooleanExpression ifCondition, CompositeStatement thenStatement,
                                CompositeStatement elseStatement) {

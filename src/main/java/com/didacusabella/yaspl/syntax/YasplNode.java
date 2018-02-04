@@ -18,16 +18,29 @@ public abstract class YasplNode {
      private final ComplexSymbolFactory.Location rightLocation;
      private ReturnType nodeType;
 
+    /**
+     * Create a new generic yaspl node.
+     * @param leftLocation the left location
+     * @param rightLocation the right location
+     */
      public YasplNode(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation) {
           this.leftLocation = leftLocation;
           this.rightLocation = rightLocation;
           this.nodeType = ReturnType.UNDEFINED;
      }
 
+    /**
+     * get the left location of this node
+     * @return the left location
+     */
      public ComplexSymbolFactory.Location getLeftLocation() {
           return leftLocation;
      }
 
+    /**
+     * get the right location of this node
+     * @return the right location
+     */
      public ComplexSymbolFactory.Location getRightLocation() {
           return rightLocation;
      }
@@ -42,10 +55,18 @@ public abstract class YasplNode {
       */
      public abstract <T, P> T accept(Visitor<T,P> visitor, P param);
 
+    /**
+     * get the node type
+     * @return the node type
+     */
     public ReturnType getNodeType() {
         return nodeType;
     }
 
+    /**
+     * set a new node type
+     * @param nodeType the new node type
+     */
     public void setNodeType(ReturnType nodeType) {
         this.nodeType = nodeType;
     }

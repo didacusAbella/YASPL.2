@@ -18,6 +18,14 @@ public class RelationalExpression extends BooleanExpression {
     private final Expression leftOperand, rightOperand;
     private final String relOp;
 
+    /**
+     * Create a new relational expression node
+     * @param leftLocation the left location
+     * @param rightLocation the right location
+     * @param leftOperand the left operand
+     * @param rightOperand the right operand
+     * @param relOp the operation
+     */
     public RelationalExpression(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
                                 Expression leftOperand, Expression rightOperand, String relOp) {
         super(leftLocation, rightLocation);

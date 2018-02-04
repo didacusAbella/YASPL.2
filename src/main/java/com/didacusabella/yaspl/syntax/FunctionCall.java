@@ -22,6 +22,14 @@ public class FunctionCall extends Statement {
     private final List<Expression> expressions;
     private final List<Variable> variables;
 
+    /**
+     * Create a new function call node
+     * @param leftLocation the left location
+     * @param rightLocation the right location
+     * @param identifier the function name
+     * @param expressions the list of inputs
+     * @param variables the list of outputs
+     */
     public FunctionCall(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
                         Identifier identifier, List<Expression> expressions, List<Variable> variables) {
         super(leftLocation, rightLocation);
@@ -61,6 +69,10 @@ public class FunctionCall extends Statement {
         return visitor.visit(this, param);
     }
 
+    /**
+     * get string representation of domain of this function call
+     * @return the domain
+     */
     public String getDomain(){
         if(expressions.isEmpty()){
             return ReturnType.VOID.getValue();
@@ -70,6 +82,10 @@ public class FunctionCall extends Statement {
         return sj.toString();
     }
 
+    /**
+     * get the string representation of the codomain of this function call
+     * @return the codomain
+     */
     public String getCodomain(){
         StringJoiner sj = new StringJoiner("X");
         variables.forEach(v -> sj.add(v.getNodeType().getValue()));

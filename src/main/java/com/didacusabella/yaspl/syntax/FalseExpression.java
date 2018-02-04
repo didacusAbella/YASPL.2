@@ -12,7 +12,11 @@ import java_cup.runtime.ComplexSymbolFactory;
  * </pre>
  */
 public class FalseExpression extends BooleanExpression {
-
+    /**
+     * Create a new false expression node
+     * @param leftLocation the left location
+     * @param rightLocation the right location
+     */
     public FalseExpression(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation) {
         super(leftLocation, rightLocation);
     }

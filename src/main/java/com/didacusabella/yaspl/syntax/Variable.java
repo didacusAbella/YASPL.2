@@ -15,6 +15,12 @@ public class Variable extends YasplNode {
 
     private final Identifier identifier;
 
+    /**
+     * Create a new variable node
+     * @param leftLocation the left location
+     * @param rightLocation the right location
+     * @param identifier the identifier node
+     */
     public Variable(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
                     Identifier identifier) {
         super(leftLocation, rightLocation);

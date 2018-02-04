@@ -16,6 +16,12 @@ public class Identifier extends Expression {
 
     private final String name;
 
+    /**
+     * Create anew identifier node
+     * @param leftLocation the left location
+     * @param rightLocation the right location
+     * @param name the name of the identifier
+     */
     public Identifier(ComplexSymbolFactory.Location leftLocation,
                       ComplexSymbolFactory.Location rightLocation, String name) {
         super(leftLocation, rightLocation);

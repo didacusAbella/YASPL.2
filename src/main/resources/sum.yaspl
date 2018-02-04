@@ -1,0 +1,10 @@
+head
+int first, second, result;
+def sum(int first, second;) :int result; {
+  result = first + second;
+  "Il risultato è", result ->;
+};
+start
+"Inserisci due numeri separati da spazio" ->;
+first, second <- int, int;
+sum(first, second:result);

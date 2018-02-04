@@ -20,6 +20,12 @@ public class ParameterDeclaration extends YasplNode {
 
     private final List<VariableDeclaration> variableDeclarations;
 
+    /**
+     * Create a new parameter declaration node
+     * @param leftLocation the left location
+     * @param rightLocation the right location
+     * @param variableDeclarations the variable declaration node
+     */
     public ParameterDeclaration(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
                                 List<VariableDeclaration> variableDeclarations) {
         super(leftLocation, rightLocation);
