@@ -29,6 +29,7 @@ public class App
     private static StringBuilder pathBuilder = new StringBuilder();
     private static ComplexSymbolFactory complexSymbolFactory = new ComplexSymbolFactory();
     private static StringTable stringTable = new ArrayStringTable();
+    private static final String EMCC_PATH = System.getProperty("user.home") + "/ExternalTools/emsdk-portable/emscripten/1.37.33/emcc";
 
     /**
      * Main method for exec class
@@ -100,25 +101,38 @@ public class App
         }
         /*************************Code Generation************************************/
         CodeVisitor cVisitor = new CodeVisitor(symbolTable);
-        pathBuilder.append(OUTPUT_PATH).append('/').append(testFile.replace("yaspl", "c"));
+        String generatedOutput = testFile.replace("yaspl", "c");
+        pathBuilder.append(OUTPUT_PATH).append('/').append(generatedOutput);
         File generatedFile = new File(pathBuilder.toString());
         FileWriter pw = new FileWriter(generatedFile);
         pw.write(cVisitor.visit(program, null));
         pw.close();
         pathBuilder.setLength(0);
-        pathBuilder.append(OUTPUT_PATH).append('/').append(testFile.replace("yaspl", ""));
-        Process p = Runtime.getRuntime().exec(String.format("clang -std=c99 %s -o %s", generatedFile.getAbsolutePath(),
+        pathBuilder.append(OUTPUT_PATH).append('/').append(testFile.replace(".yaspl", ""));
+        Process p = Runtime.getRuntime().exec(String.format("clang-5.0 -std=c99 %s -o %s", generatedFile.getAbsolutePath(),
                 pathBuilder.toString()));
         BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
         BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
         handleIO(stdInput, true);
         handleIO(stdError, false);
+        /************************XML generation option*******************************/
         if(hasOption(options, "-xml")){
             pathBuilder.setLength(0);
             pathBuilder.append(testFile.replace("yaspl", "xml"));
             SyntaxVisitor syntaxVisitor = new SyntaxVisitor();
             syntaxVisitor.appendRoot(syntaxVisitor.visit(program, null));
             syntaxVisitor.toXml(pathBuilder.toString());
+        }
+        /*************************JS generation Option****************************/
+        if(hasOption(options, "-web")){
+            pathBuilder.setLength(0);
+            pathBuilder.append(OUTPUT_PATH).append('/').append(testFile.replace("yaspl", "js"));
+            p = Runtime.getRuntime().exec(String.format("%s -std=c99 %s -o %s ", EMCC_PATH, generatedFile.getAbsolutePath(),
+                    pathBuilder.toString()));
+            stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+            handleIO(stdInput, true);
+            handleIO(stdError, false);
         }
     }
 
