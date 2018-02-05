@@ -10,6 +10,10 @@ import java.util.ArrayList;
 import com.didacusabella.yaspl.syntax.*;
 import com.didacusabella.yaspl.visitor.*;
 import java_cup.runtime.ComplexSymbolFactory.ComplexSymbol;
+import java.util.logging.Logger;
+import java.util.LinkedList;
+import java.util.Iterator;
+import java.util.List;
 import java_cup.runtime.ComplexSymbolFactory.Location;
 import java_cup.runtime.XMLElement;
 
@@ -307,6 +311,37 @@ public class Parser extends java_cup.runtime.lr_parser {
 
   /** <code>error</code> Symbol index. */
   public int error_sym() {return 1;}
+
+
+
+   private static Logger logger = Logger.getLogger("Parser");
+
+   public void report_error(String message, Object info) {
+     if (info instanceof ComplexSymbol) {
+       ComplexSymbol cs = (ComplexSymbol)info;
+       logger.severe(message + " for input symbol \"" + cs.getName() + "\" spanning from " + cs.getLeft() + " to " + cs.getRight());
+     } else {
+         this.logger.severe(message);
+         if (info instanceof Symbol) {
+           if (((Symbol)info).left != -1) {
+             logger.severe(" at character " + ((Symbol)info).left + " of input");
+           } else {
+              this.logger.severe("");
+           }
+         }
+     }
+   }
+
+   protected void report_expected_token_ids() {
+     List<Integer> ids = this.expected_token_ids();
+     LinkedList<String> list = new LinkedList<>();
+     Iterator var3 = ids.iterator();
+     while(var3.hasNext()) {
+       Integer expected = (Integer)var3.next();
+       list.add(this.symbl_name_from_id(expected));
+      }
+       logger.severe("instead expected token classes are " + list);
+    }
 
 
 /** Cup generated class to encapsulate user supplied action code.*/

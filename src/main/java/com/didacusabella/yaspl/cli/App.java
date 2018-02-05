@@ -37,7 +37,7 @@ public class App
      * @throws Exception if some error occurred during runtime
      */
     public static void main( String[] args ) throws Exception {
-        String testFile = "";
+        String testFile;
         if(args.length == 0){
             System.out.println(START_MESSAGE);
             Scanner input = new Scanner(System.in);
@@ -58,8 +58,7 @@ public class App
                     testFile = "fibonacci.yaspl";
                     break;
                     default:
-                        System.out.println("Command not valid");
-                        System.exit(1);
+                        testFile = "test.yaspl";
                         break;
 
             }
@@ -87,19 +86,21 @@ public class App
      * </pre>
      */
     private static void compileFile(String testFile, String[] options) throws Exception {
-        InputStream is = (options.length == 0) ? App.class.getResourceAsStream(testFile) : new FileInputStream(new File(testFile));
-        /********************Lexical and syntax analysis******************************/
+        InputStream is;
+        if(options.length == 0) {
+            is = App.class.getClassLoader().getResourceAsStream(testFile);
+        } else {
+            is = new FileInputStream(new File(testFile));
+        }
         Lexer lexer = new Lexer(complexSymbolFactory, is, stringTable);
         Parser parser = new Parser(lexer, complexSymbolFactory);
         Program program = (Program) parser.parse().value;
-        /**********************Semantic Analisys*************************************/
         SymbolTable symbolTable = new StackSymbolTable(stringTable);
         SemanticVisitor semanticVisitor = new SemanticVisitor(symbolTable);
         semanticVisitor.visit(program, Logger.getLogger(App.class.getSimpleName()));
         if(program.getNodeType() == ReturnType.UNDEFINED) {
             throw new SemanticException("Semantic Error");
         }
-        /*************************Code Generation************************************/
         CodeVisitor cVisitor = new CodeVisitor(symbolTable);
         String generatedOutput = testFile.replace("yaspl", "c");
         pathBuilder.append(OUTPUT_PATH).append('/').append(generatedOutput);
@@ -115,7 +116,6 @@ public class App
         BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
         handleIO(stdInput, true);
         handleIO(stdError, false);
-        /************************XML generation option*******************************/
         if(hasOption(options, "-xml")){
             pathBuilder.setLength(0);
             pathBuilder.append(testFile.replace("yaspl", "xml"));
@@ -123,10 +123,9 @@ public class App
             syntaxVisitor.appendRoot(syntaxVisitor.visit(program, null));
             syntaxVisitor.toXml(pathBuilder.toString());
         }
-        /*************************JS generation Option****************************/
         if(hasOption(options, "-web")){
             pathBuilder.setLength(0);
-            pathBuilder.append(OUTPUT_PATH).append('/').append(testFile.replace("yaspl", "js"));
+            pathBuilder.append(OUTPUT_PATH).append('/').append(testFile.replace("yaspl", "html"));
             p = Runtime.getRuntime().exec(String.format("%s -std=c99 %s -o %s ", EMCC_PATH, generatedFile.getAbsolutePath(),
                     pathBuilder.toString()));
             stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));

@@ -9,13 +9,6 @@ public class ArrayStringTable implements StringTable {
 
     private ArrayList<LexicalSymbol> lexicalSymbols;
 
-    /**
-     * Create a new String table
-     * @param lexicalSymbols the list of lexical symbols
-     */
-    public ArrayStringTable(ArrayList<LexicalSymbol> lexicalSymbols) {
-        this.lexicalSymbols = lexicalSymbols;
-    }
 
     /**
      * Create an empty string table
@@ -43,7 +36,7 @@ public class ArrayStringTable implements StringTable {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for(int i = 0; i < lexicalSymbols.size(); i++){
-            sb.append(String.format("Indirizzo:%d | Valore:%s\n", i, lexicalSymbols.get(i).getLexeme()));
+            sb.append(String.format("Address:%d | Value:%s\n", i, lexicalSymbols.get(i).getLexeme()));
         }
         return sb.toString();
     }

@@ -7,7 +7,7 @@ import java.util.Objects;
  */
 public abstract class SemanticSymbol {
 
-    private ReturnType returnType;
+    private final ReturnType returnType;
 
     /**
      * Create a new semantic symbol
@@ -19,19 +19,12 @@ public abstract class SemanticSymbol {
 
     /**
      * Get the type of this symbol
-     * @return
+     * @return the kind of the symbol
      */
     public ReturnType getReturnType() {
         return returnType;
     }
 
-    /**
-     * Set a new type for this symbol
-     * @param returnType
-     */
-    public void setReturnType(ReturnType returnType) {
-        this.returnType = returnType;
-    }
 
     @Override
     public boolean equals(Object o) {

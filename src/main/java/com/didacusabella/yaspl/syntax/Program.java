@@ -2,7 +2,6 @@ package com.didacusabella.yaspl.syntax;
 
 import com.didacusabella.yaspl.semantic.Scope;
 import com.didacusabella.yaspl.semantic.Scopeable;
-import com.didacusabella.yaspl.semantic.SymbolTable;
 import com.didacusabella.yaspl.visitor.Visitor;
 import java_cup.runtime.ComplexSymbolFactory;
 

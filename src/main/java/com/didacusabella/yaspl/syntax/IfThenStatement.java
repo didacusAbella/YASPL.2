@@ -7,7 +7,7 @@ import java_cup.runtime.ComplexSymbolFactory;
  * Tree node representing if then statement. For example:
  * <pre>
  *     {@code
- *     if(booleancondition) then {
+ *     if(booleanCondition) then {
  *         statements
  *     };
  *     }

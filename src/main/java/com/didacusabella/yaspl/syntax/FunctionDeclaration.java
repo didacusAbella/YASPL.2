@@ -3,7 +3,6 @@ package com.didacusabella.yaspl.syntax;
 import com.didacusabella.yaspl.semantic.ReturnType;
 import com.didacusabella.yaspl.semantic.Scope;
 import com.didacusabella.yaspl.semantic.Scopeable;
-import com.didacusabella.yaspl.semantic.SymbolTable;
 import com.didacusabella.yaspl.visitor.Visitor;
 import java_cup.runtime.ComplexSymbolFactory;
 
@@ -111,14 +110,12 @@ public class FunctionDeclaration extends Decl implements Scopeable {
      */
     public String functionCodomain(){
         StringJoiner sj = new StringJoiner("X");
-        parameterDeclarations.forEach(p -> {
-            p.getVariableDeclarationList().forEach(v -> {
-                int size = v.getVariables().size();
-                ReturnType type = v.getNodeType();
-                String tmp = String.join("X", Collections.nCopies(size, type.getValue()));
-                sj.add(tmp);
-            });
-        });
+        parameterDeclarations.forEach(p -> p.getVariableDeclarationList().forEach(v -> {
+            int size = v.getVariables().size();
+            ReturnType type = v.getNodeType();
+            String tmp = String.join("X", Collections.nCopies(size, type.getValue()));
+            sj.add(tmp);
+        }));
         return sj.toString();
     }
 

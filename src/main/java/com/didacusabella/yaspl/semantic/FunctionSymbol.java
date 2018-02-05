@@ -54,10 +54,7 @@ public class FunctionSymbol extends SemanticSymbol {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Tipo:".concat(this.getReturnType().getValue()).concat("\n"));
-        sb.append("Dominio:".concat(this.inputDomain));
-        sb.append("Codominio:".concat(this.outputDomain));
-        return sb.toString();
+        return "Type:".concat(this.getReturnType().getValue()).concat("\n").concat("Domain:").concat(this.inputDomain)
+                .concat(" Codomain:").concat(this.outputDomain);
     }
 }

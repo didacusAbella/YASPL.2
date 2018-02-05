@@ -15,7 +15,7 @@ public enum ReturnType {
 
     /**
      * Get the string value for this enum
-     * @return
+     * @return the string value of this enum
      */
     public String getValue() {
         return value;

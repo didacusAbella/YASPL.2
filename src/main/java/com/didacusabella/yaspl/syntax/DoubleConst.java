@@ -31,7 +31,7 @@ public class DoubleConst extends Expression {
 
     /**
      * Return the double value associated with this wrapper
-     * @return
+     * @return the double value associated with this node
      */
     public double getDoubleValue() {
         return doubleValue;

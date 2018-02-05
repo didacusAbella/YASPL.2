@@ -70,7 +70,7 @@ public class ReadStatement extends Statement {
      * @return the domain of the types
      */
     public String typeDomain(){
-        return this.types.stream().map(v -> v.getTypeName()).collect(Collectors.joining("X"));
+        return this.types.stream().map(Type::getTypeName).collect(Collectors.joining("X"));
     }
 
     /**

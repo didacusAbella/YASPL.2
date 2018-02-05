@@ -18,7 +18,7 @@ public class VariableSymbol extends SemanticSymbol {
 
     /**
      * Get the variable kind of this symbol
-     * @return
+     * @return the variable kind
      */
     public VariableType getVarType() {
         return varType;
@@ -26,7 +26,7 @@ public class VariableSymbol extends SemanticSymbol {
 
     /**
      * Set a new variable kind for this symbol
-     * @param varType
+     * @param varType the new variable kind
      */
     public void setVarType(VariableType varType) {
         this.varType = varType;
@@ -34,6 +34,6 @@ public class VariableSymbol extends SemanticSymbol {
 
     @Override
     public String toString() {
-        return String.format("Tipo:%s", this.getReturnType().getValue());
+        return String.format("Type:%s", this.getReturnType().getValue());
     }
 }

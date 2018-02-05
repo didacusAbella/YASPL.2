@@ -7,6 +7,41 @@ import java.util.ArrayList;
 import com.didacusabella.yaspl.syntax.*;
 import com.didacusabella.yaspl.visitor.*;
 import java_cup.runtime.ComplexSymbolFactory.ComplexSymbol;
+import java.util.logging.Logger;
+import java.util.LinkedList;
+import java.util.Iterator;
+import java.util.List;
+
+parser code {:
+   private static Logger logger = Logger.getLogger("Parser");
+
+   public void report_error(String message, Object info) {
+     if (info instanceof ComplexSymbol) {
+       ComplexSymbol cs = (ComplexSymbol)info;
+       logger.severe(message + " for input symbol \"" + cs.getName() + "\" spanning from " + cs.getLeft() + " to " + cs.getRight());
+     } else {
+         this.logger.severe(message);
+         if (info instanceof Symbol) {
+           if (((Symbol)info).left != -1) {
+             logger.severe(" at character " + ((Symbol)info).left + " of input");
+           } else {
+              this.logger.severe("");
+           }
+         }
+     }
+   }
+
+   protected void report_expected_token_ids() {
+     List<Integer> ids = this.expected_token_ids();
+     LinkedList<String> list = new LinkedList<>();
+     Iterator var3 = ids.iterator();
+     while(var3.hasNext()) {
+       Integer expected = (Integer)var3.next();
+       list.add(this.symbl_name_from_id(expected));
+      }
+       logger.severe("instead expected token classes are " + list);
+    }
+:}
 
 /* Terminals (tokens returned by the scanner). Annotated with String attribute. Exception for constants */
 terminal String        HEAD, START, SEMI, INT, BOOL, DOUBLE, NAME, COMMA, DEF, LPAR, RPAR, COLON, LGPAR,

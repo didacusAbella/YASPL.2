@@ -66,7 +66,7 @@ public class StackSymbolTable extends Stack<Scope> implements SymbolTable {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for(int i=0; i < this.size(); i++){
-            sb.append("Scope n"+i+"\n "+this.elementAt(i).toString().concat("\n"));
+            sb.append("Scope n°").append(i).append('\n').append(this.elementAt(i).toString()).append('\n');
         }
         return sb.toString();
     }

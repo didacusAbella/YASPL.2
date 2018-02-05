@@ -4,7 +4,6 @@ package com.didacusabella.yaspl.visitor;
 import com.didacusabella.yaspl.semantic.*;
 import com.didacusabella.yaspl.syntax.*;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -81,16 +80,6 @@ public class SemanticVisitor implements Visitor<ReturnType, Logger> {
                 functionDeclarationNode.setNodeType(ReturnType.VOID);
                 fs.setInputDomain(functionDeclarationNode.functionDomain());
                 fs.setOutputDomain(functionDeclarationNode.functionCodomain());
-                /*Patch parameter*/
-                for(ParameterDeclaration p : functionDeclarationNode.getParameterDeclarations()){
-                    for(VariableDeclaration vd : p.getVariableDeclarationList()){
-                        for(Variable v : vd.getVariables()){
-                            int address = this.symbolTable.findAddress(v.getIdentifier().getName());
-                            VariableSymbol vs = (VariableSymbol)this.symbolTable.getCurrentScope().get(address);
-                            vs.setVarType(VariableType.OUTPUT);
-                        }
-                    }
-                }
             } else {
                 functionDeclarationNode.setNodeType(ReturnType.UNDEFINED);
                 param.severe(ErrorGenerator.generateError("Function declaration error", functionDeclarationNode));
@@ -142,6 +131,12 @@ public class SemanticVisitor implements Visitor<ReturnType, Logger> {
     public ReturnType visit(ParameterDeclaration parameterDeclarationNode, Logger param) {
         parameterDeclarationNode.getVariableDeclarationList().forEach(o -> o.accept(this, param));
         if(this.checkAll(parameterDeclarationNode.getVariableDeclarationList())){
+            parameterDeclarationNode.getVariableDeclarationList().stream().flatMap(vd -> vd.getVariables().stream())
+                    .forEach(v -> {
+                        int address = this.symbolTable.findAddress(v.getIdentifier().getName());
+                        VariableSymbol vs = (VariableSymbol)this.symbolTable.getCurrentScope().get(address);
+                        vs.setVarType(VariableType.OUTPUT);
+                    });
             parameterDeclarationNode.setNodeType(ReturnType.VOID);
         }else{
             param.severe(ErrorGenerator.generateError("Parameter declaration error", parameterDeclarationNode));
@@ -168,7 +163,8 @@ public class SemanticVisitor implements Visitor<ReturnType, Logger> {
         readStatementNode.getIdentifierList().forEach(i -> i.accept(this, param));
         readStatementNode.getTypeList().forEach(t -> t.accept(this, param));
         if(this.checkAll(readStatementNode.getIdentifierList()) && this.checkAll(readStatementNode.getTypeList())){
-            if(readStatementNode.checkInputValidity()){
+            if(readStatementNode.checkInputValidity() && this.checkReadType(readStatementNode.getTypeList())
+                    && this.checkReadType(readStatementNode.getIdentifierList())){
                 readStatementNode.setNodeType(ReturnType.VOID);
             }else{
                 param.severe(ErrorGenerator.generateError(String.format("Input expected: %s but found %s",
@@ -439,6 +435,10 @@ public class SemanticVisitor implements Visitor<ReturnType, Logger> {
 
     private boolean isUndefined(YasplNode node){
         return node.getNodeType() != ReturnType.UNDEFINED;
+    }
+
+    private boolean checkReadType(List<? extends YasplNode> node){
+        return node.stream().allMatch(n -> n.getNodeType() != ReturnType.STRING && n.getNodeType() != ReturnType.BOOLEAN);
     }
 
 }
