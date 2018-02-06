@@ -1,18 +1,18 @@
 head
-int result, value;
-def factorial(int value;) :int result; {
+double value, result;
+
+def sqrt(double value;) :double result; {
   int i;
-  result = 1;
-  i = 1;
-  while(i <= value) do {
-    result = result * i;
-    i = i +1;
+  result = value / 2;
+  i = 0;
+  while(i < 64) do{
+    result = ( result + ( value / result) )/ 2;
+    i = i + 1;
   };
 };
+
 start
-value = 0;
-result = 0;
-"Inserisci valore di cui vuoi calcolare il fattoriale" ->;
-value <- int;
-factorial(value:result);
-"Il fattoriale è", result ->;
+"Inserisci il valore di cui vuoi calcolare la radice quadrata" ->;
+value <- double;
+sqrt(value:result);
+"Il valore della radice quadrata è", result ->;

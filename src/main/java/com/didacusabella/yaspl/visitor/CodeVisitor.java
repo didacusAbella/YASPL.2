@@ -202,9 +202,11 @@ public class CodeVisitor implements Visitor<String, Scope> {
     @Override
     public String visit(BinaryExpression binaryExpressionNode, Scope param) {
         StringBuilder binaryBuilder = new StringBuilder();
+        binaryBuilder.append('(');
         binaryBuilder.append(binaryExpressionNode.getLeftOperand().accept(this, param)).append(' ');
         binaryBuilder.append(mapOperand(binaryExpressionNode.getOp())).append(' ');
         binaryBuilder.append(binaryExpressionNode.getRightOperand().accept(this, param));
+        binaryBuilder.append(')');
         return binaryBuilder.toString();
     }
 
@@ -251,9 +253,11 @@ public class CodeVisitor implements Visitor<String, Scope> {
     @Override
     public String visit(RelationalExpression relationalExpressionNode, Scope param) {
         StringBuilder relBuilder = new StringBuilder();
+        relBuilder.append('(');
         relBuilder.append(relationalExpressionNode.getLeftOperand().accept(this, param)).append(' ');
         relBuilder.append(mapOperand(relationalExpressionNode.getRelOp())).append(' ');
         relBuilder.append(relationalExpressionNode.getRightOperand().accept(this, param));
+        relBuilder.append(')');
         return relBuilder.toString();
     }
 
