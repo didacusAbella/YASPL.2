@@ -11,6 +11,7 @@ import java_cup.runtime.ComplexSymbolFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.logging.Logger;
 
 public class EnvironmentGenerator {
@@ -22,8 +23,7 @@ public class EnvironmentGenerator {
     public static Program setupEnvironment(String fileName) throws Exception {
         ComplexSymbolFactory csf = new ComplexSymbolFactory();
         st = new ArrayStringTable();
-        FileInputStream fis = new FileInputStream(new File(EnvironmentGenerator.class
-                .getResource(fileName).getPath()));
+        InputStream fis = EnvironmentGenerator.class.getClassLoader().getResourceAsStream(fileName);
         parser = new Parser(new Lexer(csf, fis, st), csf);
         SemanticVisitor sm = new SemanticVisitor(new StackSymbolTable(st));
         Program p = (Program)parser.parse().value;

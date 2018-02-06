@@ -109,7 +109,6 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
                     <finalName>yaspl2cc</finalName>
-                    <appendAssemblyId>false</appendAssemblyId>
                     <archive>
                         <manifest>
                             <mainClass>com.didacusabella.yaspl.cli.App</mainClass>

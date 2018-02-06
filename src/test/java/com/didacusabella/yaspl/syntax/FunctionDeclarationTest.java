@@ -13,7 +13,7 @@ public class FunctionDeclarationTest {
 
     @Before
     public void setUp() throws Exception {
-        this.program = EnvironmentGenerator.setupEnvironment("/testFunctionDeclaration.yaspl");
+        this.program = EnvironmentGenerator.setupEnvironment("testFunctionDeclaration.yaspl");
     }
 
     @Test
@@ -30,7 +30,7 @@ public class FunctionDeclarationTest {
 
     @Test
     public void emptyDomain() throws Exception{
-        this.program = EnvironmentGenerator.setupEnvironment("/testEmptyFunction.yaspl");
+        this.program = EnvironmentGenerator.setupEnvironment("testEmptyFunction.yaspl");
         FunctionDeclaration fd = (FunctionDeclaration) program.getDeclarations().get(1);
         assertEquals("void", fd.functionDomain());
         assertEquals("int", fd.functionCodomain());

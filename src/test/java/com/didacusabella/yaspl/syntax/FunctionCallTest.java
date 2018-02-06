@@ -12,7 +12,7 @@ public class FunctionCallTest {
 
     @Before
     public void setUp() throws Exception {
-        this.program = EnvironmentGenerator.setupEnvironment("/testFunctionCall.yaspl");
+        this.program = EnvironmentGenerator.setupEnvironment("testFunctionCall.yaspl");
     }
 
     @Test
@@ -29,7 +29,7 @@ public class FunctionCallTest {
 
     @Test
     public void emptyCall() throws Exception {
-        this.program = EnvironmentGenerator.setupEnvironment("/testEmptyFunction.yaspl");
+        this.program = EnvironmentGenerator.setupEnvironment("testEmptyFunction.yaspl");
         FunctionCall fc = (FunctionCall) this.program.getStatements().get(1);
         assertEquals("int", fc.getCodomain());
         assertEquals("void", fc.getDomain());

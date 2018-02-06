@@ -1,4 +1,0 @@
-head
-int value
-start
-value <- int;

@@ -1,0 +1,27 @@
+head
+int first, second;
+double third, fourth;
+bool fifth, sixth;
+string seventh, eight;
+def perfectFunction(int first, second; double third, fourth;) :bool fifth, sixth; string seventh, eight; {
+  "This is the perfect function" ->;
+};
+start
+first,second <- int, int;
+third = 3.5;
+fourth = third;
+if(first > second) then {
+  first = first + second;
+};
+
+if (second == first) then {
+  third = third - fourth;
+}else {
+  third = third * fourth;
+};
+
+while(not(first == 1)) do{
+  fourth = fourth / third;
+};
+
+perfectFunction(first, second, third, fourth:fifth,sixth, seventh, eight);
