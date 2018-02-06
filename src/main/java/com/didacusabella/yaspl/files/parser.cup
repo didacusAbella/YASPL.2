@@ -189,6 +189,7 @@ Simple_stat ::=  Vars:vs READ Types:tps SEMI {: RESULT = new ReadStatement(vsxle
                         :}
                | WHILE:wh LPAR Bool_Expr:be RPAR DO Comp_stat:c1 SEMI
                         {: RESULT = new WhileStatement(whxleft, whxright, be, c1); :}
+               | error SEMI
                ;
 
 
