@@ -1,18 +1,11 @@
 head
-double value, result;
-
-def sqrt(double value;) :double result; {
-  int i;
-  result = value / 2;
-  i = 0;
-  while(i < 64) do{
-    result = ( result + ( value / result) )/ 2;
-    i = i + 1;
-  };
+int value, result;
+def function() :int result; {
+  double value;
+  value = 0.0;
+  "Il valore è", value -> ;
 };
-
 start
-"Inserisci il valore di cui vuoi calcolare la radice quadrata" ->;
-value <- double;
-sqrt(value:result);
-"Il valore della radice quadrata è", result ->;
+value = 0;
+"Il valore è", value ->;
+function(:result);

@@ -5,7 +5,6 @@ import com.didacusabella.yaspl.syntax.*;
 
 import java.util.List;
 import java.util.StringJoiner;
-import java.util.stream.Collectors;
 
 /**
  * The code visitor. Generate C99 compliant code

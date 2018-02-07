@@ -1,0 +1,18 @@
+head
+double value, result;
+
+def sqrt(double value;) :double result; {
+  int i;
+  result = value / 2;
+  i = 0;
+  while(i < 64) do{
+    result = ( result + ( value / result) )/ 2;
+    i = i + 1;
+  };
+};
+
+start
+"Inserisci il valore di cui vuoi calcolare la radice quadrata" ->;
+value <- double;
+sqrt(value:result);
+"Il valore della radice quadrata è", result ->;
