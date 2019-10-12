@@ -5,12 +5,11 @@ package com.didacusabella.yaspl.lexical;
  */
 public interface StringTable {
     /**
-     * Add a new lexical symbol to table
-     * @param symbol the symbol name
-     * @param code the code associated
-     * @return true if addedd successfully
+     * Add a new lexical symbol to table. I f the symbol is yet present it isn't added to table
+     * @param lexeme the symbol name
+     * @return true if no duplicates are found, false otherwise
      */
-    boolean addLexicalSymbol(String symbol, int code);
+    boolean install(String lexeme);
 
     /**
      * Get the addres for a specific lexeme
@@ -18,13 +17,6 @@ public interface StringTable {
      * @return the address of the lexeme
      */
     int getAddress(String lexeme);
-
-    /**
-     * Find a lexical symbol associated with a specific address
-     * @param address the address
-     * @return the lexical symbol
-     */
-    LexicalSymbol getSymbol(int address);
 
     /**
      * Get the lexeme associated with this address

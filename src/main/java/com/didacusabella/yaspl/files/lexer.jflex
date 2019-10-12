@@ -21,16 +21,15 @@ import java.util.HashMap;
 
 %{
     private StringTable table;
-
-
-    public Lexer(ComplexSymbolFactory sf, java.io.InputStream is, StringTable table){
-		this(new InputStreamReader(is));
-        symbolFactory = sf;
-        this.table = table;
-    }
-
     private StringBuffer sb = new StringBuffer();
     private ComplexSymbolFactory symbolFactory;
+
+    public Lexer(ComplexSymbolFactory sf, java.io.InputStream is, StringTable table){
+      this(new InputStreamReader(is));
+      this.symbolFactory = sf;
+      this.table = table;
+    }
+
 
     public Symbol symbol(String name, int code){
 		return symbolFactory.newSymbol(name, code,
@@ -39,7 +38,7 @@ import java.util.HashMap;
     }
 
     public Symbol symbol(String name, int code, Object value){
-        this.table.addLexicalSymbol(value.toString(), code);
+        this.table.install(value.toString());
         return symbolFactory.newSymbol(name, code,
     					new Location(yyline+1, yycolumn+1),
     					new Location(yyline+1, yycolumn+yylength()), value);
