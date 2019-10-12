@@ -1,10 +1,7 @@
 package com.didacusabella.yaspl.syntax;
 
 import com.didacusabella.yaspl.visitor.Visitor;
-import java_cup.runtime.ComplexSymbolFactory;
-
-import java.util.ArrayList;
-import java.util.Collections;
+import java_cup.runtime.ComplexSymbolFactory.Location;
 import java.util.List;
 
 /**
@@ -16,45 +13,44 @@ import java.util.List;
  *     }
  * </pre>
  */
-public class ParameterDeclaration extends YasplNode {
+public class ParameterDeclaration extends AstNode {
 
-    private final List<VariableDeclaration> variableDeclarations;
+  private final List<Variable> variables;
+  private final TypeDenoter type;
 
-    /**
-     * Create a new parameter declaration node
-     * @param leftLocation the left location
-     * @param rightLocation the right location
-     * @param variableDeclarations the variable declaration node
-     */
-    public ParameterDeclaration(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
-                                List<VariableDeclaration> variableDeclarations) {
-        super(leftLocation, rightLocation);
-        Collections.reverse(variableDeclarations);
-        this.variableDeclarations = variableDeclarations;
-    }
+  /**
+   * Create a new parameter declaration node
+   *
+   * @param leftLocation the left location
+   * @param rightLocation the right location
+   * @param variableDeclaration the variable declaration node
+   */
+  public ParameterDeclaration(Location leftLocation, Location rightLocation,
+          VariableDeclaration variableDeclaration) {
+    super(leftLocation, rightLocation);
+    this.variables = variableDeclaration.getVariables();
+    this.type = variableDeclaration.getType();
+  }
 
-    /**
-     * Create a new parameter declaration node
-     * @param vd the single variable
-     */
-    public ParameterDeclaration(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
-                                VariableDeclaration vd) {
-        super(leftLocation, rightLocation);
-        this.variableDeclarations = new ArrayList<>();
-        this.variableDeclarations.add(vd);
-    }
+  @Override
+  public <T, P> T accept(Visitor<T, P> visitor, P param) {
+    return visitor.visit(this, param);
+  }
 
-    @Override
-    public <T, P> T accept(Visitor<T, P> visitor, P param) {
-        return visitor.visit(this, param);
-    }
+  /**
+   * Get the variable list
+   * @return the variable list 
+   */
+  public List<Variable> getVariables() {
+    return variables;
+  }
 
-    /**
-     * Get the list of variables used as parameter
-     * @return the list of variables
-     */
-    public List<VariableDeclaration> getVariableDeclarationList() {
-        return this.variableDeclarations;
-    }
+  /**
+   * Get the type denoter
+   * @return the type denoter node
+   */
+  public TypeDenoter getType() {
+    return type;
+  }
 
 }

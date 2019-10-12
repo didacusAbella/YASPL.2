@@ -106,7 +106,7 @@ public class SemanticVisitor implements Visitor<ReturnType, Logger> {
     }
 
     @Override
-    public ReturnType visit(Type typeNode, Logger param) {
+    public ReturnType visit(TypeDenoter typeNode, Logger param) {
         if(typeNode.getTypeName().equals("int") || typeNode.getTypeName().equals("double") || typeNode.getTypeName().equals("string")
                 || typeNode.getTypeName().equals("bool")) {
             typeNode.setNodeType(ReturnType.getEnumFor(typeNode.getTypeName()));
@@ -425,19 +425,19 @@ public class SemanticVisitor implements Visitor<ReturnType, Logger> {
         return assignStatementNode.getNodeType();
     }
 
-    private boolean checkAll(List<? extends YasplNode> list){
+    private boolean checkAll(List<? extends AstNode> list){
         return list.stream().allMatch(node -> node.getNodeType() != ReturnType.UNDEFINED);
     }
 
-    private boolean allUndefined(List<? extends YasplNode> list){
+    private boolean allUndefined(List<? extends AstNode> list){
         return list.stream().allMatch(node -> node.getNodeType() == ReturnType.UNDEFINED);
     }
 
-    private boolean isUndefined(YasplNode node){
+    private boolean isUndefined(AstNode node){
         return node.getNodeType() != ReturnType.UNDEFINED;
     }
 
-    private boolean checkReadType(List<? extends YasplNode> node){
+    private boolean checkReadType(List<? extends AstNode> node){
         return node.stream().allMatch(n -> n.getNodeType() != ReturnType.STRING && n.getNodeType() != ReturnType.BOOLEAN);
     }
 

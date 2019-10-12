@@ -1,7 +1,7 @@
 package com.didacusabella.yaspl.syntax;
 
 import com.didacusabella.yaspl.visitor.Visitor;
-import java_cup.runtime.ComplexSymbolFactory;
+import java_cup.runtime.ComplexSymbolFactory.Location;
 
 import java.util.Collections;
 import java.util.List;
@@ -16,43 +16,45 @@ import java.util.List;
  */
 public class VariableDeclaration extends Decl {
 
-    private final Type type;
-    private final List<Variable> variables;
+  private final TypeDenoter type;
+  private final List<Variable> variables;
 
-    /**
-     * Create a new variable declaration node
-     * @param leftLocation the left location
-     * @param rightLocation then right location
-     * @param type the type node
-     * @param variables the variable node list
-     */
-    public VariableDeclaration(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
-                               Type type, List<Variable> variables) {
-        super(leftLocation, rightLocation);
-        this.type = type;
-        Collections.reverse(variables);
-        this.variables = variables;
-    }
+  /**
+   * Create a new variable declaration node
+   *
+   * @param leftLocation the left location
+   * @param rightLocation then right location
+   * @param type the type node
+   * @param variables the variable node list
+   */
+  public VariableDeclaration(Location leftLocation, Location rightLocation,
+          TypeDenoter type, List<Variable> variables) {
+    super(leftLocation, rightLocation);
+    this.type = type;
+    this.variables = variables;
+  }
 
-    @Override
-    public <T, P> T accept(Visitor<T, P> visitor, P param) {
-        return visitor.visit(this, param);
-    }
+  @Override
+  public <T, P> T accept(Visitor<T, P> visitor, P param) {
+    return visitor.visit(this, param);
+  }
 
-    /**
-     * Get the type of the declaration
-     * @return the type of the declaration
-     */
-    public Type getType() {
-        return this.type;
-    }
+  /**
+   * Get the type of the declaration
+   *
+   * @return the type of the declaration
+   */
+  public TypeDenoter getType() {
+    return this.type;
+  }
 
-    /**
-     * Get the list of the variable
-     * @return the list of the variable
-     */
-    public List<Variable> getVariables() {
-        return this.variables;
-    }
+  /**
+   * Get the list of the variable
+   *
+   * @return the list of the variable
+   */
+  public List<Variable> getVariables() {
+    return this.variables;
+  }
 
 }

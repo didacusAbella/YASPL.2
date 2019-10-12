@@ -83,7 +83,7 @@ public class CodeVisitor implements Visitor<String, Scope> {
     }
 
     @Override
-    public String visit(Type typeNode, Scope param) {
+    public String visit(TypeDenoter typeNode, Scope param) {
         return typeNode.getTypeName();
     }
 
@@ -317,7 +317,7 @@ public class CodeVisitor implements Visitor<String, Scope> {
         return type;
     }
 
-    private String compactCode(List<? extends YasplNode> list, Scope scope){
+    private String compactCode(List<? extends AstNode> list, Scope scope){
         return list.stream().map(l -> l.accept(this, scope)).reduce("", String::concat);
     }
 

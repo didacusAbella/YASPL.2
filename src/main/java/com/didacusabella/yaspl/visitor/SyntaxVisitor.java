@@ -105,7 +105,7 @@ public class SyntaxVisitor implements Visitor<Element, Void>{
     }
 
     @Override
-    public Element visit(Type typeNode, Void param) {
+    public Element visit(TypeDenoter typeNode, Void param) {
         Element el = this.xmlDocument.createElement("Type");
         el.setAttribute("value",typeNode.getTypeName());
         return el;

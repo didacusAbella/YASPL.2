@@ -1,7 +1,7 @@
 package com.didacusabella.yaspl.syntax;
 
 import com.didacusabella.yaspl.visitor.Visitor;
-import java_cup.runtime.ComplexSymbolFactory;
+import java_cup.runtime.ComplexSymbolFactory.Location;
 
 /**
  * This node encapsulate a variable of a YASPL program. For example:
@@ -11,33 +11,34 @@ import java_cup.runtime.ComplexSymbolFactory;
  *     }
  * </pre>
  */
-public class Variable extends YasplNode {
+public class Variable extends AstNode {
 
-    private final Identifier identifier;
+  private final String name;
 
-    /**
-     * Create a new variable node
-     * @param leftLocation the left location
-     * @param rightLocation the right location
-     * @param identifier the identifier node
-     */
-    public Variable(ComplexSymbolFactory.Location leftLocation, ComplexSymbolFactory.Location rightLocation,
-                    Identifier identifier) {
-        super(leftLocation, rightLocation);
-        this.identifier = identifier;
-    }
+  /**
+   * Create a new variable node
+   *
+   * @param leftLocation the left location
+   * @param rightLocation the right location
+   * @param name the identifier node
+   */
+  public Variable(Location leftLocation, Location rightLocation, String name) {
+    super(leftLocation, rightLocation);
+    this.name = name;
+  }
 
-    @Override
-    public <T, P> T accept(Visitor<T, P> visitor, P param) {
-        return visitor.visit(this, param);
-    }
+  @Override
+  public <T, P> T accept(Visitor<T, P> visitor, P param) {
+    return visitor.visit(this, param);
+  }
 
-    /**
-     * Get the name of the variable
-     * @return the name of the variable
-     */
-    public Identifier getIdentifier() {
-        return this.identifier;
-    }
+  /**
+   * Get the name of the variable
+   *
+   * @return the name of the variable
+   */
+  public String getName() {
+    return this.name;
+  }
 
 }
