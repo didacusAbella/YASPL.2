@@ -11,7 +11,7 @@ import java_cup.runtime.ComplexSymbolFactory.Location;
  */
 public class TypeDenoter extends AstNode {
 
-  private final int kind;
+  private final String kind;
 
   /**
    * Create a new Type node
@@ -20,16 +20,16 @@ public class TypeDenoter extends AstNode {
    * @param rightLocation the right location
    * @param kind the type name
    */
-  public TypeDenoter(Location leftLocation, Location rightLocation, int kind) {
+  public TypeDenoter(Location leftLocation, Location rightLocation, String kind) {
     super(leftLocation, rightLocation);
     this.kind = kind;
   }
 
   /**
-   * return the int representation of this type
+   * return the string representation of this type
    * @return the kind of type
    */
-  public int getKind() {
+  public String getKind() {
     return this.kind;
   }
 

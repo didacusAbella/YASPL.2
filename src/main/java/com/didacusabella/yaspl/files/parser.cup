@@ -93,10 +93,10 @@ Var_decl ::= Type:type Vars:vars SEMI                   {: RESULT = new Variable
 
 
 /************************************ Types ammitted ************************************************/
-Type ::=  INT:i                                         {: RESULT = new TypeDenoter(ixleft, ixright, 2); :}
-        | BOOL:b                                        {: RESULT = new TypeDenoter(bxleft, bxright, 0); :}
-        | DOUBLE:d                                      {: RESULT = new TypeDenoter(dxleft, dxright, 1); :}
-        | STRING:s                                      {: RESULT = new TypeDenoter(sxleft, sxright, 3); :}
+Type ::=  INT:i                                         {: RESULT = new TypeDenoter(ixleft, ixright, "int"); :}
+        | BOOL:b                                        {: RESULT = new TypeDenoter(bxleft, bxright, "bool"); :}
+        | DOUBLE:d                                      {: RESULT = new TypeDenoter(dxleft, dxright, "double"); :}
+        | STRING:s                                      {: RESULT = new TypeDenoter(sxleft, sxright, "string"); :}
         ;
 
 

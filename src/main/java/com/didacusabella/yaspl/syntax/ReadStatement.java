@@ -2,6 +2,8 @@ package com.didacusabella.yaspl.syntax;
 
 import com.didacusabella.yaspl.visitor.Visitor;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import java_cup.runtime.ComplexSymbolFactory.Location;
 
 /**
@@ -14,7 +16,7 @@ import java_cup.runtime.ComplexSymbolFactory.Location;
  */
 public class ReadStatement extends Statement {
 
-  private final List<Variable> variables;
+  private final List<Identifier> variables;
   private final List<TypeDenoter> types;
 
   /**
@@ -28,8 +30,12 @@ public class ReadStatement extends Statement {
   public ReadStatement(Location leftLocation, Location rightLocation,
           List<Variable> variables, List<TypeDenoter> types) {
     super(leftLocation, rightLocation);
-    this.variables = variables;
+    this.variables = variables.stream().map(this.toIdentifier()).collect(Collectors.toList());
     this.types = types;
+  }
+  
+  private Function<Variable, Identifier> toIdentifier(){
+    return (Variable v) -> new Identifier(v.getLeftLocation(), v.getRightLocation(), v.getName());
   }
 
   @Override
@@ -42,7 +48,7 @@ public class ReadStatement extends Statement {
    *
    * @return the identifier list
    */
-  public List<Variable> getIdentifiers() {
+  public List<Identifier> getIdentifiers() {
     return this.variables;
   }
 

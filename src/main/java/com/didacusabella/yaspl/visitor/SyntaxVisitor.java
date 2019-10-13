@@ -1,266 +1,213 @@
 package com.didacusabella.yaspl.visitor;
 
 import com.didacusabella.yaspl.syntax.*;
+import java.util.function.Consumer;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import java.io.File;
-
 /**
- * Syntax visitor. It perform depth first visiting, creating an xml file as output
+ * Syntax visitor. It perform depth first visiting, creating an xml file as
+ * output
  */
-public class SyntaxVisitor implements Visitor<Element, Void>{
+public class SyntaxVisitor implements Visitor<Element, Document> {
 
-    private Document xmlDocument;
+  @Override
+  public Element visit(Program program, Document param) {
+    Element el = param.createElement("ProgramOp");
+    program.getDeclarations().forEach(this.append(el, param));
+    program.getStatements().forEach(this.append(el, param));
+    param.appendChild(el);
+    return el;
+  }
 
-    /**
-     * Create a new syntax visitor
-     */
-    public SyntaxVisitor() {
-        super();
-        this.createDocument();
-    }
+  private Consumer<? super AstNode> append(Element parent, Document doc) {
+    return (AstNode node) -> parent.appendChild(node.accept(this, doc));
+  }
 
-    /**
-     * This method append the root child to document
-     * @param el the root child
-     */
-    public void appendRoot(Element el){
-        this.xmlDocument.appendChild(el);
-    }
+  @Override
+  public Element visit(VariableDeclaration variableDeclaration, Document param) {
+    Element el = param.createElement("VarDeclOp");
+    el.appendChild(variableDeclaration.getType().accept(this, param));
+    variableDeclaration.getVariables().forEach(this.append(el, param));
+    return el;
+  }
 
-    /**
-     * Create a new empty document to fill
-     */
-    private void createDocument(){
-        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-        try {
-            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-            this.xmlDocument = docBuilder.newDocument();
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        }
-    }
+  @Override
+  public Element visit(FunctionDeclaration functionDeclaration, Document param) {
+    Element el = param.createElement("DefDeclOp");
+    el.appendChild(functionDeclaration.getFunctionName().accept(this, param));
+    functionDeclaration.getVariableDeclarations().forEach(this.append(el, param));
+    functionDeclaration.getParameterDeclarations().forEach(this.append(el, param));
+    el.appendChild(functionDeclaration.getBody().accept(this, param));
+    return el;
+  }
 
-    /**
-     * Generate the appropriate XML file for the output
-     * @param fileName the filename to generate
-     */
-    public void toXml(String fileName){
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        Transformer transformer;
-        try {
-            transformer = transformerFactory.newTransformer();
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-            DOMSource source = new DOMSource(this.xmlDocument);
-            StreamResult result = new StreamResult(new File(System.getProperty("user.home").concat("/".concat(fileName))));
-            transformer.transform(source, result);
-            System.out.println("File saved!");
-        } catch (TransformerException e) {
-            e.printStackTrace();
-        }
-    }
+  @Override
+  public Element visit(Variable variable, Document param) {
+    Element el = param.createElement("Variable");
+    el.setAttribute("lexeme", variable.getName());
+    return el;
+  }
 
-    @Override
-    public Element visit(Program programNode, Void param) {
-        Element el = this.xmlDocument.createElement("ProgramOp");
-        programNode.getDeclarations().forEach(d -> el.appendChild(d.accept(this, param)));
-        programNode.getStatements().forEach(s -> el.appendChild(s.accept(this, param)));
-        return el;
-    }
+  @Override
+  public Element visit(TypeDenoter type, Document param) {
+    Element el = param.createElement("Type");
+    el.setAttribute("kind", type.getKind());
+    return el;
+  }
 
-    @Override
-    public Element visit(VariableDeclaration variableDeclarationNode, Void param) {
-        Element el = this.xmlDocument.createElement("VarDeclOp");
-        el.appendChild(variableDeclarationNode.getType().accept(this, param));
-        variableDeclarationNode.getVariables().forEach(v -> el.appendChild(v.accept(this, param)));
-        return el;
-    }
+  @Override
+  public Element visit(Identifier identifier, Document param) {
+    Element el = param.createElement("Identifier");
+    el.setAttribute("lexeme", identifier.getName());
+    return el;
+  }
 
-    @Override
-    public Element visit(FunctionDeclaration functionDeclarationNode, Void param) {
-        Element el = this.xmlDocument.createElement("ProcDeclOp");
-        el.setAttribute("name", functionDeclarationNode.getIdentifier().getName());
-        functionDeclarationNode.getVariableDeclarations().forEach(v -> el.appendChild(v.accept(this, param)));
-        functionDeclarationNode.getParameterDeclarations().forEach(p -> el.appendChild(p.accept(this, param)));
-        el.appendChild(functionDeclarationNode.getBody().accept(this, param));
-        return el;
-    }
+  @Override
+  public Element visit(ParameterDeclaration parameterDeclaration, Document param) {
+    Element el = param.createElement("ParDeclOp");
+    el.appendChild(parameterDeclaration.getType().accept(this, param));
+    parameterDeclaration.getVariables().forEach(this.append(el, param));
+    return el;
+  }
 
-    @Override
-    public Element visit(Variable variableNode, Void param) {
-        Element el = this.xmlDocument.createElement("VarOp");
-        el.appendChild(variableNode.getIdentifier().accept(this, param));
-        return el;
-    }
+  @Override
+  public Element visit(Body body, Document param) {
+    Element el = param.createElement("BodyOp");
+    body.getVariableDeclarations().forEach(this.append(el, param));
+    body.getStatements().forEach(this.append(el, param));
+    return el;
+  }
 
-    @Override
-    public Element visit(TypeDenoter typeNode, Void param) {
-        Element el = this.xmlDocument.createElement("Type");
-        el.setAttribute("value",typeNode.getTypeName());
-        return el;
-    }
+  @Override
+  public Element visit(ReadStatement readStatement, Document param) {
+    Element el = param.createElement("ReadOp");
+    readStatement.getIdentifiers().forEach(this.append(el, param));
+    readStatement.getTypes().forEach(this.append(el, param));
+    return el;
+  }
 
-    @Override
-    public Element visit(Identifier identifierNode, Void param) {
-        Element el = this.xmlDocument.createElement("IdentifierOp");
-        el.setAttribute("lexem", identifierNode.getName());
-        return el;
-    }
+  @Override
+  public Element visit(WriteStatement writeStatement, Document param) {
+    Element el = param.createElement("WriteOp");
+    writeStatement.getExpressions().forEach(this.append(el, param));
+    return el;
+  }
 
-    @Override
-    public Element visit(ParameterDeclaration parameterDeclarationNode, Void param) {
-        Element el = this.xmlDocument.createElement("ParDeclOp");
-        parameterDeclarationNode.getVariableDeclarationList().forEach(v -> el.appendChild(v.accept(this, param)));
-        return el;
-    }
+  @Override
+  public Element visit(FunctionCall functionCall, Document param) {
+    Element el = param.createElement("DefCallOp");
+    el.appendChild(functionCall.getFunctionName().accept(this, param));
+    functionCall.getExpressions().forEach(this.append(el, param));
+    functionCall.getVariables().forEach(this.append(el, param));
+    return el;
+  }
 
-    @Override
-    public Element visit(Body bodyNode, Void param) {
-        Element el =  this.xmlDocument.createElement("BodyOp");
-        bodyNode.getStatements().forEach(s -> el.appendChild(s.accept(this, param)));
-        bodyNode.getVariableDeclarationList().forEach(v -> el.appendChild(v.accept(this, param)));
-        return el;
-    }
+  @Override
+  public Element visit(CompositeStatement compositeStatement, Document param) {
+    Element el = param.createElement("CompOp");
+    compositeStatement.getStatements().forEach(this.append(el, param));
+    return el;
+  }
 
-    @Override
-    public Element visit(ReadStatement readStatementNode, Void param) {
-        Element el =  this.xmlDocument.createElement("ReadOp");
-        readStatementNode.getIdentifierList().forEach(i -> el.appendChild(i.accept(this, param)));
-        readStatementNode.getTypeList().forEach(t -> el.appendChild(t.accept(this, param)));
-        return el;
-    }
+  @Override
+  public Element visit(WhileStatement whileStatement, Document param) {
+    Element el = param.createElement("WhileOp");
+    el.appendChild(whileStatement.getWhileCondition().accept(this, param));
+    el.appendChild(whileStatement.getWhileStatement().accept(this, param));
+    return el;
+  }
 
-    @Override
-    public Element visit(WriteStatement writeStatementNode, Void param) {
-        Element el = this.xmlDocument.createElement("WriteOp");
-        writeStatementNode.getExpressions().forEach(e -> el.appendChild(e.accept(this, param)));
-        return el;
-    }
+  @Override
+  public Element visit(IfThenStatement ifThenStatement, Document param) {
+    Element el = param.createElement("IfThenOp");
+    el.appendChild(ifThenStatement.getIfCondition().accept(this, param));
+    el.appendChild(ifThenStatement.getThenStatement().accept(this, param));
+    return el;
+  }
 
-    @Override
-    public Element visit(FunctionCall functionCallNode, Void param) {
-        Element el = this.xmlDocument.createElement("CallOp");
-        el.setAttribute("name", functionCallNode.getFunctionName().getName());
-        functionCallNode.getExpressions().forEach(e -> el.appendChild(e.accept(this, param)));
-        functionCallNode.getVariableList().forEach(v -> el.appendChild(v.accept(this, param)));
-        return el;
-    }
+  @Override
+  public Element visit(IfThenElseStatement ifThenElseStatement, Document param) {
+    Element el = param.createElement("IfThenElseOp");
+    el.appendChild(ifThenElseStatement.getIfCondition().accept(this, param));
+    el.appendChild(ifThenElseStatement.getThenStatement().accept(this, param));
+    el.appendChild(ifThenElseStatement.getElseStatement().accept(this, param));
+    return el;
+  }
 
-    @Override
-    public Element visit(CompositeStatement compositeStatementNode, Void param) {
-        Element el =  this.xmlDocument.createElement("CompStatOp");
-        compositeStatementNode.getStatementList().forEach(s -> el.appendChild(s.accept(this, param)));
-        return el;
-    }
+  @Override
+  public Element visit(BinaryExpression binaryExpression, Document param) {
+    Element el = param.createElement("BinaryOp");
+    el.appendChild(binaryExpression.getLeftOperand().accept(this, param));
+    el.appendChild(binaryExpression.getRightOperand().accept(this, param));
+    el.setAttribute("operation", binaryExpression.getOp());
+    return el;
+  }
 
-    @Override
-    public Element visit(WhileStatement whileStatementNode, Void param) {
-        Element el = this.xmlDocument.createElement("WhileOp");
-        el.appendChild(whileStatementNode.getWhileCondition().accept(this, param));
-        el.appendChild(whileStatementNode.getWhileStatement().accept(this, param));
-        return el;
-    }
+  @Override
+  public Element visit(UminusExpression uminusExpression, Document param) {
+    Element el = param.createElement("UminusOp");
+    el.appendChild(uminusExpression.getExpression().accept(this, param));
+    return el;
+  }
 
-    @Override
-    public Element visit(IfThenStatement ifThenStatementNode, Void param) {
-        Element el = this.xmlDocument.createElement("IfThenOp");
-        el.appendChild(ifThenStatementNode.getIfCondition().accept(this, param));
-        el.appendChild(ifThenStatementNode.getThenStatement().accept(this, param));
-        return el;
-    }
+  @Override
+  public Element visit(DoubleConst doubleConst, Document param) {
+    Element el = param.createElement("DoubleConst");
+    el.setAttribute("value", String.valueOf(doubleConst.getDoubleValue()));
+    return el;
+  }
 
-    @Override
-    public Element visit(IfThenElseStatement ifThenElseStatementNode, Void param) {
-        Element el = this.xmlDocument.createElement("IfThenElseOp");
-        el.appendChild(ifThenElseStatementNode.getIfCondition().accept(this, param));
-        el.appendChild(ifThenElseStatementNode.getThenStatement().accept(this, param));
-        el.appendChild(ifThenElseStatementNode.getElseStatement().accept(this, param));
-        return el;
-    }
+  @Override
+  public Element visit(IntegerConst integerConst, Document param) {
+    Element el = param.createElement("IntegerConst");
+    el.setAttribute("value", String.valueOf(integerConst.getIntValue()));
+    return el;
+  }
 
-    @Override
-    public Element visit(BinaryExpression binaryExpressionNode, Void param) {
-        Element el = this.xmlDocument.createElement("BinOp");
-        el.setAttribute("operator", binaryExpressionNode.getOp());
-        el.appendChild(binaryExpressionNode.getLeftOperand().accept(this, param));
-        el.appendChild(binaryExpressionNode.getRightOperand().accept(this, param));
-        return el;
-    }
+  @Override
+  public Element visit(StringConst stringConst, Document param) {
+    Element el = param.createElement("StringConst");
+    el.setAttribute("value", stringConst.getStringValue());
+    return el;
+  }
 
-    @Override
-    public Element visit(UminusExpression uminusExpressionNode, Void param) {
-        Element el = this.xmlDocument.createElement("UMinusOp");
-        el.appendChild(uminusExpressionNode.getExpression().accept(this, param));
-        return el;
-    }
+  @Override
+  public Element visit(NotExpression notExpression, Document param) {
+    Element el = param.createElement("NotOp");
+    el.appendChild(notExpression.getExpression().accept(this, param));
+    return el;
+  }
 
-    @Override
-    public Element visit(DoubleConst doubleConstNode, Void param) {
-        Element el = this.xmlDocument.createElement("DoubleConst");
-        el.setAttribute("value", String.valueOf(doubleConstNode.getDoubleValue()));
-        return el;
-    }
+  @Override
+  public Element visit(TrueExpression trueExpression, Document param) {
+    Element el = param.createElement("TrueExpr");
+    el.setAttribute("value", String.valueOf(trueExpression.getValue()));
+    return el;
+  }
 
-    @Override
-    public Element visit(IntegerConst integerConstNode, Void param) {
-        Element el = this.xmlDocument.createElement("IntConst");
-        el.setAttribute("value", String.valueOf(integerConstNode.getIntValue()));
-        return el;
-    }
+  @Override
+  public Element visit(FalseExpression falseExpression, Document param) {
+    Element el = param.createElement("FalseExpr");
+    el.setAttribute("value", String.valueOf(falseExpression.getValue()));
+    return el;
+  }
 
-    @Override
-    public Element visit(StringConst stringConstNode, Void param) {
-        Element el = this.xmlDocument.createElement("StringConst");
-        el.setAttribute("value", String.valueOf(stringConstNode.getStringValue()));
-        return el;
-    }
+  @Override
+  public Element visit(RelationalExpression relationalExpression, Document param) {
+    Element el = param.createElement("RelOp");
+    el.setAttribute("operation", relationalExpression.getRelOp());
+    el.appendChild(relationalExpression.getLeftOperand().accept(this, param));
+    el.appendChild(relationalExpression.getRightOperand().accept(this, param));
+    return el;
+  }
 
-    @Override
-    public Element visit(NotExpression notExpressionNode, Void param) {
-        Element el = this.xmlDocument.createElement("NotOp");
-        el.appendChild(notExpressionNode.getExpression().accept(this, param));
-        return el;
-    }
+  @Override
+  public Element visit(AssignStatement assignStatement, Document param) {
+    Element el = param.createElement("AssignOp");
+    el.appendChild(assignStatement.getIdentifier().accept(this, param));
+    el.appendChild(assignStatement.getExpression().accept(this, param));
+    return el;
+  }
 
-    @Override
-    public Element visit(TrueExpression trueExpressionNode, Void param) {
-        Element el = this.xmlDocument.createElement("TrueConst");
-        el.setAttribute("value", String.valueOf(trueExpressionNode.getValue()));
-        return el;
-    }
-
-    @Override
-    public Element visit(FalseExpression falseExpressionNode, Void param) {
-        Element el = this.xmlDocument.createElement("FalseConst");
-        el.setAttribute("value", String.valueOf(falseExpressionNode.getValue()));
-        return el;
-    }
-
-    @Override
-    public Element visit(RelationalExpression relationalExpressionNode, Void param) {
-        Element el = this.xmlDocument.createElement("Relop");
-        el.setAttribute("operator", relationalExpressionNode.getRelOp());
-        el.appendChild(relationalExpressionNode.getLeftOperand().accept(this, param));
-        el.appendChild(relationalExpressionNode.getRightOperand().accept(this, param));
-        return el;
-    }
-
-    @Override
-    public Element visit(AssignStatement assignStatementNode, Void param) {
-        Element el = this.xmlDocument.createElement("AssignOp");
-        el.appendChild(assignStatementNode.getIdentifier().accept(this, param));
-        el.appendChild(assignStatementNode.getExpression().accept(this, param));
-        return el;
-    }
 }

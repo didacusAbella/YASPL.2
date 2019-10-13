@@ -3,6 +3,8 @@ package com.didacusabella.yaspl.syntax;
 import com.didacusabella.yaspl.visitor.Visitor;
 import java_cup.runtime.ComplexSymbolFactory.Location;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * This is the node associated with a function call. For example:
@@ -16,7 +18,7 @@ public class FunctionCall extends Statement {
 
   private final Identifier identifier;
   private final List<Expression> expressions;
-  private final List<Variable> variables;
+  private final List<Identifier> variables;
 
   /**
    * Create a new function call node
@@ -32,7 +34,11 @@ public class FunctionCall extends Statement {
     super(leftLocation, rightLocation);
     this.identifier = identifier;
     this.expressions = expressions;
-    this.variables = variables;
+    this.variables = variables.stream().map(this.toIdentifier()).collect(Collectors.toList());
+  }
+  
+  private Function<Variable, Identifier> toIdentifier(){
+    return (Variable v) -> new Identifier(v.getLeftLocation(), v.getRightLocation(), v.getName());
   }
 
   /**
@@ -58,7 +64,7 @@ public class FunctionCall extends Statement {
    *
    * @return the list of variables
    */
-  public List<Variable> getVariableList() {
+  public List<Identifier> getVariables() {
     return this.variables;
   }
 
