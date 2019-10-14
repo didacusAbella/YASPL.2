@@ -1,58 +1,40 @@
 package com.didacusabella.yaspl.semantic;
 
-import com.didacusabella.yaspl.lexical.StringTable;
+import java.util.Optional;
 
 /**
  * A symbol table is used during compiling for semantic analysis and code generation
  */
 public interface SymbolTable {
-    /**
-     * Create a new scope
-     */
-    void enterScope();
-
-    /**
-     * exit from the current scope
-     */
-    void exitScope();
-
-    /**
-     * check if a symbol is present in the current scope
-     * @param address the addres of the identifier
-     * @return true if is present
-     */
-    boolean probe(int address);
-
-    /**
-     * Add a new symbol in the current scope
-     * @param address the address of the new symbol
-     * @param symbol the semantic symbol associated
-     */
-    void addId(int address, SemanticSymbol symbol);
-
-    /**
-     * find if an identifier is the table
-     * @param address the address of the identifier
-     * @return The scope where the identifier is defined. Null otherwise
-     */
-    Scope lookup(int address);
-
-    /**
-     * Find the address for a specific identifier name
-     * @param lexeme the name
-     * @return the address associated
-     */
-    int findAddress(String lexeme);
-
-    /**
-     * Get the current scope in table
-     * @return the current scope
-     */
-    Scope getCurrentScope();
-
-    /**
-     * get the string table used
-     * @return the string table
-     */
-    StringTable getTable();
+   
+  /**
+   * Enter in  a new scope
+   */
+  void enterScope();
+  
+  /**
+   * Exit from the current scope
+   */
+  void exitScope();
+  
+  /**
+   * Check if the lexeme is present in the current scope
+   * @param lexeme the lexeme to find
+   * @return true if is present in the current scope
+   */
+  boolean probe(String lexeme);
+  
+  /**
+   * Search for a lexeme in the scope hierarchy
+   * @param lexeme the lexeme to find
+   * @return an optional record associated
+   */
+  Optional<SymbolTableRecord> lookup(String lexeme);
+  
+  /**
+   * Add a new entry in the current scope
+   * @param lexeme the lexeme
+   * @param str the record associated
+   */
+  void addEntry(String lexeme, SymbolTableRecord str);
 }

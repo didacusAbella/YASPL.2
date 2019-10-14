@@ -7,7 +7,7 @@ import java.util.Objects;
  *
  * @author didacus
  */
-public class CompositeType extends Type {
+public class CompositeType implements Type {
   
   private final List<Type> types;
 
@@ -16,9 +16,34 @@ public class CompositeType extends Type {
   }
 
   @Override
+  public PrimitiveType checkAdd(PrimitiveType type) {
+    return PrimitiveType.NULL;
+  }
+
+  @Override
+  public PrimitiveType checkSub(PrimitiveType type) {
+    return PrimitiveType.NULL;
+  }
+
+  @Override
+  public PrimitiveType checkMul(PrimitiveType type) {
+    return PrimitiveType.NULL;
+  }
+
+  @Override
+  public PrimitiveType checkDiv(PrimitiveType type) {
+    return PrimitiveType.NULL;
+  }
+
+  @Override
+  public PrimitiveType checkRel(PrimitiveType type) {
+    return PrimitiveType.NULL;
+  }
+
+  @Override
   public int hashCode() {
-    int hash = 5;
-    hash = 97 * hash + Objects.hashCode(this.types);
+    int hash = 7;
+    hash = 11 * hash + Objects.hashCode(this.types);
     return hash;
   }
 
@@ -30,10 +55,13 @@ public class CompositeType extends Type {
       return false;
     } else if (getClass() != obj.getClass()) {
       return false;
-    } else{
-      final CompositeType other = (CompositeType) obj;
-      return this.types.equals(other);
+    } else {
+    final CompositeType other = (CompositeType) obj;
+    return !Objects.equals(this.types, other.types); 
     }
   }
+
+
+  
 
 }

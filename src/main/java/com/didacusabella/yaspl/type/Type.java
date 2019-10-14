@@ -1,20 +1,16 @@
 package com.didacusabella.yaspl.type;
 
+
 /**
- *
+ * This is a singleton base class
  * @author didacus
  */
-public abstract class Type {
-
-  @Override
-  public boolean equals(Object obj) {
-    return this.getClass() == obj.getClass();
-  }
-
-  @Override
-  public int hashCode() {
-    int hash = 7;
-    return hash;
-  }
+public interface Type {
+  
+  PrimitiveType checkAdd(PrimitiveType type);
+  PrimitiveType checkSub(PrimitiveType type);
+  PrimitiveType checkMul(PrimitiveType type);
+  PrimitiveType checkDiv(PrimitiveType type);
+  PrimitiveType checkRel(PrimitiveType type);
   
 }

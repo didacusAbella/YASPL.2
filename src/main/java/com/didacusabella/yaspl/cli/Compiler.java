@@ -5,6 +5,9 @@ import com.didacusabella.yaspl.dist.Parser;
 import com.didacusabella.yaspl.lexical.ArrayStringTable;
 import com.didacusabella.yaspl.lexical.StringTable;
 import com.didacusabella.yaspl.semantic.SymbolTable;
+import com.didacusabella.yaspl.syntax.Program;
+import com.didacusabella.yaspl.template.XmlTemplate;
+import com.didacusabella.yaspl.visitor.SyntaxVisitor;
 import java.io.InputStream;
 import java_cup.runtime.ComplexSymbolFactory;
 
@@ -40,9 +43,16 @@ public class Compiler {
   
   /**
    * Compile the file passed
+   * @throws java.lang.Exception
    */
-  public void compileFile() {
-    
+  public void compileFile() throws Exception {
+    Program program = Program.class.cast(this.parser.parse().value);
+    if(this.hasOption("-xml")){
+      XmlTemplate xmlTemplate = new XmlTemplate();
+      SyntaxVisitor sv = new SyntaxVisitor();
+      program.accept(sv, xmlTemplate.getDocument());
+      xmlTemplate.render(this.options[0]);
+    }
   }
   
   

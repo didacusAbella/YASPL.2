@@ -42,5 +42,9 @@ public class XmlTemplate implements Template {
       System.err.println("Error during transforming");
     }
   }
+  
+  public Document getDocument() {
+    return this.document;
+  }
 
 }

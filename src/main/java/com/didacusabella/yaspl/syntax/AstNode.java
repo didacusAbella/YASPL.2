@@ -1,6 +1,4 @@
 package com.didacusabella.yaspl.syntax;
-
-import com.didacusabella.yaspl.semantic.ReturnType;
 import com.didacusabella.yaspl.visitor.Visitor;
 import java_cup.runtime.ComplexSymbolFactory.Location;
 

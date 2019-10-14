@@ -1,5 +1,6 @@
 package com.didacusabella.yaspl.syntax;
 
+import com.didacusabella.yaspl.type.PrimitiveType;
 import com.didacusabella.yaspl.visitor.Visitor;
 import java_cup.runtime.ComplexSymbolFactory.Location;
 
@@ -38,4 +39,18 @@ public class TypeDenoter extends AstNode {
     return visitor.visit(this, param);
   }
 
+  public PrimitiveType typeFactory(){
+    switch(this.kind){
+      case "int":
+        return PrimitiveType.INT;
+      case "double":
+        return PrimitiveType.DOUBLE;
+      case "string":
+        return PrimitiveType.STRING;
+      case "bool":
+        return PrimitiveType.BOOL;
+      default:
+        return PrimitiveType.NULL;
+    }
+  }
 }
