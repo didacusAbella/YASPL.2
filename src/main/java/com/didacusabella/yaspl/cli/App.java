@@ -17,17 +17,19 @@ public class App {
    * @param args the srguments
    * @throws java.io.FileNotFoundException if file not found
    */
-  public static void main(String[] args) throws FileNotFoundException {
+  public static void main(String[] args) throws FileNotFoundException, Exception {
     if(args.length == 0){
       System.out.println(START_MESSAGE);
       Scanner testNumber = new Scanner(System.in);
       String testFile = chooseTestFile(testNumber.nextInt());
       String[] testOptions = { testFile, "-xml" };
       compiler = new Compiler(App.class.getResourceAsStream(testFile), testOptions);
+      compiler.compileFile();
       System.exit(0);
     } else {
       String pathName = new File(args[0]).getAbsolutePath();
       compiler = new Compiler(new FileInputStream(pathName), args);
+      compiler.compileFile();
       System.exit(0);
     }
   }
