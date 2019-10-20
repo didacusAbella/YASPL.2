@@ -4,48 +4,36 @@ import com.didacusabella.yaspl.visitor.Visitor;
 import java_cup.runtime.ComplexSymbolFactory.Location;
 
 /**
- * A Tree node for the an assignment. For example:
- * <pre>
- *     {@code
- *     x = 1;
- *     }
- * </pre>
- *
- * @since 1.0
- * @author didacusAbella
+ * Node that represents the assignment operation. Example:
+ * {@code a = 1;}
  */
 public class AssignStatement extends Statement {
 
-  private final Identifier identifier;
-  private final Expression expression;
+  private final Identifier left;
+  private final Expression right;
 
+  /**
+   * {@inheritDoc}
+   * @param left left side of assignment
+   * @param  right side of assignment
+   */
   public AssignStatement(Location leftLocation, Location rightLocation,
-          Identifier identifier, Expression expression) {
+          Identifier left, Expression right) {
     super(leftLocation, rightLocation);
-    this.identifier = identifier;
-    this.expression = expression;
+    this.left= left;
+    this.right = right;
   }
 
-  /**
-   * Get the identifier list
-   *
-   * @return the identifier list
-   */
-  public Identifier getIdentifier() {
-    return this.identifier;
+  public Identifier getLeft() {
+    return this.left;
   }
 
-  /**
-   * Get the expression list
-   *
-   * @return the expression list
-   */
-  public Expression getExpression() {
-    return this.expression;
+  public Expression getRight() {
+    return this.right;
   }
 
   @Override
-  public <T, P> T accept(Visitor<T, P> visitor, P param) {
-    return visitor.visit(this, param);
+  public <T, P> T accept(Visitor<T, P> visitor, P arg) {
+    return visitor.visit(this, arg);
   }
 }

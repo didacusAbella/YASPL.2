@@ -1,24 +1,19 @@
 package com.didacusabella.yaspl.syntax;
 
 import com.didacusabella.yaspl.type.PrimitiveType;
-import com.didacusabella.yaspl.visitor.Visitor;
 import java_cup.runtime.ComplexSymbolFactory.Location;
+import com.didacusabella.yaspl.visitor.Visitor;
 
 /**
  * This node wrapping the primitive types of a YASPL program.
  *
- * @since 1.0
- * @author didacusAbella
  */
-public class TypeDenoter extends AstNode {
+public class TypeDenoter extends AstNode implements Leaf<String> {
 
   private final String kind;
 
   /**
-   * Create a new Type node
-   *
-   * @param leftLocation the left location
-   * @param rightLocation the right location
+   * {@inheritDoc}
    * @param kind the type name
    */
   public TypeDenoter(Location leftLocation, Location rightLocation, String kind) {
@@ -27,18 +22,9 @@ public class TypeDenoter extends AstNode {
   }
 
   /**
-   * return the string representation of this type
-   * @return the kind of type
+   * Create the PrimitiveType associated with this instance
+   * @return the primitive type
    */
-  public String getKind() {
-    return this.kind;
-  }
-
-  @Override
-  public <T, P> T accept(Visitor<T, P> visitor, P param) {
-    return visitor.visit(this, param);
-  }
-
   public PrimitiveType typeFactory(){
     switch(this.kind){
       case "int":
@@ -52,5 +38,15 @@ public class TypeDenoter extends AstNode {
       default:
         return PrimitiveType.NULL;
     }
+  }
+
+  @Override
+  public String getValue() {
+    return this.kind;
+  }
+
+  @Override
+  public <T, P> T accept(Visitor<T, P> visitor, P arg) {
+    return visitor.visit(this, arg);
   }
 }

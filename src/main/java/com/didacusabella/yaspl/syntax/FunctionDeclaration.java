@@ -1,84 +1,77 @@
 package com.didacusabella.yaspl.syntax;
-import com.didacusabella.yaspl.visitor.Visitor;
+import com.didacusabella.yaspl.type.CompositeType;
 import java_cup.runtime.ComplexSymbolFactory.Location;
 import java.util.List;
+import com.didacusabella.yaspl.visitor.Visitor;
+
 
 /**
- * This class id the node for function declaration. For example:
- * <pre>
- *     {@code
- *     def functionName(type variblelist) :types variables {
- *         body
- *     }
- *     }
- * </pre>
+ * Node for function declaration. For example:
+ * { @code 
+ *    def functionName(type variblelist) :types variables {
+ *        body
+ *    }
+ * }
  */
 public class FunctionDeclaration extends Decl {
 
-  private final Variable identifier;
-  private final List<VariableDeclaration> variableDeclarations;
-  private final List<ParameterDeclaration> parameterDeclarations;
+  private final Variable name;
+  private final List<VariableDeclaration> inputs;
+  private final List<ParameterDeclaration> outputs;
   private final Body body;
 
   /**
-   * Create a new function declaration node
-   *
-   * @param leftLocation the left location
-   * @param rightLocation the right location
-   * @param identifier the function name
-   * @param variableDeclarations the list of input
-   * @param parameterDeclarations the list of outputs
-   * @param body the body node of the function
+   * {@inheritDoc}
+   * @param name the function name
+   * @param inputs the list of input
+   * @param outputs the list of outputs
+   * @param body the body of the function
    */
   public FunctionDeclaration(Location leftLocation, Location rightLocation,
-          Variable identifier, List<VariableDeclaration> variableDeclarations,
-          List<ParameterDeclaration> parameterDeclarations, Body body) {
+          Variable name, List<VariableDeclaration> inputs,
+          List<ParameterDeclaration> outputs, Body body) {
     super(leftLocation, rightLocation);
-    this.identifier = identifier;
-    this.variableDeclarations = variableDeclarations;
-    this.parameterDeclarations = parameterDeclarations;
+    this.name = name;
+    this.inputs = inputs;
+    this.outputs = outputs;
     this.body = body;
   }
 
-  /**
-   * get the list of formal parameters
-   *
-   * @return the list of variables
-   */
-  public List<VariableDeclaration> getVariableDeclarations() {
-    return variableDeclarations;
+  public List<VariableDeclaration> getInputs() {
+    return this.inputs;
   }
 
-  /**
-   * get the list of return variables
-   *
-   * @return the list of returned variables
-   */
-  public List<ParameterDeclaration> getParameterDeclarations() {
-    return parameterDeclarations;
+  public List<ParameterDeclaration> getOutputs() {
+    return this.outputs;
   }
 
-  /**
-   * get the name of the function
-   *
-   * @return the name of the function
-   */
-  public Variable getFunctionName() {
-    return identifier;
+  public Variable getName() {
+    return this.name;
   }
 
-  /**
-   * get the body of the function
-   *
-   * @return the body of the function
-   */
   public Body getBody() {
     return body;
   }
+  
+  public boolean haveArgs() {
+    return this.outputs.size() > 0;
+  }
+  
+  public CompositeType domain() {
+    CompositeType ct = new CompositeType(List.of());
+    this.inputs.forEach(vd -> ct.addType(vd.getType().typeFactory()));
+    return ct;
+  }
+  
+  public CompositeType codomain() {
+    CompositeType ct = new CompositeType(List.of());
+    this.outputs.forEach(pd -> ct.addType(pd.getType().typeFactory()));
+    return ct;
+  }
 
   @Override
-  public <T, P> T accept(Visitor<T, P> visitor, P param) {
-    return visitor.visit(this, param);
+  public <T, P> T accept(Visitor<T, P> visitor, P arg) {
+    return visitor.visit(this, arg);
   }
 
 }

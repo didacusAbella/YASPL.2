@@ -1,25 +1,18 @@
 package com.didacusabella.yaspl.syntax;
 
-import com.didacusabella.yaspl.visitor.Visitor;
 import java_cup.runtime.ComplexSymbolFactory.Location;
+import com.didacusabella.yaspl.visitor.Visitor;
 
 /**
- * This class wrap the identifiers. For example
- * <pre>
- *     {@code
- *     int id;
- *     }
- * </pre>
+ * Node for variable used as expression. For example
+ * {@code a = b + c;}
  */
-public class Identifier extends Expression {
+public class Identifier extends Expression implements Leaf<String> {
 
   private final String name;
 
   /**
-   * Create anew identifier node
-   *
-   * @param leftLocation the left location
-   * @param rightLocation the right location
+   * {@inheritDoc}
    * @param name the name of the identifier
    */
   public Identifier(Location leftLocation, Location rightLocation, String name) {
@@ -27,18 +20,14 @@ public class Identifier extends Expression {
     this.name = name;
   }
 
-  /**
-   * return the name of the identifier
-   *
-   * @return themname of the identifier
-   */
-  public String getName() {
+  @Override
+  public String getValue() {
     return this.name;
   }
 
   @Override
-  public <T, P> T accept(Visitor<T, P> visitor, P param) {
-    return visitor.visit(this, param);
+  public <T, P> T accept(Visitor<T, P> visitor, P arg) {
+    return visitor.visit(this, arg);
   }
-
+  
 }

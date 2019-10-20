@@ -4,55 +4,42 @@ import com.didacusabella.yaspl.visitor.Visitor;
 import java_cup.runtime.ComplexSymbolFactory.Location;
 
 /**
- * This is a while statement node for a YASPL program. For example:
- * <pre>
- *     {@code
+ * This is a while statement node. For example:
+ * { @code
  *     while(booleanExpression) do {
  *       statements;
  *     };
- *     }
- * </pre>
+ * }
  */
 public class WhileStatement extends Statement {
 
-  private final BooleanExpression booleanExpression;
+  private final BooleanExpression condition;
   private final CompositeStatement whileStatement;
 
   /**
-   * Create a new while statement node
-   *
-   * @param leftLocation the left location
-   * @param rightLocation the right location
-   * @param booleanExpression the boolean expression node
+   * {@inheritDoc}
+   * @param condition the condition for iterating in the while
    * @param whileStatement the while statement
    */
   public WhileStatement(Location leftLocation, Location rightLocation,
-          BooleanExpression booleanExpression, CompositeStatement whileStatement) {
+          BooleanExpression condition, CompositeStatement whileStatement) {
     super(leftLocation, rightLocation);
-    this.booleanExpression = booleanExpression;
+    this.condition = condition;
     this.whileStatement = whileStatement;
+  }
+  
+  public BooleanExpression getCondition() {
+    return this.condition;
+  }
+
+  
+  public CompositeStatement getBody() {
+    return this.whileStatement;
   }
 
   @Override
-  public <T, P> T accept(Visitor<T, P> visitor, P param) {
-    return visitor.visit(this, param);
+  public <T, P> T accept(Visitor<T, P> visitor, P arg) {
+    return visitor.visit(this, arg);
   }
-
-  /**
-   * Get the while condition
-   *
-   * @return the while condition
-   */
-  public BooleanExpression getWhileCondition() {
-    return this.booleanExpression;
-  }
-
-  /**
-   * Get the list of the statements
-   *
-   * @return the list of the statements;
-   */
-  public CompositeStatement getWhileStatement() {
-    return this.whileStatement;
-  }
+  
 }

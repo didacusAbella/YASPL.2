@@ -7,7 +7,7 @@ import com.didacusabella.yaspl.lexical.StringTable;
 import com.didacusabella.yaspl.semantic.SymbolTable;
 import com.didacusabella.yaspl.syntax.Program;
 import com.didacusabella.yaspl.template.XmlTemplate;
-import com.didacusabella.yaspl.visitor.SyntaxVisitor;
+import com.didacusabella.yaspl.visitor.XmlVisitor;
 import java.io.InputStream;
 import java_cup.runtime.ComplexSymbolFactory;
 
@@ -49,8 +49,8 @@ public class Compiler {
     Program program = Program.class.cast(this.parser.parse().value);
     if(this.hasOption("-xml")){
       XmlTemplate xmlTemplate = new XmlTemplate();
-      SyntaxVisitor sv = new SyntaxVisitor();
-      program.accept(sv, xmlTemplate.getDocument());
+      XmlVisitor visitor = new XmlVisitor();
+      program.accept(visitor, xmlTemplate.getDocument());
       xmlTemplate.render(this.options[0]);
     }
   }

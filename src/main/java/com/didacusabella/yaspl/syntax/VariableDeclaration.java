@@ -1,18 +1,14 @@
 package com.didacusabella.yaspl.syntax;
 
-import com.didacusabella.yaspl.visitor.Visitor;
 import java_cup.runtime.ComplexSymbolFactory.Location;
 
-import java.util.Collections;
+
 import java.util.List;
+import com.didacusabella.yaspl.visitor.Visitor;
 
 /**
  * Represent a variable declaration node. For example:
- * <pre>
- *     {@code
- *     int a;
- *     }
- * </pre>
+ * { @code int a; }
  */
 public class VariableDeclaration extends Decl {
 
@@ -20,10 +16,7 @@ public class VariableDeclaration extends Decl {
   private final List<Variable> variables;
 
   /**
-   * Create a new variable declaration node
-   *
-   * @param leftLocation the left location
-   * @param rightLocation then right location
+   * {@inheritDoc}
    * @param type the type node
    * @param variables the variable node list
    */
@@ -34,27 +27,17 @@ public class VariableDeclaration extends Decl {
     this.variables = variables;
   }
 
-  @Override
-  public <T, P> T accept(Visitor<T, P> visitor, P param) {
-    return visitor.visit(this, param);
-  }
-
-  /**
-   * Get the type of the declaration
-   *
-   * @return the type of the declaration
-   */
   public TypeDenoter getType() {
     return this.type;
   }
 
-  /**
-   * Get the list of the variable
-   *
-   * @return the list of the variable
-   */
   public List<Variable> getVariables() {
     return this.variables;
   }
 
+  @Override
+  public <T, P> T accept(Visitor<T, P> visitor, P arg) {
+    return visitor.visit(this, arg);
+  }
+  
 }

@@ -1,25 +1,18 @@
 package com.didacusabella.yaspl.syntax;
 
-import com.didacusabella.yaspl.visitor.Visitor;
 import java_cup.runtime.ComplexSymbolFactory.Location;
+import com.didacusabella.yaspl.visitor.Visitor;
 
 /**
  * Node used for wrapping a string constant value. For example
- * <pre>
- *     {@code
- *     "Hello";
- *     }
- * </pre>
+ * { @code "Hello"; }
  */
-public class StringConst extends Expression {
+public class StringConst extends Expression implements Leaf<String> {
 
   private final String stringValue;
 
   /**
-   * Create a new stirng const node
-   *
-   * @param leftLocation the left location
-   * @param rightLocation the right location
+   * {@inheritDoc}
    * @param stringValue the string value
    */
   public StringConst(Location leftLocation, Location rightLocation,
@@ -27,18 +20,14 @@ public class StringConst extends Expression {
     super(leftLocation, rightLocation);
     this.stringValue = stringValue;
   }
-
-  /**
-   * Get the string constant
-   *
-   * @return the string constant
-   */
-  public String getStringValue() {
-    return stringValue;
+  
+  @Override
+  public String getValue() {
+    return this.stringValue;
   }
 
   @Override
-  public <T, P> T accept(Visitor<T, P> visitor, P param) {
-    return visitor.visit(this, param);
+  public <T, P> T accept(Visitor<T, P> visitor, P arg) {
+    return visitor.visit(this, arg);
   }
 }

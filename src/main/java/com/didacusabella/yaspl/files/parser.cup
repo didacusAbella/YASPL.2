@@ -199,8 +199,8 @@ Arith_op ::= PLUS:s                                   {: RESULT = "PLUS"; :}
 
 
 /********************************** BooleanExpression *****************************************/
-Bool_Expr ::= TRUE:t                                  {: RESULT = new TrueExpression(txleft, txright); :}
-             | FALSE:f                                {: RESULT = new FalseExpression(fxleft, fxright); :}
+Bool_Expr ::= TRUE:t                                  {: RESULT = new BooleanConst(txleft, txright, t); :}
+             | FALSE:f                                {: RESULT = new BooleanConst(fxleft, fxright, f); :}
              | Bool_Expr:b1 Bool_op:bo Bool_Expr:b2   {: RESULT = new RelationalExpression(b1xleft, b1xright, b1, b2, bo); :}
              | NOT Bool_Expr:exp                      {: RESULT = new NotExpression(expxleft, expxright, exp); :}
              | Expr:r1 Rel_op:ro Expr:r2              {: RESULT = new RelationalExpression(r1xleft, r1xright, r1, r2, ro);:}

@@ -65,7 +65,7 @@ StringLiteral = [^\r\n\"\\]
 /* comments */
 Comment = {TraditionalComment} | {EndOfLineComment}
 TraditionalComment = "/*" {CommentContent} \*+ "/"
-EndOfLineComment = "//" [^\r\n]* {Newline}
+EndOfLineComment = "//" [^\r\n]* {Newline}?
 CommentContent = ( [^*] | \*+[^*/] )*
 
 Identifier = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*

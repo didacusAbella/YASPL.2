@@ -13,10 +13,7 @@ public class Program extends AstNode {
   private final List<Statement> statements;
 
   /**
-   * Create a new Program node (The root program)
-   *
-   * @param leftLocation the left location
-   * @param rightLocation the right location
+   * {@inheritDoc}
    * @param declarations the list of declarations
    * @param statements the list of statements
    */
@@ -27,26 +24,19 @@ public class Program extends AstNode {
     this.statements = statements;
   }
 
-  /**
-   * Get the list of all declarations
-   *
-   * @return the list of declarations
-   */
+  
   public List<Decl> getDeclarations() {
     return declarations;
   }
 
-  /**
-   * Get the list of all statement
-   *
-   * @return the list of all statements
-   */
+  
   public List<Statement> getStatements() {
     return statements;
   }
 
   @Override
-  public <T, P> T accept(Visitor<T, P> visitor, P param) {
-    return visitor.visit(this, param);
+  public <T, P> T accept(Visitor<T, P> visitor, P arg) {
+    return visitor.visit(this, arg);
   }
+
 }

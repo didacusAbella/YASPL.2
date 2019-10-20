@@ -5,20 +5,15 @@ import com.didacusabella.yaspl.type.Type;
 import java_cup.runtime.ComplexSymbolFactory.Location;
 
 /**
- * An Expression is an operation that return always a value
+ * An Expression's Node is an operation that return always a value.
  *
- * @since 1.0
- * @author didacusAbella
  */
 public abstract class Expression extends AstNode {
   
   private Type type;
 
   /**
-   * Create a new Expression node
-   *
-   * @param leftLocation the left location
-   * @param rightLocation the right location
+   * {@inheritDoc}
    */
   public Expression(Location leftLocation, Location rightLocation) {
     super(leftLocation, rightLocation);

@@ -6,12 +6,10 @@ import java.util.List;
 
 /**
  * This node represent the parameter declaration into a function. For example
- * <pre>
- *     {@code
+ *{ @code
  *     def functionName(int a) : int x
- *     the values after the colon are the parameters
- *     }
- * </pre>
+ *}
+ * The declarations after the colons are the parameters
  */
 public class ParameterDeclaration extends AstNode {
 
@@ -19,10 +17,7 @@ public class ParameterDeclaration extends AstNode {
   private final TypeDenoter type;
 
   /**
-   * Create a new parameter declaration node
-   *
-   * @param leftLocation the left location
-   * @param rightLocation the right location
+   * {@inheritDoc}
    * @param variableDeclaration the variable declaration node
    */
   public ParameterDeclaration(Location leftLocation, Location rightLocation,
@@ -31,26 +26,18 @@ public class ParameterDeclaration extends AstNode {
     this.variables = variableDeclaration.getVariables();
     this.type = variableDeclaration.getType();
   }
-
-  @Override
-  public <T, P> T accept(Visitor<T, P> visitor, P param) {
-    return visitor.visit(this, param);
-  }
-
-  /**
-   * Get the variable list
-   * @return the variable list 
-   */
+  
   public List<Variable> getVariables() {
     return variables;
   }
 
-  /**
-   * Get the type denoter
-   * @return the type denoter node
-   */
+  
   public TypeDenoter getType() {
     return type;
-  }
+  }  
 
+  @Override
+  public <T, P> T accept(Visitor<T, P> visitor, P arg) {
+    return visitor.visit(this, arg);
+  }
 }

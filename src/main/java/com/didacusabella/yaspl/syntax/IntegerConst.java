@@ -1,25 +1,18 @@
 package com.didacusabella.yaspl.syntax;
 
-import com.didacusabella.yaspl.visitor.Visitor;
 import java_cup.runtime.ComplexSymbolFactory.Location;
+import com.didacusabella.yaspl.visitor.Visitor;
 
 /**
  * Node for wrapping integer const value. For example
- * <pre>
- *     {@code
- *     1
- *     }
- * </pre>
+ * { @code 1 }
  */
-public class IntegerConst extends Expression {
+public class IntegerConst extends Expression implements Leaf<Integer> {
 
   private final int intValue;
 
   /**
-   * Create a new integer node
-   *
-   * @param leftLocation the left location
-   * @param rightLocation the right location
+   * {@inheritDoc}
    * @param intValue the value of the node
    */
   public IntegerConst(Location leftLocation, Location rightLocation, int intValue) {
@@ -27,17 +20,15 @@ public class IntegerConst extends Expression {
     this.intValue = intValue;
   }
 
-  /**
-   * get the int value associated with this node
-   *
-   * @return the int value
-   */
-  public int getIntValue() {
-    return intValue;
+  @Override
+  public Integer getValue() {
+    return this.intValue;
   }
 
   @Override
-  public <T, P> T accept(Visitor<T, P> visitor, P param) {
-    return visitor.visit(this, param);
+  public <T, P> T accept(Visitor<T, P> visitor, P arg) {
+    return visitor.visit(this, arg);
   }
+
+  
 }

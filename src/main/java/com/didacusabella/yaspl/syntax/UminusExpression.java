@@ -1,25 +1,18 @@
 package com.didacusabella.yaspl.syntax;
 
-import com.didacusabella.yaspl.visitor.Visitor;
 import java_cup.runtime.ComplexSymbolFactory.Location;
+import com.didacusabella.yaspl.visitor.Visitor;
 
 /**
  * This node represent the uminus expression. For example:
- * <pre>
- *     {@code
- *     -1
- *     }
- * </pre>
+ * {@code -1 }
  */
 public class UminusExpression extends Expression {
 
   private final Expression expression;
 
   /**
-   * Create a new uminus node
-   *
-   * @param leftLocation the left location
-   * @param rightLocation the right location
+   * {@inheritDoc}
    * @param expression the expression node
    */
   public UminusExpression(Location leftLocation, Location rightLocation,
@@ -28,17 +21,12 @@ public class UminusExpression extends Expression {
     this.expression = expression;
   }
 
-  /**
-   * Get the expression associated
-   *
-   * @return the expression
-   */
   public Expression getExpression() {
     return expression;
   }
 
   @Override
-  public <T, P> T accept(Visitor<T, P> visitor, P param) {
-    return visitor.visit(this, param);
+  public <T, P> T accept(Visitor<T, P> visitor, P arg) {
+    return visitor.visit(this, arg);
   }
 }

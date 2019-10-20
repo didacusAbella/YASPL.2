@@ -1,22 +1,19 @@
 package com.didacusabella.yaspl.syntax;
-import com.didacusabella.yaspl.visitor.Visitor;
+import com.didacusabella.yaspl.visitor.Visitable;
 import java_cup.runtime.ComplexSymbolFactory.Location;
 
 /**
- * This class is a representation of YASPL language node used for create the
- * AST. is a visitable node into the scheme of the Visitor Pattern
- *
- * @version 1.0
- * @author didacusAbella
- * @since 1.0
+ * This class is the base class for all other nodes of the AST. It contains 
+ * the location of node creation in a YASPL file based on CUP's Location class and implements
+ * the Visitable interface for implementing the Visitor Pattern
  */
-public abstract class AstNode {
+public abstract class AstNode implements Visitable {
 
   private final Location leftLocation;
   private final Location rightLocation;
 
   /**
-   * Create a new generic yaspl node.
+   * Create a new generic AST node.
    *
    * @param leftLocation the left location
    * @param rightLocation the right location
@@ -27,32 +24,18 @@ public abstract class AstNode {
   }
 
   /**
-   * get the left location of this node
-   *
-   * @return the left location
+   * 
+   * @return The left position 
    */
   public Location getLeftLocation() {
     return leftLocation;
   }
 
   /**
-   * get the right location of this node
-   *
-   * @return the right location
+   * 
+   * @return The right position
    */
   public Location getRightLocation() {
     return rightLocation;
   }
-
-  /**
-   * Accept method used to implement visitor pattern
-   *
-   * @param visitor the visitor to accept
-   * @param param additional parameter to pass into visitor. Use Void to pass
-   * anything
-   * @param <T> result type of this operation
-   * @param <P> additional parameter
-   * @return a result based of parameter T and P
-   */
-  public abstract <T, P> T accept(Visitor<T, P> visitor, P param);
 }

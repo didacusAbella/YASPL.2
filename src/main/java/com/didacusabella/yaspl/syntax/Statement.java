@@ -8,10 +8,7 @@ import java_cup.runtime.ComplexSymbolFactory.Location;
 public abstract class Statement extends AstNode {
 
   /**
-   * Create a new statement node
-   *
-   * @param leftLocation the left location
-   * @param rightLocation the right location
+   * {@inheritDoc}
    */
   public Statement(Location leftLocation, Location rightLocation) {
     super(leftLocation, rightLocation);

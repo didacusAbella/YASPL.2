@@ -39,6 +39,10 @@ public class CompositeType implements Type {
   public PrimitiveType checkRel(PrimitiveType type) {
     return PrimitiveType.NULL;
   }
+  
+  public void addType(Type type){
+    this.types.add(type);
+  }
 
   @Override
   public int hashCode() {
@@ -60,7 +64,6 @@ public class CompositeType implements Type {
     return !Objects.equals(this.types, other.types); 
     }
   }
-
 
   
 
