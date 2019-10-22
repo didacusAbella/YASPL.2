@@ -37,4 +37,6 @@ public interface ErrorHandler {
   default void reportYetDefined(AstNode node){
     this.reportError(YET_DEFINED, node);
   }
+  
+  boolean haveErrors();
 }

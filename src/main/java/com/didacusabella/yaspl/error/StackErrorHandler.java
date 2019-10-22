@@ -31,5 +31,10 @@ public class StackErrorHandler implements ErrorHandler {
   public void logErrors() {
    this.catchedErrors.forEach(System.out::println);
   }
+
+  @Override
+  public boolean haveErrors() {
+    return this.catchedErrors.isEmpty();
+  }
   
 }
