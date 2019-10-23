@@ -1,32 +1,35 @@
 package com.didacusabella.yaspl.template;
 
+import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Map;
+import java.util.Optional;
 
 /**
  *
  * @author didacus
  */
-public class CTemplate implements Template {
-  
-  private final Map<String, String> renderMap;
+public class CTemplate implements Template<String> {
 
-  public CTemplate( Map<String, String> renderMap) {
-    this.renderMap = renderMap;
-  }
-  
   @Override
-  public void render(String filePath) {
-    try {
-      String fileContent = new String(Files.readAllBytes(Paths.get(filePath)), 
-              StandardCharsets.UTF_8);
-      this.renderMap.forEach((key, value) -> fileContent.replace(key, value));
+  public void write(String filePath, String model) {
+    filePath = filePath.replace(".yaspl", ".c");
+    try (FileWriter fw = new FileWriter(filePath)) {
+      fw.write(model);
     } catch (IOException ex) {
-      System.err.println("Input Output Exception");
+      System.err.println("Input/Output Error during C Template rendering");
     }
   }
-  
+
+  @Override
+  public Optional<String> create() {
+    String builder = null;
+    try {
+      builder = new String(this.getClass().getClassLoader()
+              .getResourceAsStream("program.c").readAllBytes());
+    } catch (IOException ex) {
+      System.err.println("Input/Output Errror during model creation");
+    }
+    return Optional.ofNullable(builder);
+  }
+
 }

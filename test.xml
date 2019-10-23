@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Program>
+  <VariableDeclaration>
+    <TypeDenoter kind="int"/>
+    <Variable lexeme="value"/>
+    <Variable lexeme="result"/>
+  </VariableDeclaration>
+  <FunctionDeclaration>
+    <Variable lexeme="function"/>
+    <ParameterDeclaration>
+      <TypeDenoter kind="int"/>
+      <Variable lexeme="result"/>
+    </ParameterDeclaration>
+    <Body>
+      <VariableDeclaration>
+        <TypeDenoter kind="double"/>
+        <Variable lexeme="value"/>
+      </VariableDeclaration>
+      <AssignStatement>
+        <Identifier lexeme="value"/>
+        <DoubleConst value="0.0"/>
+      </AssignStatement>
+      <WriteStatement>
+        <DoubleConst value="Il valore è"/>
+        <Identifier lexeme="value"/>
+      </WriteStatement>
+    </Body>
+  </FunctionDeclaration>
+  <AssignStatement>
+    <Identifier lexeme="value"/>
+    <IntConst value="0"/>
+  </AssignStatement>
+  <WriteStatement>
+    <DoubleConst value="Il valore è"/>
+    <Identifier lexeme="value"/>
+  </WriteStatement>
+  <FunctionCall>
+    <Identifier lexeme="function"/>
+    <Identifier lexeme="result"/>
+  </FunctionCall>
+</Program>

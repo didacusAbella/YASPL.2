@@ -240,6 +240,21 @@ public enum PrimitiveType implements Type {
       return NULL;
     }
   };
+  
+  public String cType(){
+    switch(this){
+      case STRING:
+        return "char *";
+      case DOUBLE:
+        return "double";
+      case BOOL:
+        return "bool";
+      case INT:
+        return "int";
+      default:
+        return "";
+    }
+  }
 
   @Override
   public String toString() {

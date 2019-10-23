@@ -3,6 +3,7 @@ import com.didacusabella.yaspl.type.CompositeType;
 import java_cup.runtime.ComplexSymbolFactory.Location;
 import java.util.List;
 import com.didacusabella.yaspl.visitor.Visitor;
+import java.util.ArrayList;
 
 
 /**
@@ -58,13 +59,13 @@ public class FunctionDeclaration extends Decl {
   }
   
   public CompositeType domain() {
-    CompositeType ct = new CompositeType(List.of());
+    CompositeType ct = new CompositeType(new ArrayList<>());
     this.inputs.forEach(vd -> ct.addType(vd.getType().typeFactory()));
     return ct;
   }
   
   public CompositeType codomain() {
-    CompositeType ct = new CompositeType(List.of());
+    CompositeType ct = new CompositeType(new ArrayList<>());
     this.outputs.forEach(pd -> ct.addType(pd.getType().typeFactory()));
     return ct;
   }

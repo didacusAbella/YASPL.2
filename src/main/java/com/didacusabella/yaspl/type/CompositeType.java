@@ -65,6 +65,13 @@ public class CompositeType implements Type {
     }
   }
 
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    this.types.forEach(t -> sb.append(t.toString()));
+    return sb.toString();
+  }
+
   
 
 }

@@ -1,5 +1,6 @@
 package com.didacusabella.yaspl.template;
 
+import java.util.Optional;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -16,24 +17,17 @@ import org.w3c.dom.Document;
  *
  * @author didacus
  */
-public class XmlTemplate implements Template {
-
-  private final Document document;
-
-  public XmlTemplate() throws ParserConfigurationException {
-    DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-    DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-    this.document = docBuilder.newDocument();
-  }
+public class XmlTemplate implements Template<Document> {
 
   @Override
-  public void render(String filePath) {
+  public void write(String filePath, Document model) {
     try {
+      filePath = filePath.replace(".yaspl", ".xml");
       TransformerFactory transformerFactory = TransformerFactory.newInstance();
       Transformer transformer = transformerFactory.newTransformer();
       transformer.setOutputProperty(OutputKeys.INDENT, "yes");
       transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-      DOMSource source = new DOMSource(this.document);
+      DOMSource source = new DOMSource(model);
       StreamResult result = new StreamResult(filePath);
       transformer.transform(source, result);
     } catch (TransformerConfigurationException ex) {
@@ -42,9 +36,18 @@ public class XmlTemplate implements Template {
       System.err.println("Error during transforming");
     }
   }
-  
-  public Document getDocument() {
-    return this.document;
+
+  @Override
+  public Optional<Document> create() {
+    Document doc = null;
+    try {
+      DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+      DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+      doc = docBuilder.newDocument();
+    } catch (ParserConfigurationException ex) {
+      System.err.println("Error creating XML Document" + ex);
+    }
+    return Optional.ofNullable(doc);
   }
 
 }

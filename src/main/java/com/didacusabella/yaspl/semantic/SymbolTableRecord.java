@@ -31,4 +31,10 @@ public class SymbolTableRecord {
   public void setKind(SymbolKind kind) {
     this.kind = kind;
   }
+
+  @Override
+  public String toString() {
+    return String.format("Type: %s, Kind: %s", this.type.toString(), this.kind);
+  }
+  
 }

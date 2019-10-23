@@ -16,7 +16,7 @@ public class FakeSymbolTable implements SymbolTable {
   public FakeSymbolTable(StackSymbolTable table, StringTable sTable) {
     this.table = table;
     this.sTable = sTable;
-    this.currentLevel = 0;
+    this.currentLevel = -1;
   }
   
   @Override
@@ -39,9 +39,11 @@ public class FakeSymbolTable implements SymbolTable {
   public Optional<SymbolTableRecord> lookup(String lexeme) {
     int address = this.sTable.getAddress(lexeme);
     int level = this.currentLevel;
-    while(level > 0){
-      if(this.table.get(level).containsKey(address))
+    while(level >= 0){
+      if(this.table.get(level).containsKey(address)) {
         return Optional.of(this.table.get(level).get(address));
+      }
+      level--;
     }
     return Optional.empty();
   }

@@ -34,7 +34,10 @@ public class ContextVisitor implements Visitor<Boolean, SymbolTable> {
   }
   
   private boolean checkContext(List<? extends AstNode> nodes, SymbolTable arg) {
-    return nodes.stream().allMatch(node -> node.accept(this, arg));
+    if(nodes.isEmpty())
+      return true;
+    else
+      return nodes.stream().allMatch(node -> node.accept(this, arg));
   }
 
   @Override

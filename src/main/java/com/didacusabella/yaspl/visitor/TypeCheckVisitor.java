@@ -4,7 +4,7 @@ import com.didacusabella.yaspl.error.ErrorHandler;
 import com.didacusabella.yaspl.semantic.SymbolTable;
 import com.didacusabella.yaspl.syntax.*;
 import com.didacusabella.yaspl.type.*;
-import java.util.List;
+import java.util.ArrayList;
 import java.util.function.Consumer;
 
 /**
@@ -83,9 +83,9 @@ public class TypeCheckVisitor implements Visitor<Type, SymbolTable> {
 
   @Override
   public Type visit(ReadStatement readStatement, SymbolTable arg) {
-    CompositeType varType = new CompositeType(List.of());
+    CompositeType varType = new CompositeType(new ArrayList<>());
     readStatement.getIdentifiers().forEach(i -> varType.addType(i.accept(this, arg)));
-    CompositeType types = new CompositeType(List.of());
+    CompositeType types = new CompositeType(new ArrayList<>());
     readStatement.getTypes().forEach(t -> types.addType(t.accept(this, arg)));
     if(!varType.equals(types))
       this.handler.reportTypeMismatch(types, varType, readStatement);
@@ -100,7 +100,7 @@ public class TypeCheckVisitor implements Visitor<Type, SymbolTable> {
 
   @Override
   public Type visit(FunctionCall functionCall, SymbolTable arg) {
-    CompositeType input = new CompositeType(List.of());
+    CompositeType input = new CompositeType(new ArrayList<>());
     functionCall.getInputs().forEach(e -> input.addType(e.accept(this, arg)));
     Type output = functionCall.getName().accept(this, arg);
     if(!input.equals(output))
@@ -119,7 +119,9 @@ public class TypeCheckVisitor implements Visitor<Type, SymbolTable> {
     Type condType = whileStatement.getCondition().accept(this, arg);
     if(!condType.equals(PrimitiveType.BOOL))
       this.handler.reportTypeMismatch(PrimitiveType.BOOL, condType, whileStatement);
+    arg.enterScope();
     whileStatement.getBody().accept(this, arg);
+    arg.exitScope();
     return PrimitiveType.NULL;
   }
 

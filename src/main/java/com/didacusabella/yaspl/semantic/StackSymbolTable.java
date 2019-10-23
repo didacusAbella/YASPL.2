@@ -3,6 +3,7 @@ package com.didacusabella.yaspl.semantic;
 import com.didacusabella.yaspl.lexical.StringTable;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Stack;
 
@@ -18,7 +19,6 @@ public class StackSymbolTable extends LinkedHashMap<Integer, HashMap<Integer, Sy
   private int currentLevel;
 
   public StackSymbolTable(StringTable table) {
-    super();
     this.table = table;
     this.scopeLevel = new Stack();
     this.currentLevel = 0;
@@ -45,7 +45,7 @@ public class StackSymbolTable extends LinkedHashMap<Integer, HashMap<Integer, Sy
   @Override
   public Optional<SymbolTableRecord> lookup(String lexeme) {
     int address = this.table.getAddress(lexeme);
-    int size = this.scopeLevel.size();
+    int size = (this.scopeLevel.size() - 1);
     for(int i = size; i > 0; i--){
       int level = this.scopeLevel.elementAt(i);
       if (this.get(level).containsKey(address))
@@ -59,4 +59,25 @@ public class StackSymbolTable extends LinkedHashMap<Integer, HashMap<Integer, Sy
     int address = this.table.getAddress(lexeme);
     this.get(this.scopeLevel.peek()).put(address, str);
   }  
+
+  @Override
+  public String toString() {
+    StringBuilder dump = new StringBuilder();
+    this.entrySet().forEach(entry -> {
+      Integer level = entry.getKey();
+      dump.append("Level:").append(level).append('\n');
+      Map<Integer, SymbolTableRecord> record = entry.getValue();
+      record.entrySet().forEach(en -> {
+        dump.append("==>");
+        dump.append("Address:").append(en.getKey());
+        dump.append("|");
+        dump.append("Record:");
+        dump.append(en.getValue().toString());
+        dump.append("\n");
+      });
+    });
+    return dump.toString();
+  }
+  
+  
 }

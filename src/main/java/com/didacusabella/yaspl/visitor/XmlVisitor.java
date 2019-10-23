@@ -15,6 +15,7 @@ public class XmlVisitor implements Visitor<Element, Document> {
     Element element = arg.createElement("Program");
     program.getDeclarations().forEach(this.addParent(element, arg));
     program.getStatements().forEach(this.addParent(element, arg));
+    arg.appendChild(element);
     return element;
   }
   

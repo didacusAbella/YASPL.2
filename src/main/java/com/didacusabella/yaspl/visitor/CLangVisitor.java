@@ -22,14 +22,16 @@ public class CLangVisitor implements Visitor<String, SymbolTable> {
   
   @Override
   public String visit(Program program, SymbolTable arg) {
+    arg.enterScope();
     String decl = this.stringify(program.getDeclarations(), arg);
     String sts = this.stringify(program.getStatements(), arg);
-    return root.replace("$declarations$", decl).replace("$statements$", sts);
+    arg.exitScope();
+    return this.root.replace("$declarations$", decl).replace("$statements$", sts);
   }
   
   private String stringify(List<? extends AstNode> nodes, SymbolTable table){
     StringBuilder builder = new StringBuilder();
-    nodes.forEach(node -> builder.append(node.accept(this, table)));
+    nodes.forEach(node -> builder.append(node.accept(this, table)).append("\n"));
     return builder.toString();
   }
 
@@ -44,18 +46,22 @@ public class CLangVisitor implements Visitor<String, SymbolTable> {
   @Override
   public String visit(FunctionDeclaration functionDeclaration, SymbolTable arg) {
     StringBuilder functionBuilder = new StringBuilder();
-    functionBuilder.append("void");
+    functionBuilder.append("void ");
     String fName = functionDeclaration.getName().accept(this, arg);
     functionBuilder.append(fName);
     functionBuilder.append('(');
     StringJoiner inputs = new StringJoiner(",");
+    arg.enterScope();
     functionDeclaration.getInputs().forEach(input -> inputs.add(input.accept(this, arg)));
     functionDeclaration.getOutputs().forEach(output -> inputs.add(output.accept(this, arg)));
+    functionBuilder.append(inputs.toString());
+    functionBuilder.append(')');
     functionBuilder.append('{');
     functionBuilder.append('\n');
     functionBuilder.append(functionDeclaration.getBody().accept(this, arg));
     functionBuilder.append('\n');
     functionBuilder.append('}');
+    arg.exitScope();
     return functionBuilder.toString();
   }
 
@@ -70,7 +76,7 @@ public class CLangVisitor implements Visitor<String, SymbolTable> {
 
   @Override
   public String visit(TypeDenoter type, SymbolTable arg) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    return type.typeFactory().cType();
   }
 
   @Override
@@ -134,7 +140,7 @@ public class CLangVisitor implements Visitor<String, SymbolTable> {
   public String visit(FunctionCall functionCall, SymbolTable arg) {
     StringJoiner funJoiner = new StringJoiner(",");
     functionCall.getInputs().forEach(i -> funJoiner.add(i.accept(this, arg)));
-    functionCall.getOutputs().forEach(o -> funJoiner.add(o.accept(this, arg)));
+    functionCall.getOutputs().forEach(o -> funJoiner.add("&".concat(o.accept(this, arg))));
     String fName = functionCall.getName().accept(this, arg);
     return String.format("%s(%s);", fName, funJoiner.toString());
   }
@@ -149,7 +155,9 @@ public class CLangVisitor implements Visitor<String, SymbolTable> {
   @Override
   public String visit(WhileStatement whileStatement, SymbolTable arg) {
     String condition = whileStatement.getCondition().accept(this, arg);
+    arg.enterScope();
     String body = whileStatement.getBody().accept(this, arg);
+    arg.exitScope();
     return String.format("while(%s){\n%s\n}", condition, body);
   }
 
