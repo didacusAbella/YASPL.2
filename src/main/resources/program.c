@@ -4,7 +4,7 @@
 /********************* Declarations ****************/
 $declarations$
 /********************* Main  ***********************/
-int main(int args, char *argv){
-  $statements$
-  return 0;
+int main(int args, char **argv){
+$statements$
+return 0;
 }

@@ -63,7 +63,8 @@ public class ContextVisitor implements Visitor<Boolean, SymbolTable> {
       arg.enterScope();
       boolean areInputsSafe = this.checkContext(functionDeclaration.getInputs(), arg);
       boolean areOutputsSafe = this.checkContext(functionDeclaration.getOutputs(), arg);
-      isFunctionSafe = areInputsSafe && areOutputsSafe;
+      boolean isBodySafe = functionDeclaration.getBody().accept(this, arg);
+      isFunctionSafe = areInputsSafe && areOutputsSafe && isBodySafe;
       if(!isFunctionSafe)
         this.handler.reportError("Function Declaration error", functionDeclaration);
       arg.exitScope();

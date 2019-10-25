@@ -7,6 +7,7 @@ import com.didacusabella.yaspl.type.PrimitiveType;
 import com.didacusabella.yaspl.type.Type;
 import java.util.List;
 import java.util.StringJoiner;
+import java.util.function.Consumer;
 
 /**
  *
@@ -23,46 +24,45 @@ public class CLangVisitor implements Visitor<String, SymbolTable> {
   @Override
   public String visit(Program program, SymbolTable arg) {
     arg.enterScope();
-    String decl = this.stringify(program.getDeclarations(), arg);
-    String sts = this.stringify(program.getStatements(), arg);
+    String decl = this.beautify(program.getDeclarations(), new StringJoiner("\n"), arg);
+    String sts = this.beautify(program.getStatements(), new StringJoiner("\n"), arg);
     arg.exitScope();
     return this.root.replace("$declarations$", decl).replace("$statements$", sts);
   }
   
-  private String stringify(List<? extends AstNode> nodes, SymbolTable table){
-    StringBuilder builder = new StringBuilder();
-    nodes.forEach(node -> builder.append(node.accept(this, table)).append("\n"));
-    return builder.toString();
+  private String beautify(List<? extends AstNode> nodes, StringJoiner joiner, SymbolTable table){
+    nodes.forEach(node -> joiner.add(node.accept(this, table)));
+    return joiner.toString();
   }
 
   @Override
   public String visit(VariableDeclaration variableDeclaration, SymbolTable arg) {
     String type = variableDeclaration.getType().accept(this, arg);
-    StringJoiner inputJoiner = new StringJoiner(",");
-    variableDeclaration.getVariables().forEach(v -> inputJoiner.add(v.accept(this, arg)));
-    return String.format("%s %s;", type, inputJoiner.toString());
+    String varDecls = this.beautify(variableDeclaration.getVariables(), new StringJoiner(","), arg);
+    return String.format("%s %s;", type, varDecls);
   }
 
   @Override
   public String visit(FunctionDeclaration functionDeclaration, SymbolTable arg) {
-    StringBuilder functionBuilder = new StringBuilder();
-    functionBuilder.append("void ");
-    String fName = functionDeclaration.getName().accept(this, arg);
-    functionBuilder.append(fName);
-    functionBuilder.append('(');
-    StringJoiner inputs = new StringJoiner(",");
+    String name = functionDeclaration.getName().accept(this, arg);
+    StringJoiner arguments = new StringJoiner(",");
     arg.enterScope();
-    functionDeclaration.getInputs().forEach(input -> inputs.add(input.accept(this, arg)));
-    functionDeclaration.getOutputs().forEach(output -> inputs.add(output.accept(this, arg)));
-    functionBuilder.append(inputs.toString());
-    functionBuilder.append(')');
-    functionBuilder.append('{');
-    functionBuilder.append('\n');
-    functionBuilder.append(functionDeclaration.getBody().accept(this, arg));
-    functionBuilder.append('\n');
-    functionBuilder.append('}');
+    functionDeclaration.getInputs().forEach(this.formatArg(arguments, arg));
+    this.beautify(functionDeclaration.getOutputs(), arguments, arg);
+    String body = functionDeclaration.getBody().accept(this, arg);
     arg.exitScope();
-    return functionBuilder.toString();
+    return String.format("void %s(%s){\n%s\n}", name, arguments.toString(), body);
+  }
+  
+  private Consumer<VariableDeclaration> formatArg(StringJoiner joiner, SymbolTable table){
+    return new Consumer<VariableDeclaration>() {
+      @Override
+      public void accept(VariableDeclaration t) {
+        String type = t.getType().accept(CLangVisitor.this, table);
+        t.getVariables().forEach(v -> joiner.add(String.format("%s %s", type, 
+                v.accept(CLangVisitor.this, table))));
+      }
+    };
   }
 
   @Override
@@ -91,16 +91,17 @@ public class CLangVisitor implements Visitor<String, SymbolTable> {
   @Override
   public String visit(ParameterDeclaration parameterDeclaration, SymbolTable arg) {
     String type = parameterDeclaration.getType().accept(this, arg);
-    StringJoiner inputJoiner = new StringJoiner(",");
-    parameterDeclaration.getVariables().forEach(v -> inputJoiner.add(v.accept(this, arg)));
-    return String.format("%s %s", type, inputJoiner.toString());
+    StringJoiner joiner = new StringJoiner(",");
+    parameterDeclaration.getVariables().forEach(v -> joiner
+            .add(String.format("%s %s", type, v.accept(this, arg))));
+    return joiner.toString();
   }
 
   @Override
   public String visit(Body body, SymbolTable arg) {
     StringJoiner bodyJoiner = new StringJoiner("\n");
-    body.getVariableDeclarations().forEach(vd -> bodyJoiner.add(vd.accept(this, arg)));
-    body.getStatements().forEach(st -> bodyJoiner.add(st.accept(this, arg)));
+    this.beautify(body.getVariableDeclarations(), bodyJoiner, arg);
+    this.beautify(body.getStatements(), bodyJoiner, arg);
     return bodyJoiner.toString();
   }
 
@@ -109,8 +110,8 @@ public class CLangVisitor implements Visitor<String, SymbolTable> {
     StringJoiner typeJoiner = new StringJoiner(" ");
     readStatement.getTypes().forEach(t -> typeJoiner.add(this.formatType(t.typeFactory())));
     StringJoiner read = new StringJoiner(",");
-    readStatement.getIdentifiers().forEach(i -> read.add(i.accept(this, arg)));
-    return String.format("scanf(%s, %s);", typeJoiner.toString(), read.toString());
+    readStatement.getIdentifiers().forEach(i -> read.add("&".concat(i.accept(this, arg))));
+    return String.format("scanf(\"%s\", %s);", typeJoiner.toString(), read.toString());
   }
   
   private String formatType(Type type){
@@ -127,7 +128,7 @@ public class CLangVisitor implements Visitor<String, SymbolTable> {
 
   @Override
   public String visit(WriteStatement writeStatement, SymbolTable arg) {
-    StringJoiner typeJoiner = new StringJoiner(",");
+    StringJoiner typeJoiner = new StringJoiner(" ");
     StringJoiner exprJoiner = new StringJoiner(",");
     writeStatement.getExpressions().forEach(e -> {
       typeJoiner.add(this.formatType(e.getType()));
@@ -148,7 +149,7 @@ public class CLangVisitor implements Visitor<String, SymbolTable> {
   @Override
   public String visit(CompositeStatement compositeStatement, SymbolTable arg) {
     StringJoiner compJoiner = new StringJoiner("\n");
-    compositeStatement.getStatements().forEach(s -> compJoiner.add(s.accept(this, arg)));
+    this.beautify(compositeStatement.getStatements(), compJoiner, arg);
     return compJoiner.toString();
   }
 
@@ -181,7 +182,7 @@ public class CLangVisitor implements Visitor<String, SymbolTable> {
     String left = binaryExpression.getLeftOperand().accept(this, arg);
     String right = binaryExpression.getRightOperand().accept(this, arg);
     String op = this.formatOp(binaryExpression.getOp());
-    return String.format("%s %s %s;", left, right, op);
+    return String.format("%s %s %s;", left, op, right);
   }
   
   private String formatOp(String otherFormat){

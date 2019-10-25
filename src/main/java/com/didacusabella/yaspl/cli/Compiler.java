@@ -98,7 +98,8 @@ public class Compiler {
       XmlVisitor xmlVisitor = new XmlVisitor();
       program.accept(xmlVisitor, xmlModel);
       xTemplate.write(this.options[0], xmlModel);
-    } else if (this.hasOption("-sym")){
+    } 
+    if (this.hasOption("-sym")){
       SymbolTableTemplate stt = new SymbolTableTemplate();
       stt.write(this.options[0], this.symbolTable.toString());
     }

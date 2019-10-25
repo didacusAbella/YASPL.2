@@ -22,7 +22,7 @@ public class App {
       System.out.println(START_MESSAGE);
       Scanner testNumber = new Scanner(System.in);
       String testFile = chooseTestFile(testNumber.nextInt());
-      String[] testOptions = { testFile, "-xml" };
+      String[] testOptions = { testFile, "-xml", "-sym" };
       compiler = new Compiler(App.class.getClassLoader().getResourceAsStream(testFile), testOptions);
       compiler.compileFile();
       System.exit(0);

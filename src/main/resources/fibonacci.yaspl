@@ -15,7 +15,7 @@ def fibonacci(int n;) :int fn; {
 };
 start
 n = 0;
-"Inserisci il valore di cui vuoi calcolare il numero di fibonacci" ->;
+"Inserisci il valore di cui vuoi calcolare il numero di fibonacci\n" ->;
 n <- int;
 fibonacci(n:fn);
-"Il risultato è", fn ->;
+"Il risultato è:", fn ->;

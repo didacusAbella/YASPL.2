@@ -71,8 +71,9 @@ public class StackSymbolTable extends LinkedHashMap<Integer, HashMap<Integer, Sy
         dump.append("==>");
         dump.append("Address:").append(en.getKey());
         dump.append("|");
-        dump.append("Record:");
+        dump.append("Records(");
         dump.append(en.getValue().toString());
+        dump.append(")");
         dump.append("\n");
       });
     });
